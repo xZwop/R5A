@@ -20,7 +20,7 @@ public class LogootEngine {
 	 *            identifiant de la réplique
 	 * @return N identifiants pour la réplique s entre p et q
 	 */
-	Collection<LogootIdContainer> generateLineIdentier(LogootIdContainer p,
+	static Collection<LogootIdContainer> generateLineIdentier(LogootIdContainer p,
 			LogootIdContainer q, int N, int s) {
 		// TODO
 		Collection<LogootIdContainer> list=new ArrayList<LogootIdContainer>();
@@ -41,7 +41,7 @@ public class LogootEngine {
 		return list;
 	}
 
-	LogootIdContainer constructIdentifier(int r, LogootIdContainer p,
+	static LogootIdContainer constructIdentifier(int r, LogootIdContainer p,
 			LogootIdContainer q, int s) {
 		LogootIdContainer result=new LogootIdContainer();
 		LinkedList<Integer> prefix=prefixToList(r);
@@ -51,19 +51,19 @@ public class LogootEngine {
 		return result;
 	}
 
-	int prefix(LogootIdContainer id, int index) {
+	static public int prefix(LogootIdContainer id, int index) {
 		String result="";
 		int size=new Integer(LogootConf.BASE-1).toString().length();
 		for(int i=0;i<index;i++){
-			String s=id.getChaine().get(i).toString();
-			String complement="";
-			while(complement.length()<size)	complement+="0";
-			result+=complement+s;
+			String s= String.valueOf(id.getChaine().get(i).getI());
+			while(s.length()<size)
+				s="0"+s;
+			result+=s;
 		}
 		return Integer.parseInt(result);
 	}
 	
-	private LinkedList<Integer> prefixToList(int prefix){
+	static private LinkedList<Integer> prefixToList(int prefix){
 		LinkedList<Integer> result=new LinkedList<Integer>();
 		String ts=String.valueOf(prefix);
 		int size=new Integer(LogootConf.BASE-1).toString().length();
