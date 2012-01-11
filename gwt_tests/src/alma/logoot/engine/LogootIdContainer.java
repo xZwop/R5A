@@ -5,7 +5,9 @@ import java.util.ArrayList;
 public class LogootIdContainer {
 	private ArrayList<LogootIdentifier> chaine;
 	
-	public LogootIdContainer(){}
+	public LogootIdContainer(){
+		chaine=new ArrayList<LogootIdentifier>();
+	}
 
 	public ArrayList<LogootIdentifier> getChaine() {
 		return chaine;
