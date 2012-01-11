@@ -22,6 +22,10 @@ public class LogootIdentifier implements Comparable<LogootIdentifier>{
 		this.s = s;
 		this.r = r;
 	}
+	
+	public LogootIdentifier(){
+		
+	}
 
 	public int getI() {
 		return i;
