@@ -12,8 +12,11 @@ class TestLogoot {
   }
 
   void run() {
-    var client1 = new Replica('client1', 1);
-    var client2 = new Replica('client2', 2);
+    Replica client1 = new Replica('client1', 1);
+    Replica client2 = new Replica('client2', 2);
+    
+    client1.setNeighbor(client2);
+    client2.setNeighbor(client1);
   }
 }
 

@@ -9,4 +9,14 @@ class Position {
   operator ==(Position other) {
     return (this.digit == other.digit && this.repid == other.repid && this.clock == other.clock);
   }
+  
+  operator <(Position other) {
+    return (this.digit < other.digit
+            || (this.digit == other.digit && this.repid < other.repid)
+            || ( this.digit == other.digit && this.repid == other.repid && this.clock < other.clock));
+  }
+  
+  String toString() {
+    return ('<' + this.digit + ', ' + this.repid + ', ' + this.clock + '>');
+  }
 }
