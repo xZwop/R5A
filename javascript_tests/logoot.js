@@ -26,6 +26,7 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
   prefixPreviousLineId[0] = {cumval:'', idstrval:''};
   prefixNextLineId[0] = {cumval:'', idstrval:''};
 
+  // Compute index to ensure between p and q you could put N new LineId.
   while (interval < N) {
     index ++;
 
@@ -93,12 +94,14 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
 
       if (i <= previousLineId.length()
           && prefixPreviousLineId[i].idstrval == d) {
-        position = new Position(d, previousLineId.get(i - 1).getReplica(),
-            previousLineId.get(i - 1).getClock());
+        position = new Position(d,
+            previousLineId.getPosition(i - 1).getReplica(),
+            previousLineId.getPosition(i - 1).getClock());
       } else if (i <= nextLineId.length()
           && prefixNextLineId[i].idstrval == d) {
-        position = new Position(d, nextLineId.get(i - 1).getReplica(),
-            nextLineId.get(i - 1).getClock());
+        position = new Position(d,
+            nextLineId.getPosition(i - 1).getReplica(),
+            nextLineId.getPosition(i - 1).getClock());
       } else {
         position = new Position(d, replica, clock++);
       }
@@ -113,8 +116,20 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
   return list;
 }
 
-Logoot.prefix = function(position, index) {
-    return str_pad(position.get(index -1).getInt().toString(), DIGIT, '0',
+/*!
+ * \brief   Compute the prefix from a LineId.
+ *
+ * Returns new number in same base as lineId position integer. It returns
+ * \c index first position.getInt from lineId. Each position.getInt is
+ * put in same base as \BASE.
+ *
+ * \param   lineId  The line id to compute prefix.
+ * \param   index   Index first position.getInt of lineId.
+ * \return  Prefix of lineId.
+ */
+Logoot.prefix = function(lineId, index) {
+
+    return str_pad(lineId.getPosition(index -1).getInt().toString(), DIGIT, '0',
         'STR_PAD_LEFT');
 }
 

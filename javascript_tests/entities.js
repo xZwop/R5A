@@ -74,14 +74,29 @@ function Position(int_, replica, clock) {
 Position.prototype = new Triplet;  
 Position.prototype.constructor = Position;
 
+/*!
+ * \brief   Returns the Integer in range of <tt>[0..BASE[</tt>.
+ *
+ * \return  The integer in range of <tt>[0..BASE[</tt>.
+ */
 Position.prototype.getInt = function() {
   return this.first;
 }
 
+/*!
+ * \brief   Returns replica identifying the user.
+ *
+ * \return  The unique identifier.
+ */
 Position.prototype.getReplica = function() {
   return this.second;
 }
 
+/*!
+ * \brief   Returns the current value of the clock.
+ *
+ * \return  The value of clock.
+ */
 Position.prototype.getClock = function() {
   return this.third;
 }
@@ -138,7 +153,13 @@ LineId.prototype.add = function(position) {
  this.positions.push(position);
 }
 
-LineId.prototype.get = function(i) {
+/*!
+ * \brief   Returns position at specified index.
+ *
+ * \param   i   Index of position to return.
+ * \return  The position object at the specified index (or undefined).
+ */
+LineId.prototype.getPosition = function(i) {
   return this.positions[i];
 }
 
