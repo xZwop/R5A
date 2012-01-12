@@ -1,7 +1,6 @@
 //! BASE constant for position object (if not existe, BASE is set to MAX_INT).
 if (!BASE) {
-  // var MAX_INT = Math.pow(2, 53);
-  var MAX_INT = Math.pow(2, 7);
+  var MAX_INT = Math.pow(2, 53);
   var BASE = MAX_INT;
 }
 

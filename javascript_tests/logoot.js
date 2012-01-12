@@ -20,96 +20,37 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
     replica, clock) {
   var index = 0;
   var interval = 0;
-  var prefixPreviousLineId = [];
-  var prefixNextLineId = [];
-
-  prefixPreviousLineId[0] = {cumval:'', idstrval:''};
-  prefixNextLineId[0] = {cumval:'', idstrval:''};
 
   // Compute index to ensure between p and q you could put N new LineId.
   while (interval < N) {
     index ++;
 
-    var pref;
-
     // Compute prefix
-    pref = Logoot.prefix(previousLineId, index);
-    prefixPreviousLineId[index] = {
-      idstrval:pref,
-      cumval:prefixPreviousLineId[index-1].cumval + pref
-    };
-    console.log('prefixPreviousLineId[' + index + ']{idstrval:'
-        + prefixPreviousLineId[index].idstrval +', cumval:'
-        + prefixPreviousLineId[index].cumval +'}');
-
-    pref = Logoot.prefix(nextLineId, index);
-    prefixNextLineId[index] = {
-      idstrval:pref,
-      cumval:prefixNextLineId[index-1].cumval + pref
-    };
-    console.log('prefixNextLineId[' + index + ']{idstrval:'
-        + prefixNextLineId[index].idstrval +', cumval:'
-        + prefixNextLineId[index].cumval +'}');
+    // Now pref is cumval and idstrval is the last chunck of cumval split
+    // on size(DIGIT).
+    // Caution -- NEED TO SPECIFIC BASE IN parseInt Function.
+    var prefPrev = Logoot.prefix(previousLineId, index);
+    var prefNext = Logoot.prefix(nextLineId, index);
 
     // Compute interval
-    // Caution -- NEED TO SPECIFIC BASE IN parseInt Function.
-    var prefNext = parseInt(prefixNextLineId[index].cumval, 10);
-    var prefPrev = parseInt(prefixPreviousLineId[index].cumval, 10);
-
     interval = prefNext - prefPrev - 1;
 
-    console.log('prefNext:' + prefNext);
-    console.log('prefPrev:' + prefPrev);
+    console.log('prefixPreviousLineId:' + prefPrev);
+    console.log('prefixNextLineId:' + prefNext);
     console.log('interval:' + interval);
   }
 
-  // Construct Indentifier
-  // TODO: integrated boundary : step = Math.min(interval/N, boundary);
-  // FIXME: May sur to round step
+  // Construct Indentifier.
+  //! \todo: integrated boundary : step = Math.min(interval/N, boundary);
+  //! \fixme: Ensure to round step
   var step = Math.round(interval/N);
-  var r = parseInt(prefixPreviousLineId[index].cumval, 10);
+  var r = Logoot.prefix(previousLineId, index);
   var list = [];
 
   for (var j = 1; j <= N; j++) {
-    var nr = r + rand(1, step);
-    var strNr = nr.toString();
+    list.push(Logoot.constructLineId(r + rand(1, step), previousLineId,
+          nextLineId, replica, clock));
 
-    console.log('nr:' + nr);
-    console.log('strNr:' + strNr);
-
-    // Cut strNr on (DIGIT) to get each chunk.
-    // -- If strNr isn't cutable on BASE-1, add some 0 from left.
-    if((strNr.length % (index * (DIGIT))) != 0) {
-      strNr = str_pad(strNr, strNr.length + ((index * (DIGIT)) 
-          - strNr.length % (index * (DIGIT))), '0', 'STR_PAD_LEFT');
-    }
-    
-    var chunksNr = str_split(strNr, (DIGIT));
-    var lineId = new LineId();
-    console.log('chunksNr:' + chunksNr.toString());
-
-    for (var i = 1; i <= index; i++) {
-      var position;
-      var d = chunksNr[i - 1];
-
-      if (i <= previousLineId.length()
-          && prefixPreviousLineId[i].idstrval == d) {
-        position = new Position(d,
-            previousLineId.getPosition(i - 1).getReplica(),
-            previousLineId.getPosition(i - 1).getClock());
-      } else if (i <= nextLineId.length()
-          && prefixNextLineId[i].idstrval == d) {
-        position = new Position(d,
-            nextLineId.getPosition(i - 1).getReplica(),
-            nextLineId.getPosition(i - 1).getClock());
-      } else {
-        position = new Position(d, replica, clock++);
-      }
-
-      lineId.add(position);
-    }
-
-    list.push(lineId);
     r += step;
   }
 
@@ -128,8 +69,68 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
  * \return  Prefix of lineId.
  */
 Logoot.prefix = function(lineId, index) {
-
-    return str_pad(lineId.getPosition(index -1).getInt().toString(), DIGIT, '0',
+  var result = '';
+  var max = (index <= lineId.length()) ? index : lineId.length();
+  
+  // Get each position.getInt and put it in right \c BASE.
+  for (var id = 0; id < max; ++ id) {
+    result += str_pad(lineId.getPosition(id).getInt().toString(), DIGIT, '0',
         'STR_PAD_LEFT');
+  }
+
+  // If index is bigger than positions available, fill with 0.
+  while (max < index) {
+    result += str_pad('', DIGIT, '0');
+    ++ max;
+  }
+
+  return parseInt(result, 10);
+}
+
+/*!
+ * \brief   Generate randomly a LineId.
+ *
+ * \param   r             value to generate LineId.
+ * \param   startLineId   LineId from generate r.
+ * \param   endLineId     LineId to generate r.
+ * \param   replica       User unqiue replica.
+ * \param   clock         User clock (at this time).
+ */
+Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
+  var strR = r.toString();
+
+  // Cut strR on (DIGIT) to get each chunk. if strR isn't cutable on DIGIT,
+  // add needed 0 at left.
+  var lastChunkSize = strR.length % DIGIT;
+  if (lastChunkSize != 0) {
+    var zeroToAdd = str_pad('', DIGIT - lastChunkSize, '0');
+    strR = zeroToAdd + strR;
+  }
+
+  var chunksR = str_split(strR, DIGIT);
+  var lineId = new LineId();
+  console.log('chunksR:' + chunksR);
+
+  // Generate position of lineId.
+  for (var i in chunksR) {
+    var position;
+    var d = parseInt(chunksR[i], 10);
+
+    if (i < startLineId.length() && d == startLineId.getPosition(i).getInt()) {
+      position = new Position(d,
+          startLineId.getPosition(i).getReplica(),
+          startLineId.getPosition(i).getClock());
+    } else if (i < endLineId.length && d == endLineId.getPosition(i).getInt()) {
+      position = new Position(d,
+          endLineId.getPosition(i).getReplica(),
+          endLineId.getPosition(i).getClock());
+    } else {
+      position = new Position(d, replica, clock++);
+    }
+
+    lineId.add(position);
+  }
+
+  return lineId;
 }
 

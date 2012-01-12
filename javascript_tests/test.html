@@ -3,11 +3,14 @@
   </head>
   <body>
     <p>See JavaScript console for log</p>
+    <script>
+      var BASE = 100;
+    </script>
     <script src="utils.js"></script>
     <script src="entities.js"></script>
     <script src="logoot.js"></script>
     <script>
-      BASE = 100;
+      var N;
 
       p1 = new Position(2, 4, 7);
       p2 = new Position(59, 9, 5);
@@ -24,20 +27,28 @@
       q.add(q2);
       q.add(q3);
 
+      N = 7
+      console.log('##########################################################');
       console.log('----------------------------------------------------------');
       console.log('BASE:' + BASE);
+      console.log('DIGIT:' + DIGIT);
       console.log('p:' + p.toString());
       console.log('q:' + q.toString());
-      console.log('generateLineId(p, q, N, undefined, 3, 10) ; N = 7');
+      console.log('N:' + N.toString());
+      console.log('generateLineId(p, q, N, undefined, 3, 10)');
       console.log('----------------------------------------------------------');
       r = Logoot.generateLineId(p, q, 7, undefined, 3, 10);
       console.log('RESULT: ' + r.toString());
 
+      N = 8;
+      console.log('##########################################################');
       console.log('----------------------------------------------------------');
       console.log('BASE:' + BASE);
+      console.log('DIGIT:' + DIGIT);
       console.log('p:' + p.toString());
       console.log('q:' + q.toString());
-      console.log('generateLineId(p, q, N, undefined, 3, 10) ; N = 8');
+      console.log('N:' + N.toString());
+      console.log('generateLineId(p, q, N, undefined, 3, 10)');
       console.log('----------------------------------------------------------');
       r = Logoot.generateLineId(p, q, 8, undefined, 3, 10);
       console.log('RESULT: ' + r.toString());
