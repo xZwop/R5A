@@ -1,4 +1,4 @@
-package alma.logoot.engine;
+package alma.logoot.shared;
 
 public class LogootIdentifier implements Comparable<LogootIdentifier>{
 	
@@ -73,6 +73,9 @@ public class LogootIdentifier implements Comparable<LogootIdentifier>{
 		return 0;
 	}
 	
+	public String toString() {
+		return "<"+i+", "+s+", "+r+">";
+	}
 	
 	
 	

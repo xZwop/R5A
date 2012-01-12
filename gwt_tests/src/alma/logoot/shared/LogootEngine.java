@@ -1,11 +1,11 @@
-package alma.logoot.engine;
+package alma.logoot.shared;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Random;
 
-import com.google.gwt.user.client.Random;
 
 public class LogootEngine {
 
@@ -21,33 +21,40 @@ public class LogootEngine {
 	 *            identifiant de la réplique
 	 * @return N identifiants pour la réplique s entre p et q
 	 */
-	static Collection<LogootIdContainer> generateLineIdentier(
+	public static ArrayList<LogootIdContainer> generateLineIdentier(
 			LogootIdContainer p, LogootIdContainer q, int N,
 			LogootIdentifier rep) {
 		// TODO
-		BigInteger MAXINT = new BigInteger(Integer.MAX_VALUE+"");
-		Collection<LogootIdContainer> list = new ArrayList<LogootIdContainer>();
+		BigInteger MAXINT = new BigInteger(Integer.MAX_VALUE + "");
+		ArrayList<LogootIdContainer> list = new ArrayList<LogootIdContainer>();
 		int index = 0;
 		int interval = 0;
-//		BigInteger interval = new BigInteger("0");
-		while (interval< N ) {
+		// BigInteger interval = new BigInteger("0");
+		while (interval < N) {
 			index++;
 			BigInteger intervalB = prefix(q, index).subtract(prefix(p, index));
-			if ( (intervalB).compareTo(MAXINT) != -1 )
+			intervalB=intervalB.subtract(new BigInteger("1"));
+			System.out.println("Intervale : "+intervalB);
+			if ((intervalB).compareTo(MAXINT) != -1)
 				interval = Integer.MAX_VALUE;
-			else 
+			else
 				interval = intervalB.intValue();
 		}
+		System.out.println("Index : " + index);
 		int step = interval / N;
-		BigInteger stepB = new BigInteger(step+"");
-		BigInteger r = prefix(p, index);
 
-		for (int j = 1; j < N; j++) {
-			BigInteger rand = r.add(new BigInteger((Random.nextInt(step) + 1)+""));
+		BigInteger stepB = new BigInteger(step + "");
+		System.out.println("Step : " + step + "(" + stepB + ")");
+		BigInteger r = prefix(p, index);
+		Random random=new Random();
+		for (int j = 0; j < N; j++) {
+			BigInteger rand = r.add(new BigInteger((random.nextInt(step)+1 )
+					+ ""));
+			System.out.println("Prefix(+rand)"+rand+"\n");
 			list.add(constructIdentifier(rand, p, q, rep));
 			r = r.add(stepB);
 		}
-		return list; 
+		return list;
 	}
 
 	/**
@@ -63,24 +70,28 @@ public class LogootEngine {
 	 *            position
 	 * @return l'identifiant pour la replique définit par rep(id+horloge)
 	 */
-	static LogootIdContainer constructIdentifier(BigInteger r, LogootIdContainer p,
-			LogootIdContainer q, LogootIdentifier rep) {
+	static public LogootIdContainer constructIdentifier(BigInteger r,
+			LogootIdContainer p, LogootIdContainer q, LogootIdentifier rep) {
+		// TODO : Ici, la fonction risque de prendre des identifiants a la fois
+		// dans p et dans q.
 		LogootIdContainer result = new LogootIdContainer();
 		LinkedList<Integer> prefix = prefixToList(r);
+		int index = 0;
 		for (int i : prefix) {
 			LogootIdentifier triplet = new LogootIdentifier();
 			triplet.setI(i);
-			if (i == p.getChaine().get(i).getI()) {
-				triplet.setR(p.getChaine().get(i).getR());
-				triplet.setS(p.getChaine().get(i).getS());
-			} else if (i == q.getChaine().get(i).getI()) {
-				triplet.setR(q.getChaine().get(i).getR());
-				triplet.setS(q.getChaine().get(i).getS());
+			if (index < p.size() && i == p.getChaine().get(index).getI()) {
+				triplet.setR(p.getChaine().get(index).getR());
+				triplet.setS(p.getChaine().get(index).getS());
+			} else if (index < q.size() && i == q.getChaine().get(index).getI()) {
+				triplet.setR(q.getChaine().get(index).getR());
+				triplet.setS(q.getChaine().get(index).getS());
 			} else {
+				rep.setR(rep.getR() + 1);
 				triplet.setR(rep.getR());
-				rep.setS(rep.getS() + 1);
 				triplet.setS(rep.getS());
 			}
+			index++;
 			result.add(triplet);
 		}
 		return result;
@@ -91,7 +102,7 @@ public class LogootEngine {
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
 		for (int i = 0; i < index; i++) {
 			String s = "";
-			if ( i < id.size() ) {
+			if (i < id.size()) {
 				s = String.valueOf(id.getChaine().get(i).getI());
 			}
 			while (s.length() < size)
@@ -106,15 +117,15 @@ public class LogootEngine {
 		String ts = String.valueOf(prefix.toString());
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
 
-		int endIndex = ts.length() - 1;
+		int endIndex = ts.length();
 		int beginIndex = Math.max(0, endIndex - size);
-		ts.substring(beginIndex, endIndex);
-		result.addLast(Integer.parseInt(ts));
+		String cs = ts.substring(beginIndex, endIndex);
+		result.addLast(Integer.parseInt(cs));
 		while (beginIndex != 0) {
-			endIndex = ts.length() - 1;
+			endIndex -= cs.length();
 			beginIndex = Math.max(0, endIndex - size);
-			ts.substring(beginIndex, endIndex);
-			result.addFirst(Integer.parseInt(ts));
+			cs = ts.substring(beginIndex, endIndex);
+			result.addFirst(Integer.parseInt(cs));
 		}
 		return result;
 	}
