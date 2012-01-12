@@ -1,6 +1,102 @@
+function str_pad(input, pad_length, pad_string, pad_type) {
+    // Returns input string padded on the left or right to specified length
+    // with pad_string  
+    // 
+    // version: 1109.2015
+    // discuss at: http://phpjs.org/functions/str_pad
+    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // + namespaced by: Michael White (http://getsprink.com)
+    // +      input by: Marco van Oort
+    // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
+    // *     example 1: str_pad('Kevin van Zonneveld', 30, '-=',
+    // *                    'STR_PAD_LEFT');
+    // *     returns 1: '-=-=-=-=-=-Kevin van Zonneveld'
+    // *     example 2: str_pad('Kevin van Zonneveld', 30, '-', 'STR_PAD_BOTH');
+    // *     returns 2: '------Kevin van Zonneveld-----'
+    var half = '',
+        pad_to_go;
+ 
+    var str_pad_repeater = function (s, len) {
+        var collect = '',
+            i;
+ 
+        while (collect.length < len) {
+            collect += s;
+        }
+        collect = collect.substr(0, len);
+ 
+        return collect;
+    };
+ 
+    input += '';
+    pad_string = pad_string !== undefined ? pad_string : ' ';
+ 
+    if (pad_type != 'STR_PAD_LEFT'
+        && pad_type != 'STR_PAD_RIGHT'
+        && pad_type != 'STR_PAD_BOTH') {
+        pad_type = 'STR_PAD_RIGHT';
+    }
+    if ((pad_to_go = pad_length - input.length) > 0) {
+        if (pad_type == 'STR_PAD_LEFT') {
+            input = str_pad_repeater(pad_string, pad_to_go) + input;
+        } else if (pad_type == 'STR_PAD_RIGHT') {
+            input = input + str_pad_repeater(pad_string, pad_to_go);
+        } else if (pad_type == 'STR_PAD_BOTH') {
+            half = str_pad_repeater(pad_string, Math.ceil(pad_to_go / 2));
+            input = half + input + half;
+            input = input.substr(0, pad_length);
+        }
+    }
+ 
+    return input;
+}
+
+function str_split (string, split_length) {
+    // Convert a string to an array. If split_length is specified, break the
+    // string down into chunks each split_length characters long.  
+    // 
+    // version: 1109.2015
+    // discuss at: http://phpjs.org/functions/str_split
+    // +     original by: Martijn Wieringa
+    // +     improved by: Brett Zamir (http://brett-zamir.me)
+    // +     bugfixed by: Onno Marsman
+    // +      revised by: Theriault
+    // +        input by: Bjorn Roesbeke (http://www.bjornroesbeke.be/)
+    // +      revised by: Rafał Kukawski (http://blog.kukawski.pl/)
+    // *       example 1: str_split('Hello Friend', 3);
+    // *       returns 1: ['Hel', 'lo ', 'Fri', 'end']
+    if (split_length === null) {
+        split_length = 1;
+    }
+    if (string === null || split_length < 1) {
+        return false;
+    }
+    string += '';
+    var chunks = [],
+        pos = 0,
+        len = string.length;
+    while (pos < len) {
+        chunks.push(string.slice(pos, pos += split_length));
+    }
+ 
+    return chunks;
+}
+
+/*!
+ * \brief   Returns random value between min and max.
+ *
+ * \param   min Min range for random value.
+ * \param   max Max range for random value.
+ * \return  Random integer value in range <tt>[min..max]</tt>.
+ */
+function rand(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
 //! BASE constant for position object (if not existe, BASE is set to MAX_INT).
 if (!BASE) {
-  var MAX_INT = Math.pow(2, 53);
+  // var MAX_INT = Math.pow(2, 53);
+  var MAX_INT = Math.pow(2, 7);
   var BASE = MAX_INT;
 }
 
@@ -220,7 +316,7 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary,
     var pref;
 
     // Compute prefix
-    pref = previousLineId.prefix(index - 1);
+    pref = previousLineId.prefix(index);
     prefixPreviousLineId[index] = {
       idstrval:pref,
       cumval:prefixPreviousLineId[index-1].cumval + pref
@@ -229,7 +325,7 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary,
         + prefixPreviousLineId[index].idstrval +', cumval:'
         + prefixPreviousLineId[index].cumval +'}');
 
-    pref = nextLineId.prefix(index - 1);
+    pref = nextLineId.prefix(index);
     prefixNextLineId[index] = {
       idstrval:pref,
       cumval:prefixNextLineId[index-1].cumval + pref
@@ -239,19 +335,30 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary,
         + prefixNextLineId[index].cumval +'}');
 
     // Compute interval
-    interval = parseInt(prefixNextLineId[index].cumval)
-        - parseInt(prefixPreviousLineId[index].cumval);
-    console.log('interval:'+interval);
+    // Caution -- NEED TO SPECIFIC BASE IN parseInt Function.
+    var prefNext = parseInt(prefixNextLineId[index].cumval, 10);
+    var prefPrev = parseInt(prefixPreviousLineId[index].cumval, 10);
+
+    interval = prefNext - prefPrev - 1;
+
+    console.log('prefNext:' + prefNext);
+    console.log('prefPrev:' + prefPrev);
+    console.log('interval:' + interval);
   }
 
   // Construct Indentifier
-  var step = Math.min(interval/N, boundary);
-  var r = prefixPreviousLineId[index].cumval;
+  // TODO: integrated boundary : step = Math.min(interval/N, boundary);
+  // FIXME: May sur to round step
+  var step = Math.round(interval/N);
+  var r = parseInt(prefixPreviousLineId[index].cumval, 10);
   var list = [];
 
   for (var j = 1; j <= N; j++) {
     var nr = r + rand(1, step);
     var strNr = nr.toString();
+
+    console.log('nr:' + nr);
+    console.log('strNr:' + strNr);
 
     // Cut strNr on (BASE-1) to get each chunk.
     // -- If strNr isn't cutable on BASE-1, add some 0 from left.
@@ -262,10 +369,11 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary,
     
     var chunksNr = str_split(strNr, (BASE - 1));
     var lineId = new LineId();
+    console.log('chunksNr:' + chunksNr.toString());
 
     for (var i = 1; i <= index; i++) {
       var position;
-      var d = chunksNr[i];
+      var d = chunksNr[i - 1];
 
       if (i <= previousLineId.length()
           && prefixPreviousLineId[i].idstrval == d) {
@@ -289,100 +397,9 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary,
   return list;
 }
 
+//! \brief    Prefix.
 LineId.prototype.prefix = function(index) {
-    return str_pad(this.positions[index].getInt().toString(), BASE - 1, '0',
+    return str_pad(this.positions[index -1].getInt().toString(), BASE - 1, '0',
         'STR_PAD_LEFT');
-}
-
-/*!
- * \brief   Returns random value between min and max.
- *
- * \param   min Min range for random value.
- * \param   max Max range for random value.
- * \return  Random integer value in range <tt>[min..max]</tt>.
- */
-function rand(min, max) {
-  console.log('rand params: ' + min + ' ' + max);
-
-  return Math.round(Math.random() * (max - min) + min);
-}
-
-function str_pad(input, pad_length, pad_string, pad_type) {
-    // Returns input string padded on the left or right to specified length with pad_string  
-    // 
-    // version: 1109.2015
-    // discuss at: http://phpjs.org/functions/str_pad
-    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // + namespaced by: Michael White (http://getsprink.com)
-    // +      input by: Marco van Oort
-    // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
-    // *     example 1: str_pad('Kevin van Zonneveld', 30, '-=', 'STR_PAD_LEFT');
-    // *     returns 1: '-=-=-=-=-=-Kevin van Zonneveld'
-    // *     example 2: str_pad('Kevin van Zonneveld', 30, '-', 'STR_PAD_BOTH');
-    // *     returns 2: '------Kevin van Zonneveld-----'
-    var half = '',
-        pad_to_go;
- 
-    var str_pad_repeater = function (s, len) {
-        var collect = '',
-            i;
- 
-        while (collect.length < len) {
-            collect += s;
-        }
-        collect = collect.substr(0, len);
- 
-        return collect;
-    };
- 
-    input += '';
-    pad_string = pad_string !== undefined ? pad_string : ' ';
- 
-    if (pad_type != 'STR_PAD_LEFT' && pad_type != 'STR_PAD_RIGHT' && pad_type != 'STR_PAD_BOTH') {
-        pad_type = 'STR_PAD_RIGHT';
-    }
-    if ((pad_to_go = pad_length - input.length) > 0) {
-        if (pad_type == 'STR_PAD_LEFT') {
-            input = str_pad_repeater(pad_string, pad_to_go) + input;
-        } else if (pad_type == 'STR_PAD_RIGHT') {
-            input = input + str_pad_repeater(pad_string, pad_to_go);
-        } else if (pad_type == 'STR_PAD_BOTH') {
-            half = str_pad_repeater(pad_string, Math.ceil(pad_to_go / 2));
-            input = half + input + half;
-            input = input.substr(0, pad_length);
-        }
-    }
- 
-    return input;
-}
-
-function str_split (string, split_length) {
-    // Convert a string to an array. If split_length is specified, break the string down into chunks each split_length characters long.  
-    // 
-    // version: 1109.2015
-    // discuss at: http://phpjs.org/functions/str_split
-    // +     original by: Martijn Wieringa
-    // +     improved by: Brett Zamir (http://brett-zamir.me)
-    // +     bugfixed by: Onno Marsman
-    // +      revised by: Theriault
-    // +        input by: Bjorn Roesbeke (http://www.bjornroesbeke.be/)
-    // +      revised by: Rafał Kukawski (http://blog.kukawski.pl/)
-    // *       example 1: str_split('Hello Friend', 3);
-    // *       returns 1: ['Hel', 'lo ', 'Fri', 'end']
-    if (split_length === null) {
-        split_length = 1;
-    }
-    if (string === null || split_length < 1) {
-        return false;
-    }
-    string += '';
-    var chunks = [],
-        pos = 0,
-        len = string.length;
-    while (pos < len) {
-        chunks.push(string.slice(pos, pos += split_length));
-    }
- 
-    return chunks;
 }
 
