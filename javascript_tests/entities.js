@@ -4,10 +4,6 @@ if (!BASE) {
   var BASE = MAX_INT;
 }
 
-if(!DIGIT) {
-  var DIGIT = 3;
-}
-
 /*!
  * \class   Triplet
  * \brief   Triplet meta data.
@@ -204,9 +200,11 @@ LineId.getMaxPosition = function() {
  * \param   N               Number of positions generated.
  * \param   boundary        
  * \param   rep             Unique user replica.
+ * \param   clock           Unique user clock at this time.
  * \return  LineId between previous and next LineId.
  */
-LineId.generateLineId = function(previousLineId, nextLineId, N, boundary, rep) {
+LineId.generateLineId = function(previousLineId, nextLineId, N, boundary,
+    replica, clock) {
   var index = 0;
   var interval = 0;
   var prefixPreviousLineId = [];
@@ -242,7 +240,7 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary, rep) {
 
     // Compute interval
     interval = parseInt(prefixNextLineId[index].cumval)
-      - parseInt(prefixPreviousLineId[index].cumval);
+        - parseInt(prefixPreviousLineId[index].cumval);
     console.log('interval:'+interval);
   }
 
@@ -253,17 +251,42 @@ LineId.generateLineId = function(previousLineId, nextLineId, N, boundary, rep) {
 
   for (var j = 1; j <= N; j++) {
     var nr = r + rand(1, step);
-    var str_nr = nr.toString();
+    var strNr = nr.toString();
 
-    // Cut str_nr on (BASE-1) to get each chunk.
-    // -- If str_nr isn't cutable on BASE-1, add some 0 from left.
-    if((str_nr.length % (index * (BASE - 1))) != 0) {
-      str_nr = str_pad(str_nr, str_nr.length + ((index * (BASE -1)) 
-          - str_nr.length % (index * (BASE - 1))), '0', 'STR_PAD_LEFT');
+    // Cut strNr on (BASE-1) to get each chunk.
+    // -- If strNr isn't cutable on BASE-1, add some 0 from left.
+    if((strNr.length % (index * (BASE - 1))) != 0) {
+      strNr = str_pad(strNr, strNr.length + ((index * (BASE -1)) 
+          - strNr.length % (index * (BASE - 1))), '0', 'STR_PAD_LEFT');
     }
     
-    var chunk_nr = str_split(str_nr, (BASE - 1));
+    var chunksNr = str_split(strNr, (BASE - 1));
+    var lineId = new LineId();
+
+    for (var i = 1; i <= index; i++) {
+      var position;
+      var d = chunksNr[i];
+
+      if (i <= previousLineId.length()
+          && prefixPreviousLineId[i].idstrval == d) {
+        position = new Position(d, previousLineId.get(i - 1).getReplica(),
+            previousLineId.get(i - 1).getClock());
+      } else if (i <= nextLineId.length()
+          && prefixNextLineId[i].idstrval == d) {
+        position = new Position(d, nextLineId.get(i - 1).getReplica(),
+            nextLineId.get(i - 1).getClock());
+      } else {
+        position = new Position(d, replica, clock);
+      }
+
+      lineId.add(position);
+    }
+
+    list.push(lineId);
+    r += step;
   }
+
+  return list;
 }
 
 LineId.prototype.prefix = function(index) {
