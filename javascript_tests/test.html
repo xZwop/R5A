@@ -1,0 +1,44 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <p>See JavaScript console for log</p>
+    <script src="entities.js"></script>
+    <script>
+      BASE = 100;
+
+      p1 = new Position(2, 4, 7);
+      p2 = new Position(59, 9, 5);
+      q1 = new Position(10, 5, 3);
+      q2 = new Position(20, 3, 6);
+      q3 = new Position(3, 3, 9);
+
+      p = new LineId();
+      q = new LineId();
+
+      p.add(p1);
+      p.add(p2);
+      q.add(q1);
+      q.add(q2);
+      q.add(q3);
+
+      console.log('----------------------------------------------------------');
+      console.log('BASE:' + BASE);
+      console.log('p:' + p.toString());
+      console.log('q:' + q.toString());
+      console.log('generateLineId(p, q, N, undefined, 3, 10) ; N = 7');
+      console.log('----------------------------------------------------------');
+      r = LineId.generateLineId(p, q, 7, undefined, 3, 10);
+      console.log('RESULT: ' + r.toString());
+
+      console.log('----------------------------------------------------------');
+      console.log('BASE:' + BASE);
+      console.log('p:' + p.toString());
+      console.log('q:' + q.toString());
+      console.log('generateLineId(p, q, N, undefined, 3, 10) ; N = 8');
+      console.log('----------------------------------------------------------');
+      r = LineId.generateLineId(p, q, 8, undefined, 3, 10);
+      console.log('RESULT: ' + r.toString());
+    </script>
+  </body>
+</html>
