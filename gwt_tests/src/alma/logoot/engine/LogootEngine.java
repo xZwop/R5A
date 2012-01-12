@@ -1,5 +1,6 @@
 package alma.logoot.engine;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -24,22 +25,29 @@ public class LogootEngine {
 			LogootIdContainer p, LogootIdContainer q, int N,
 			LogootIdentifier rep) {
 		// TODO
+		BigInteger MAXINT = new BigInteger(Integer.MAX_VALUE+"");
 		Collection<LogootIdContainer> list = new ArrayList<LogootIdContainer>();
 		int index = 0;
 		int interval = 0;
-		while (interval < N) {
+//		BigInteger interval = new BigInteger("0");
+		while (interval< N ) {
 			index++;
-			interval = prefix(q, index) - prefix(p, index);// - 1;
+			BigInteger intervalB = prefix(q, index).subtract(prefix(p, index));
+			if ( (intervalB).compareTo(MAXINT) != -1 )
+				interval = Integer.MAX_VALUE;
+			else 
+				interval = intervalB.intValue();
 		}
 		int step = interval / N;
-		int r = prefix(p, index);
+		BigInteger stepB = new BigInteger(step+"");
+		BigInteger r = prefix(p, index);
 
 		for (int j = 1; j < N; j++) {
-			int rand = r + Random.nextInt(step) + 1;
+			BigInteger rand = r.add(new BigInteger((Random.nextInt(step) + 1)+""));
 			list.add(constructIdentifier(rand, p, q, rep));
-			r += step;
+			r = r.add(stepB);
 		}
-		return list;
+		return list; 
 	}
 
 	/**
@@ -55,7 +63,7 @@ public class LogootEngine {
 	 *            position
 	 * @return l'identifiant pour la replique définit par rep(id+horloge)
 	 */
-	static LogootIdContainer constructIdentifier(int r, LogootIdContainer p,
+	static LogootIdContainer constructIdentifier(BigInteger r, LogootIdContainer p,
 			LogootIdContainer q, LogootIdentifier rep) {
 		LogootIdContainer result = new LogootIdContainer();
 		LinkedList<Integer> prefix = prefixToList(r);
@@ -78,21 +86,24 @@ public class LogootEngine {
 		return result;
 	}
 
-	static public int prefix(LogootIdContainer id, int index) {
+	static public BigInteger prefix(LogootIdContainer id, int index) {
 		String result = "";
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
 		for (int i = 0; i < index; i++) {
-			String s = String.valueOf(id.getChaine().get(i).getI());
+			String s = "";
+			if ( i < id.size() ) {
+				s = String.valueOf(id.getChaine().get(i).getI());
+			}
 			while (s.length() < size)
 				s = "0" + s;
 			result += s;
 		}
-		return Integer.parseInt(result);
+		return new BigInteger(result);
 	}
 
-	static private LinkedList<Integer> prefixToList(int prefix) {
+	static private LinkedList<Integer> prefixToList(BigInteger prefix) {
 		LinkedList<Integer> result = new LinkedList<Integer>();
-		String ts = String.valueOf(prefix);
+		String ts = String.valueOf(prefix.toString());
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
 
 		int endIndex = ts.length() - 1;
