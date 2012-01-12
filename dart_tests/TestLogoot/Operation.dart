@@ -3,7 +3,7 @@ class Operation {
   static final int DELETION = 1;
   
   int type;
-  int id;
+  LineIdentifier id;
   String content;
   
   Operation(this.type, this.id, this.content) {

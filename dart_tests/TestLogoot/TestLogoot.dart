@@ -4,6 +4,7 @@
 #source('Operation.dart');
 #source('Position.dart');
 #source('Prefix.dart');
+#source('LineIdentifier.dart');
 
 class TestLogoot {
 

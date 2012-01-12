@@ -1,10 +1,10 @@
 class Prefix {
   List<int> digits;
   
-  Prefix(List<Position> idl, int index) {
+  Prefix(LineIdentifier idl, int index) {
     digits = new List<int>();
 
-    for(int i = 0; i < idl.length; ++i) {
+    for(int i = 0; i < idl.length(); ++i) {
       digits.add(idl[i].digit);
     }
   }
