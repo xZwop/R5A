@@ -93,3 +93,42 @@ function rand(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
 
+/*!
+ * \brief   Binary Search in Array (Monkey typing) on array.
+ * 
+ * Caution if they have no value equals to \c value in the array, this
+ * implemetation will return the first next uper value 
+ * Recursive implementation of binary search:
+ * http://en.wikipedia.org/wiki/Binary_search_algorithm
+ *
+ * \param   value   The value to search.
+ * \param   low     The low value (default 0).
+ * \param   high    The high value (default this.length).
+ * \param   compare Function using as order relation between values in the
+ *          array. The function would have same comportement than CompareTo in
+ *          java. If the function isn't give this will use "< > ==".
+ */
+Array.prototype.binarySearch(value, low, high, compare) {
+  var low = low || 0;
+  var high = high || this.length;
+
+  if (high < low) {
+    return value[low];
+  }
+
+  var mid = parseInt((low + high) / 2);
+
+  var midHigher =
+    (compare) ? (compare(this[mid], value) > 0) : (this[mid] > value);
+  var midLower =
+    (compare) ? (compare(this[mid], value) < 0) : (this[mid] < value);
+
+  if (midHigher) {
+    return this.binarySearch(value, low, mid - 1);
+  } else if (midLower) {
+    return this.binarySearch(value, mid + 1, high);
+  } else {
+    return mid;
+  }
+}
+

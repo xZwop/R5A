@@ -10,33 +10,75 @@
  * \param   deleteDoc Function call to delete content. Function takes
  *          parameters:
  *           \li position => Position where content is deleted.
+ * \param   process   Function describe how to launch logoot. This function
+ *          gets content on event, determine an operation 
  */
 function Logoot(insertDoc, deleteDoc) {
   this.idTable = [];
+  this.idTable.push(LineId.getMinPosition());
+  this.idTable.push(LineId.getMaxPosition());
 
   this.insertDoc = insertDoc;
   this.deleteDoc = deleteDoc;
+
+  // CallbackFunction executing alogorithme (callback call at each event
+  // captured):
+  //   * One callback before text change.
+  //   * One callback after text change.
+
+  // From before: Get the content.
+
+  // From after: making patch, call the Send.
+  // Send is the deliver without call of insert and deleteDoc. At end send use
+  // ShareComponent to send patch.
+
+  // Callback at each push event. This call the receive.
 }
 
-// patch is an array of Operation.
-Logoot.prototype.deliver = function(patch) {
+/*!
+ * \brief   Deliver modification to the user interface.
+ *
+ * \param   patch Operations Container.
+ */
+Logoot.prototype.receive = function(patch) {
   for (opId in patch) {
     var operation = patch[opId];
+    var lineId = operation.getLineId();
 
-    if (operation instanceof OperationInsert) {
-      var position = this.binarySearch(operation.getId());
+    switch (operation.getType()) {
+      case Operation.INSERT:
+        var content = operation.getContent();
+        var position = this.binarySearch(lineId);
 
-      this.insertInIdTable(position, operation.getId());
-      this.insertDoc(position, operation.getContent());
-    } else if (operation instanceof OperationDelete) {
-      var position = this.binarySearch(operation.getId());
+        this.insertInIdTable(position, lineId);
+        this.insertDoc(position, content);
+        break;
+      case Operation.DELETE:
+        var position = this.binarySearch(lineId);
 
-      if (this.idTable[position] == operation.getId()) {
-        this.deleteInIdTable(position);
-        this.deleteDoc(position);
-      }
+        if (this.idTable[position] == lineId) {
+          this.deleteInIdTable(position);
+          this.deleteDoc(position);
+        }
+        break;
+      default:
     }
   }
+}
+
+/*!
+ * \brief  Do a binary search in a the idTable.
+ *
+ * returns the position of lineId or the first next upper value.
+ *
+ * \param   lineId  The LineId search in table.
+ * \return  The position of \c lineId or the first greater.
+ */
+Logoot.prototype.binarySearch(lineId) {
+  return this.idTable.binarySearch(lineId, 0, this.idTable.length,
+      function(lineId1, lineId2) {
+        return lineId1.compareTo(lineId2);
+      });
 }
 
 /*!
@@ -103,18 +145,18 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
  */
 Logoot.prefix = function(lineId, index) {
   var result = '';
-  var max = (index <= lineId.length()) ? index : lineId.length();
+  var min = Math.min(index, lineId.length());
   
   // Get each position.getInt and put it in right \c BASE.
-  for (var id = 0; id < max; ++ id) {
+  for (var id = 0; id < min; ++ id) {
     result += str_pad(lineId.getPosition(id).getInt().toString(), DIGIT, '0',
         'STR_PAD_LEFT');
   }
 
   // If index is bigger than positions available, fill with 0.
-  while (max < index) {
+  while (min < index) {
     result += str_pad('', DIGIT, '0');
-    ++ max;
+    ++ min;
   }
 
   return Number(result);

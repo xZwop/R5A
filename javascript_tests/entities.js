@@ -101,6 +101,34 @@ Position.prototype.getClock = function() {
 }
 
 /*!
+ * \brief   Compare current position with another.
+ *
+ * \param   position  Position to compare with current.
+ * \return  Result of comparison. Values is one of (-1, 0, 1).
+ */
+Position.prototype.compareTo = function(position) {
+  if (this.getInt() > position.getInt()) {
+    return 1;
+  } else if (this.getInt() < position.getInt()) {
+    return -1;
+  }
+
+  if (this.getReplica > position.getReplica()) {
+    return 1;
+  } else if (this.getReplica < position.getReplica()) {
+    return -1;
+  }
+
+  if (this.getClock > position.getClock()) {
+    return 1;
+  } else if(this.getClock < position.getClock()) {
+    return -1;
+  }
+
+  return 0;
+}
+
+/*!
  * \brief   Returns a string representation of the object.
  *
  * \return  A string representation of the object.
@@ -169,6 +197,32 @@ LineId.prototype.getPosition = function(i) {
  */
 LineId.prototype.length = function() {
    return this.positions.length;
+}
+
+/*
+ * \brief   Compare a LineId with the current.
+ *
+ * \param   lineId  The LineId to compare with current.
+ * \return  Result of comparison. Values is one of (-1, 0, 1).
+ */
+LineId.prototype.compareTo = function(lineId) {
+  if (this.length() > 0 && lineId.length() > 0) {
+    for (var i = 0; i < Math.min(this.length(), lineId.length()); ++ i) {
+      var comparison = this.getPosition(i).compareTo(lineId.getPosition(i));
+
+      if (comparison != 0) {
+        return comparison;
+      }
+
+      if (this.length() > lineId.length()) {
+        return 1;
+      } else if (this.length < lineId.length()) {
+        return -1;
+      }
+    }
+  }
+
+  return 0;
 }
 
 /*!
