@@ -5,7 +5,7 @@ if (!BASE) {
 }
 
 //! Number of digit in BASE.
-var DIGIT = parseInt(BASE.toString().length - 1, 10);
+var DIGIT = Number(BASE.toString().length - 1);
 
 /*!
  * \class   Triplet
@@ -215,4 +215,87 @@ LineId.getMaxPosition = function() {
   lineId.add(Position.getMax());
   return lineId;
 }
+
+/*!
+ * \class   Operation
+ * \brief   Representation of operation on Logoot.
+ *
+ * \param   lineId  The LineId of operation.
+ * \param   type    Type of operation.
+ */
+function Operation(lineId, type) {
+  this.lineId = lineId;
+  this.type = type || Operation.DELETE;
+}
+
+//! Define UNKNOWN type operation.
+Operation.UNKNOWN = 'UNKNOWN';
+
+//! Define INSERT type operation.
+Operation.INSERT = 'INSERT';
+
+//! Define DELETE type operation.
+Operation.DELETE = 'DELETE';
+
+/*!
+ * \brief   Returns the line identifier.
+ *
+ * \return  The LineId of operation.
+ */
+Operation.prototype.getLineId = function() {
+  return this.lineId;
+}
+
+/*!
+ * \brief   Returns the operation type.
+ *
+ * \return  Operation type.
+ */
+Operation.prototype.getType = function() {
+  return this.type;
+}
+
+/*!
+ * \brief   Returns a string representation of the object.
+ *
+ * \return  A string representation of the object.
+ */
+Operation.prototype.toString = function() {
+  return this.getType() + ":" + this.getLineId();
+}
+
+/*!
+ * \class   OperationInsert
+ * \extends Operation
+ *
+ * \param   lineId  The LineId of operation.
+ * \param   content Content inserted.
+ */
+function OperationInsert(lineId, content) {
+  this.content = content;
+  Operation.call(this, lineId, Operation.INSERT);
+}
+OperationInsert.prototype = new Operation;
+OperationInsert.prototype.constructor = OperationInsert;
+
+/*!
+ * \brief   Returns the content inserted during operation.
+ *
+ * \return  Content inserted.
+ */
+Operation.prototype.getContent = function() {
+  return this.content;
+}
+
+/*!
+ * \class   OperationDelete
+ * \extends Operation
+ *
+ * \param   lineId  The LineId of operation.
+ */
+function OperationDelete(lineId) {
+  Operation.call(this, lineId, Operation.DELETE);
+}
+OperationDelete.prototype = new Operation;
+OperationDelete.prototype.constructor = OperationDelete;
 
