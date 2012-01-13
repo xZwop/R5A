@@ -1,8 +1,42 @@
 /*!
  * \class   Logoot
  * \brief   Logoot algorithm implementation.
+ *
+ * \param   
+ * \param   insertDoc Function call to insert new content. Function takes
+ *          parameters:
+ *            \li position => Position where insert content.
+ *            \li content => Content to insert.
+ * \param   deleteDoc Function call to delete content. Function takes
+ *          parameters:
+ *           \li position => Position where content is deleted.
  */
-function Logoot() {
+function Logoot(insertDoc, deleteDoc) {
+  this.idTable = [];
+
+  this.insertDoc = insertDoc;
+  this.deleteDoc = deleteDoc;
+}
+
+// patch is an array of Operation.
+Logoot.prototype.deliver = function(patch) {
+  for (opId in patch) {
+    var operation = patch[opId];
+
+    if (operation instanceof OperationInsert) {
+      var position = this.binarySearch(operation.getId());
+
+      this.insertInIdTable(position, operation.getId());
+      this.insertDoc(position, operation.getContent());
+    } else if (operation instanceof OperationDelete) {
+      var position = this.binarySearch(operation.getId());
+
+      if (this.idTable[position] == operation.getId()) {
+        this.deleteInIdTable(position);
+        this.deleteDoc(position);
+      }
+    }
+  }
 }
 
 /*!
@@ -18,6 +52,8 @@ function Logoot() {
  */
 Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
     replica, clock) {
+  var prefPrev = 0;
+  var prefNext = 0;
   var index = 0;
   var interval = 0;
 
@@ -26,26 +62,23 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
     index ++;
 
     // Compute prefix
-    // Now pref is cumval and idstrval is the last chunck of cumval split
-    // on size(DIGIT).
-    // Caution -- NEED TO SPECIFIC BASE IN parseInt Function.
-    var prefPrev = Logoot.prefix(previousLineId, index);
-    var prefNext = Logoot.prefix(nextLineId, index);
+    prefPrev = Logoot.prefix(previousLineId, index);
+    prefNext = Logoot.prefix(nextLineId, index);
 
     // Compute interval
     interval = prefNext - prefPrev - 1;
-
-    console.log('prefixPreviousLineId:' + prefPrev);
-    console.log('prefixNextLineId:' + prefNext);
-    console.log('interval:' + interval);
   }
-
   // Construct Indentifier.
   //! \todo: integrated boundary : step = Math.min(interval/N, boundary);
   //! \fixme: Ensure to round step
   var step = Math.round(interval/N);
   var r = Logoot.prefix(previousLineId, index);
   var list = [];
+
+  console.log('prefixPreviousLineId:' + prefPrev);
+  console.log('prefixNextLineId:' + prefNext);
+  console.log('interval:' + interval);
+  console.log('step:' + step);
 
   for (var j = 1; j <= N; j++) {
     list.push(Logoot.constructLineId(r + rand(1, step), previousLineId,
@@ -84,7 +117,7 @@ Logoot.prefix = function(lineId, index) {
     ++ max;
   }
 
-  return parseInt(result, 10);
+  return Number(result);
 }
 
 /*!
@@ -114,7 +147,7 @@ Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
   // Generate position of lineId.
   for (var i in chunksR) {
     var position;
-    var d = parseInt(chunksR[i], 10);
+    var d = Number(chunksR[i]);
 
     if (i < startLineId.length() && d == startLineId.getPosition(i).getInt()) {
       position = new Position(d,
