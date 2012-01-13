@@ -2,10 +2,8 @@ package alma.logoot.shared;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Random;
-
 
 public class LogootEngine {
 
@@ -24,7 +22,9 @@ public class LogootEngine {
 	public static ArrayList<LogootIdContainer> generateLineIdentier(
 			LogootIdContainer p, LogootIdContainer q, int N,
 			LogootIdentifier rep) {
-		// TODO
+		System.out.println("\t LogootEngine.generateLineIdentier(" + p + ","
+				+ q + ", " + N + ", " + rep + ")");
+
 		BigInteger MAXINT = new BigInteger(Integer.MAX_VALUE + "");
 		ArrayList<LogootIdContainer> list = new ArrayList<LogootIdContainer>();
 		int index = 0;
@@ -33,8 +33,8 @@ public class LogootEngine {
 		while (interval < N) {
 			index++;
 			BigInteger intervalB = prefix(q, index).subtract(prefix(p, index));
-			intervalB=intervalB.subtract(new BigInteger("1"));
-			System.out.println("Intervale : "+intervalB);
+			intervalB = intervalB.subtract(new BigInteger("1"));
+			System.out.println("Intervale : " + intervalB);
 			if ((intervalB).compareTo(MAXINT) != -1)
 				interval = Integer.MAX_VALUE;
 			else
@@ -46,11 +46,16 @@ public class LogootEngine {
 		BigInteger stepB = new BigInteger(step + "");
 		System.out.println("Step : " + step + "(" + stepB + ")");
 		BigInteger r = prefix(p, index);
-		Random random=new Random();
+		Random random = new Random();
 		for (int j = 0; j < N; j++) {
-			BigInteger rand = r.add(new BigInteger((random.nextInt(step)+1 )
-					+ ""));
-			System.out.println("Prefix(+rand)"+rand+"\n");
+			BigInteger rand;
+			if (step == 1) {
+				rand = r.add(new BigInteger("1"));
+			} else {
+				rand = r.add(new BigInteger((random
+						.nextInt(step - 1) + 1) + ""));
+			}
+			System.out.println("Prefix(+rand)" + rand + "\n");
 			list.add(constructIdentifier(rand, p, q, rep));
 			r = r.add(stepB);
 		}

@@ -49,4 +49,8 @@ public class LogootIdContainer implements Comparable<LogootIdContainer>{
 		return 0;
 	}
 	
+	public boolean equals(LogootIdContainer o){
+		return this.compareTo(o)==0;		
+	}
+	
 }
