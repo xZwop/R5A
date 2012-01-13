@@ -4,8 +4,12 @@ class Prefix {
   Prefix(LineIdentifier idl, int index) {
     digits = new List<int>();
 
-    for(int i = 0; i < idl.length(); ++i) {
-      digits.add(idl[i].digit);
+    for(int i = 0; i < index; ++i) {
+      if(i < idl.length()) {
+        digits.add(idl[i].digit);
+      } else {
+        digits.add(0);
+      }
     }
   }
   
@@ -40,5 +44,17 @@ class Prefix {
     }
     
     return Math.parseInt(result);
+  }
+  
+  String toString() {
+    String result = '';
+    
+    for(int i = 0; i < digits.length; ++i) {
+      result += '' + digits[i] + '.';
+    }
+    
+    result += ' (' + toInt() + ')';
+    
+    return result;
   }
 }
