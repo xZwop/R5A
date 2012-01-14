@@ -1,3 +1,6 @@
+//! Boundary for LineId Generator
+Logoot.BOUNDARY = undefined;
+
 /*!
  * \class   Logoot
  * \brief   Logoot algorithm implementation.
@@ -31,6 +34,9 @@ function Logoot(dmp, insertDoc, deleteDoc) {
 
   this.insertDoc = insertDoc;
   this.deleteDoc = deleteDoc;
+
+  //! Textarea content.
+  this.content = '';
 
   // CallbackFunction executing alogorithme (callback call at each event
   // captured):
@@ -78,15 +84,6 @@ Logoot.prototype.receive = function(patch) {
 }
 
 /*!
- * \brief   Before send, this method would be call to get the content.
- *
- * \param   content   The content before the text change.
- */
-Logoot.prototype.beforeSend = function(content) {
-  this.content = content;
-}
-
-/*!
  * \brief   Compute the patch and send it to other.
  *
  * Compute the patch. Maintain the id table and send result to other. At
@@ -99,7 +96,7 @@ var DIFF_INSERT = 1;
 var DIFF_DELETE = -1;
 Logoot.prototype.send = function(newContent) {
   var patch = [];
-  var curPos = 0;
+  var curPos = 1;
 
   // Compute patch
   var diffs = this.dmp.diff_main(this.content, newContent);
@@ -108,17 +105,27 @@ Logoot.prototype.send = function(newContent) {
     var diffStr = diffs[diffId][1];
 
     if (diffType == DIFF_INSERT) {
-      var previousLineId = this.idTable[curPos];
-      var nextLineId = this.idTable[curPos + 1];
+      var previousLineId = this.idTable[curPos - 1];
+      var nextLineId = this.idTable[curPos];
+
+      // -- DEBUG START
+      /*
+      console.log(previousLineId + ', ' + nextLineId);
+      //*/
+      // -- DEBUG END
 
       var lineIds = Logoot.generateLineId(previousLineId, nextLineId,
-          diffStr.length, 10, 1, 1);
+          diffStr.length, Logoot.BOUNDARY, 1, 1);
 
       for (id in lineIds) {
         var lineId = lineIds[id];
         var content = diffStr[id];
 
         patch.push(new OperationInsert(lineId, content));
+
+        var position = this.binarySearch(lineId);
+
+        this.insertInIdTable(position, lineId);
       }
 
       curPos += diffStr.length;
@@ -128,6 +135,10 @@ Logoot.prototype.send = function(newContent) {
         var lineId = this.idTable[curPos];
 
         patch.push(new OperationDelete(lineId));
+
+        if (this.idTable[curPos] == lineId) {
+          this.deleteInIdTable(curPos);
+        }
         -- curPos;
       }
     } else if (diffType == DIFF_NOCHANGE) {
@@ -135,33 +146,11 @@ Logoot.prototype.send = function(newContent) {
     }
   }
 
-  // Integrated patch
-  for (opId in patch) {
-    var operation = patch[opId];
-    var lineId = operation.getLineId();
-
-    switch (operation.getType()) {
-      case Operation.INSERT:
-        var content = operation.getContent();
-        var position = this.binarySearch(lineId);
-
-        this.insertInIdTable(position, lineId);
-        break;
-      case Operation.DELETE:
-        var position = this.binarySearch(lineId);
-
-        if (this.idTable[position] == lineId) {
-          this.deleteInIdTable(position);
-        }
-        break;
-      default:
-    }
-  }
-
-  console.log(this.idTable.toString());
   // From after: making patch, call the Send.
   // Send is the deliver without call of insert and deleteDoc. At end send use
   // ShareComponent to send patch.
+  
+  this.content = newContent;
 }
 
 /*!
@@ -200,6 +189,12 @@ Logoot.prototype.insertInIdTable = function(index, lineId) {
   }
 
   this.idTable = newIdTable;
+
+  // -- DEBUG START
+  //*
+  console.log('insert idTable:' + this.idTable);
+  //*/
+  // -- DEBUG END
 }
 
 /*!
@@ -216,11 +211,17 @@ Logoot.prototype.deleteInIdTable = function(index) {
   for (var i = 0; i < index; ++ i) {
     newIdTable[i] = this.idTable[i];
   }
-  for (var i = index; i < this.idTable.length; ++ i) {
-    newIdTable[i] = this.idTable[i + 1];
+  for (var i = (index + 1); i < this.idTable.length; ++ i) {
+    newIdTable[i - 1] = this.idTable[i];
   }
 
   this.idTable = newIdTable;
+
+  // -- DEBUG START
+  //*
+  console.log('delete idTable:' + this.idTable);
+  //*/
+  // -- DEBUG END
 }
 
 /*!

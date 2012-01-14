@@ -144,3 +144,20 @@ replaceAt = function(str, index, char) {
   str.substr(0, index) + char + this.substr(index+char.length);
 }
 
+function getCaretPosition (ctrl) {
+  var CaretPos = 0; // IE Support
+
+  if (document.selection) {
+    ctrl.focus ();
+    var Sel = document.selection.createRange();
+    Sel.moveStart ('character', -ctrl.value.length);
+    CaretPos = Sel.text.length;
+  }
+
+  // Firefox support
+  else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+    CaretPos = ctrl.selectionStart;
+
+  return (CaretPos);
+}
+
