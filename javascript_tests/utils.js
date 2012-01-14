@@ -94,41 +94,48 @@ function rand(min, max) {
 }
 
 /*!
- * \brief   Binary Search in Array (Monkey typing) on array.
+ * \brief   Binary Search on array.
  * 
  * Caution if they have no value equals to \c value in the array, this
  * implemetation will return the first next uper value 
  * Recursive implementation of binary search:
  * http://en.wikipedia.org/wiki/Binary_search_algorithm
  *
+ * \param   arr     The array over search.
  * \param   value   The value to search.
- * \param   low     The low value (default 0).
- * \param   high    The high value (default this.length).
+ * \param   low     The low value.
+ * \param   high    The high value.
  * \param   compare Function using as order relation between values in the
  *          array. The function would have same comportement than CompareTo in
  *          java. If the function isn't give this will use "< > ==".
  */
-Array.prototype.binarySearch(value, low, high, compare) {
-  var low = low || 0;
-  var high = high || this.length;
+var BINARYSEARCH_FROM_LEFT = 0;
+var BINARYSEARCH_FROM_RIGHT = 1;
+binarySearch = function(arr, value, low, high, compare, from) {
 
   if (high < low) {
-    return value[low];
+    if (from == BINARYSEARCH_FROM_LEFT) {
+      return high + 1;
+    } else if (from == BINARYSEARCH_FROM_RIGHT) {
+      return low;
+    }
   }
 
-  var mid = parseInt((low + high) / 2);
+  var mid = Math.floor((low + high) / 2);
+  var compareValue = (compare) ? compare(arr[mid], value) : 0;
+  var isMidValueLower = (compare) ? (compareValue < 0) : (arr[mid] < value);
+  var isMidValueHigher = (compare) ? (compareValue > 0) : (arr[mid] > value);
 
-  var midHigher =
-    (compare) ? (compare(this[mid], value) > 0) : (this[mid] > value);
-  var midLower =
-    (compare) ? (compare(this[mid], value) < 0) : (this[mid] < value);
-
-  if (midHigher) {
-    return this.binarySearch(value, low, mid - 1);
-  } else if (midLower) {
-    return this.binarySearch(value, mid + 1, high);
-  } else {
-    return mid;
+  if (isMidValueHigher) {
+    -- mid;
+    // console.log('left['+low+':'+mid+']');
+    return binarySearch(arr, value, low, mid, compare, BINARYSEARCH_FROM_LEFT);
+  } else if (isMidValueLower) {
+    ++ mid;
+    // console.log('right['+mid+':'+high+']');
+    return binarySearch(arr, value, mid, high, compare,BINARYSEARCH_FROM_RIGHT);
   }
+
+  return mid;
 }
 

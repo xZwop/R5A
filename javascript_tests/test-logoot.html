@@ -48,11 +48,19 @@
       r = Logoot.generateLineId(p, q, N, undefined, 3, 10);
       console.log('RESULT: ' + r.toString());
 
-      opInsert = new OperationInsert(p, 'lala');
-      opDelete = new OperationDelete(q);
+      patch = [];
+      patch.push(new OperationInsert(p));
+      patch.push(new OperationInsert(q));
+      for (var i in r) {
+        patch.push(new OperationInsert(r[i], 'toto'));
+      }
+      patch.push(new OperationDelete(q));
       console.log('__________________________________________________________');
-      console.log(opInsert.toString());
-      console.log(opDelete.toString());
+      console.log(patch.toString());
+      logoot = new Logoot(function(){}, function(){});
+      console.log(logoot.toString());
+      logoot.receive(patch);
+      console.log(logoot.toString());
       console.log('__________________________________________________________');
     </script>
   </body>

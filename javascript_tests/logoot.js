@@ -14,6 +14,7 @@
  *          gets content on event, determine an operation 
  */
 function Logoot(insertDoc, deleteDoc) {
+  //! Container of LineId.
   this.idTable = [];
   this.idTable.push(LineId.getMinPosition());
   this.idTable.push(LineId.getMaxPosition());
@@ -44,17 +45,21 @@ Logoot.prototype.receive = function(patch) {
   for (opId in patch) {
     var operation = patch[opId];
     var lineId = operation.getLineId();
+    console.log(operation.toString());
+    console.log('idTable:' + this.idTable.toString())
 
     switch (operation.getType()) {
       case Operation.INSERT:
         var content = operation.getContent();
         var position = this.binarySearch(lineId);
+        console.log('position:' + position);
 
         this.insertInIdTable(position, lineId);
         this.insertDoc(position, content);
         break;
       case Operation.DELETE:
         var position = this.binarySearch(lineId);
+        console.log('position:' + position);
 
         if (this.idTable[position] == lineId) {
           this.deleteInIdTable(position);
@@ -74,11 +79,64 @@ Logoot.prototype.receive = function(patch) {
  * \param   lineId  The LineId search in table.
  * \return  The position of \c lineId or the first greater.
  */
-Logoot.prototype.binarySearch(lineId) {
-  return this.idTable.binarySearch(lineId, 0, this.idTable.length,
+Logoot.prototype.binarySearch = function(lineId) {
+  return binarySearch(this.idTable, lineId, 0, (this.idTable.length - 1),
       function(lineId1, lineId2) {
         return lineId1.compareTo(lineId2);
       });
+}
+
+/*!
+ * \brief   Insert new LineId in idTable.
+ *
+ * This will insert new LineId in idTable and move next value to upper
+ * index.
+ *
+ * \param   index   The index where insert LineId.
+ * \param   lineId  LineId to insert.
+ */
+Logoot.prototype.insertInIdTable = function(index, lineId) {
+  var newIdTable = [];
+
+  for (var i = 0; i < index; ++ i) {
+    newIdTable[i] = this.idTable[i];
+  }
+  newIdTable[index] = lineId;
+  for (var i = index; i < this.idTable.length; ++ i) {
+    newIdTable[i + 1] = this.idTable[i];
+  }
+
+  this.idTable = newIdTable;
+}
+
+/*!
+ * \brief   Delete LineId at specific position in idTable.
+ *
+ * This will delete the LineId at specific position and move
+ * all next value at lower index.
+ *
+ * \param   index   Index where delete LineId.
+ */
+Logoot.prototype.deleteInIdTable = function(index) {
+  var newIdTable = [];
+
+  for (var i = 0; i < index; ++ i) {
+    newIdTable[i] = this.idTable[i];
+  }
+  for (var i = index; i < this.idTable.length; ++ i) {
+    newIdTable[i] = this.idTable[i + 1];
+  }
+
+  this.idTable = newIdTable;
+}
+
+/*!
+ * \brief   Returns a string representation of the object.
+ *
+ * \return  A string representation of the object.
+ */
+Logoot.prototype.toString = function() {
+  return this.idTable.toString();
 }
 
 /*!
