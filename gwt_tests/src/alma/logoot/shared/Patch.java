@@ -1,8 +1,8 @@
 package alma.logoot.shared;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
-public class Patch extends LinkedList<Operation>{
+public class Patch extends ArrayList<Operation>{
 
 	private static final long serialVersionUID = 1L;
 

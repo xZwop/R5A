@@ -8,12 +8,15 @@ public class OpDelete extends Operation {
 
 	@Override
 	public boolean isIns() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isDel() {
-		return false;
+		return true;
 	}
-
+	
+	public String toString(){
+		return "[DEL, "+position+"]";
+	}
 }

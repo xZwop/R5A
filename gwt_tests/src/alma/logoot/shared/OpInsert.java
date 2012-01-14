@@ -22,4 +22,8 @@ public class OpInsert extends Operation {
 		return content;
 	}
 
+	public String toString() {
+		return "[INS, " + content + "," + position + "]";
+	}
+
 }

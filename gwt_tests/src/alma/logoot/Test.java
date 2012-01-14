@@ -45,6 +45,9 @@ public class Test {
 		System.out.println("LogootEngine.generateLineIdentier(p,  q, 1,rep)\n\t"
 						+ LogootEngine.generateLineIdentier(p, q, 30, rep));
 
+		System.out.println("===== Test : CompareTo ========================");
+		System.out.println(p.compareTo(q));
+		System.out.println(p.compareTo(p));
 	}
 
 }
