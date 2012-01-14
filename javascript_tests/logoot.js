@@ -2,7 +2,11 @@
  * \class   Logoot
  * \brief   Logoot algorithm implementation.
  *
- * \param   
+ * Logoot algorithm implementation. For works this implementation use the
+ * diff_match_patch library.
+ *
+ * \sa      http://code.google.com/p/google-diff-match-patch
+ * \param   dmp   Diff_patch_match component.
  * \param   insertDoc Function call to insert new content. Function takes
  *          parameters:
  *            \li position => Position where insert content.
@@ -13,11 +17,17 @@
  * \param   process   Function describe how to launch logoot. This function
  *          gets content on event, determine an operation 
  */
-function Logoot(insertDoc, deleteDoc) {
+function Logoot(dmp, insertDoc, deleteDoc) {
+  var minLineId = LineId.getDocumentStarter();
+  var maxLineId = LineId.getDocumentFinisher();
+
+  //! Diff Match Patch Component.
+  this.dmp = dmp;
+
   //! Container of LineId.
   this.idTable = [];
-  this.idTable.push(LineId.getMinPosition());
-  this.idTable.push(LineId.getMaxPosition());
+  this.idTable.push(minLineId);
+  this.idTable.push(maxLineId);
 
   this.insertDoc = insertDoc;
   this.deleteDoc = deleteDoc;
@@ -45,21 +55,17 @@ Logoot.prototype.receive = function(patch) {
   for (opId in patch) {
     var operation = patch[opId];
     var lineId = operation.getLineId();
-    console.log(operation.toString());
-    console.log('idTable:' + this.idTable.toString())
 
     switch (operation.getType()) {
       case Operation.INSERT:
         var content = operation.getContent();
         var position = this.binarySearch(lineId);
-        console.log('position:' + position);
 
         this.insertInIdTable(position, lineId);
         this.insertDoc(position, content);
         break;
       case Operation.DELETE:
         var position = this.binarySearch(lineId);
-        console.log('position:' + position);
 
         if (this.idTable[position] == lineId) {
           this.deleteInIdTable(position);
@@ -69,6 +75,93 @@ Logoot.prototype.receive = function(patch) {
       default:
     }
   }
+}
+
+/*!
+ * \brief   Before send, this method would be call to get the content.
+ *
+ * \param   content   The content before the text change.
+ */
+Logoot.prototype.beforeSend = function(content) {
+  this.content = content;
+}
+
+/*!
+ * \brief   Compute the patch and send it to other.
+ *
+ * Compute the patch. Maintain the id table and send result to other. At
+ * the end, this will call the Shared component to send patch.
+ *
+ * \param   newContent  Content after change.
+ */
+var DIFF_NOCHANGE = 0;
+var DIFF_INSERT = 1;
+var DIFF_DELETE = -1;
+Logoot.prototype.send = function(newContent) {
+  var patch = [];
+  var curPos = 0;
+
+  // Compute patch
+  var diffs = this.dmp.diff_main(this.content, newContent);
+  for (diffId in diffs) {
+    var diffType = diffs[diffId][0];
+    var diffStr = diffs[diffId][1];
+
+    if (diffType == DIFF_INSERT) {
+      var previousLineId = this.idTable[curPos];
+      var nextLineId = this.idTable[curPos + 1];
+
+      var lineIds = Logoot.generateLineId(previousLineId, nextLineId,
+          diffStr.length, 10, 1, 1);
+
+      for (id in lineIds) {
+        var lineId = lineIds[id];
+        var content = diffStr[id];
+
+        patch.push(new OperationInsert(lineId, content));
+      }
+
+      curPos += diffStr.length;
+    } else if (diffType == DIFF_DELETE) {
+
+      for (var charId in diffStr) {
+        var lineId = this.idTable[curPos];
+
+        patch.push(new OperationDelete(lineId));
+        -- curPos;
+      }
+    } else if (diffType == DIFF_NOCHANGE) {
+      curPos += diffStr.length
+    }
+  }
+
+  // Integrated patch
+  for (opId in patch) {
+    var operation = patch[opId];
+    var lineId = operation.getLineId();
+
+    switch (operation.getType()) {
+      case Operation.INSERT:
+        var content = operation.getContent();
+        var position = this.binarySearch(lineId);
+
+        this.insertInIdTable(position, lineId);
+        break;
+      case Operation.DELETE:
+        var position = this.binarySearch(lineId);
+
+        if (this.idTable[position] == lineId) {
+          this.deleteInIdTable(position);
+        }
+        break;
+      default:
+    }
+  }
+
+  console.log(this.idTable.toString());
+  // From after: making patch, call the Send.
+  // Send is the deliver without call of insert and deleteDoc. At end send use
+  // ShareComponent to send patch.
 }
 
 /*!
@@ -168,17 +261,21 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N, boundary,
     // Compute interval
     interval = prefNext - prefPrev - 1;
   }
+
   // Construct Indentifier.
-  //! \todo: integrated boundary : step = Math.min(interval/N, boundary);
-  //! \fixme: Ensure to round step
-  var step = Math.round(interval/N);
-  var r = Logoot.prefix(previousLineId, index);
+  var step = interval/N;
+  step = (boundary) ? Math.min(Math.round(step), boundary) : Math.round(step);
+  var r = prefPrev;
   var list = [];
 
+  // -- DEBUG START
+  /*
   console.log('prefixPreviousLineId:' + prefPrev);
   console.log('prefixNextLineId:' + prefNext);
   console.log('interval:' + interval);
   console.log('step:' + step);
+  //*/
+  // -- DEBUG END
 
   for (var j = 1; j <= N; j++) {
     list.push(Logoot.constructLineId(r + rand(1, step), previousLineId,
@@ -242,18 +339,24 @@ Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
 
   var chunksR = str_split(strR, DIGIT);
   var lineId = new LineId();
+  // -- DEBUG START
+  /*
   console.log('chunksR:' + chunksR);
+  //*/
+  // -- DEBUG END
 
   // Generate position of lineId.
   for (var i in chunksR) {
     var position;
     var d = Number(chunksR[i]);
 
-    if (i < startLineId.length() && d == startLineId.getPosition(i).getInt()) {
+    if (i < startLineId.length()
+        && d == startLineId.getPosition(i).getInt()) {
       position = new Position(d,
           startLineId.getPosition(i).getReplica(),
           startLineId.getPosition(i).getClock());
-    } else if (i < endLineId.length && d == endLineId.getPosition(i).getInt()) {
+    } else if (i < endLineId.length()
+        && d == endLineId.getPosition(i).getInt()) {
       position = new Position(d,
           endLineId.getPosition(i).getReplica(),
           endLineId.getPosition(i).getClock());

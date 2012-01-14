@@ -3,26 +3,17 @@
   </head>
   <body>
     <h3 style="color:red">See JavaScript console for log</h3>
+    <script>
+      // var BASE = 100;
+    </script>
     <script src="utils.js"></script>
     <script src="entities.js"></script>
     <script src="logoot.js"></script>
     <script>
       var N;
 
-      p1 = new Position(2, 4, 7);
-      p2 = new Position(59, 9, 5);
-      q1 = new Position(10, 5, 3);
-      q2 = new Position(20, 3, 6);
-      q3 = new Position(3, 3, 9);
-
-      p = new LineId();
-      q = new LineId();
-
-      p.add(p1);
-      p.add(p2);
-      q.add(q1);
-      q.add(q2);
-      q.add(q3);
+      p = LineId.getDocumentStarter();
+      q = LineId.getDocumentFinisher();
 
       N = 7
       console.log('__________________________________________________________');
@@ -33,7 +24,7 @@
       console.log('N:' + N.toString());
       console.log('generateLineId(p, q, N, undefined, 3, 10)');
       console.log('__________________________________________________________');
-      r = Logoot.generateLineId(p, q, N, undefined, 3, 10);
+      r = Logoot.generateLineId(p, q, N, 10, 3, 10);
       console.log('RESULT: ' + r.toString());
 
       N = 20;
@@ -45,7 +36,7 @@
       console.log('N:' + N.toString());
       console.log('generateLineId(p, q, N, undefined, 3, 10)');
       console.log('__________________________________________________________');
-      r = Logoot.generateLineId(p, q, N, undefined, 3, 10);
+      r = Logoot.generateLineId(p, q, N, 10, 3, 10);
       console.log('RESULT: ' + r.toString());
 
       patch = [];
@@ -56,10 +47,11 @@
       }
       patch.push(new OperationDelete(q));
       console.log('__________________________________________________________');
+      console.log('Patch to deliver:');
       console.log(patch.toString());
-      logoot = new Logoot(function(){}, function(){});
-      console.log(logoot.toString());
+      logoot = new Logoot(undefined, function(){}, function(){});
       logoot.receive(patch);
+      console.log('Deliver complete:');
       console.log(logoot.toString());
       console.log('__________________________________________________________');
     </script>

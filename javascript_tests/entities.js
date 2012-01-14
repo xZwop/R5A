@@ -249,7 +249,7 @@ LineId.prototype.toString = function() {
  *
  * \return  New LineId with Min Position.
  */
-LineId.getMinPosition = function() {
+LineId.getDocumentStarter = function() {
   var lineId = new LineId();
 
   lineId.add(Position.getMin());
@@ -263,7 +263,7 @@ LineId.getMinPosition = function() {
  *
  * \return  New LineId with Max Position.
  */
-LineId.getMaxPosition = function() {
+LineId.getDocumentFinisher = function() {
   var lineId = new LineId();
 
   lineId.add(Position.getMax());

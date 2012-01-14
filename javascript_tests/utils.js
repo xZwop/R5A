@@ -139,3 +139,8 @@ binarySearch = function(arr, value, low, high, compare, from) {
   return mid;
 }
 
+//! \brief    String replace at function.
+replaceAt = function(str, index, char) {
+  str.substr(0, index) + char + this.substr(index+char.length);
+}
+
