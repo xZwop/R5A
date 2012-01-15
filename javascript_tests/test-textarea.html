@@ -1,0 +1,42 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <h3 style="color:red">See JavaScript console for log</h3>
+
+    <textarea style="width: 50%; height: 100px;"></textarea>
+    <!--
+    http://code.google.com/p/google-diff-match-patch/
+    http://code.google.com/p/jquery-aop/
+    -->
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
+    </script>
+    <script src="libs/diff_match_patch.js"></script>
+    <script src="libs/aop.min.js"></script>
+    <script src="libs/aop-compat.1.0.min.js"></script>
+    <script src="utils.js"></script>
+    <script src="entities.js"></script>
+    <script src="logoot.js"></script>
+    <script src="logs.js"></script>
+    <script>
+      var logoot;
+      var dmp;
+
+      $(document).ready(function() {
+        dmp = new diff_match_patch;
+
+        var insertDoc = function() {};
+        var deleteDoc = function() {};
+
+        logoot = new Logoot(dmp, insertDoc, deleteDoc);
+
+        $('textarea').keyup(function() {
+          logoot.send($(this).val());
+        });
+        $('textarea').focus();
+      });
+    </script>
+  </body>
+</html>
+
