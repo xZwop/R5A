@@ -108,12 +108,6 @@ Logoot.prototype.send = function(newContent) {
       var previousLineId = this.idTable[curPos - 1];
       var nextLineId = this.idTable[curPos];
 
-      // -- DEBUG START
-      /*
-      console.log(previousLineId + ', ' + nextLineId);
-      //*/
-      // -- DEBUG END
-
       var lineIds = Logoot.generateLineId(previousLineId, nextLineId,
           diffStr.length, Logoot.BOUNDARY, 1, 1);
 
@@ -149,7 +143,6 @@ Logoot.prototype.send = function(newContent) {
   // From after: making patch, call the Send.
   // Send is the deliver without call of insert and deleteDoc. At end send use
   // ShareComponent to send patch.
-  
   this.content = newContent;
 }
 
@@ -189,12 +182,6 @@ Logoot.prototype.insertInIdTable = function(index, lineId) {
   }
 
   this.idTable = newIdTable;
-
-  // -- DEBUG START
-  //*
-  console.log('insert idTable:' + this.idTable);
-  //*/
-  // -- DEBUG END
 }
 
 /*!
@@ -216,12 +203,6 @@ Logoot.prototype.deleteInIdTable = function(index) {
   }
 
   this.idTable = newIdTable;
-
-  // -- DEBUG START
-  //*
-  console.log('delete idTable:' + this.idTable);
-  //*/
-  // -- DEBUG END
 }
 
 /*!
@@ -340,11 +321,6 @@ Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
 
   var chunksR = str_split(strR, DIGIT);
   var lineId = new LineId();
-  // -- DEBUG START
-  /*
-  console.log('chunksR:' + chunksR);
-  //*/
-  // -- DEBUG END
 
   // Generate position of lineId.
   for (var i in chunksR) {
