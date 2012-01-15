@@ -77,14 +77,10 @@ class Replica {
     r = new Prefix(p, index);
     
     for(int i = 0; i < N; ++i) {
-      // TODO je suis un noob, il y a peut-etre mieux
-      num random = (Math.random() + 0.1) * step;
-      
-      if(random > step) {
-        random = step;
-      }
+      num random = (Math.random() * (step - 1)) + 1;
 
       list.add(constructIdentifier(r + random.toInt(), p, q));
+
       r += step;
     }
 
@@ -92,18 +88,17 @@ class Replica {
   }
   
   LineIdentifier constructIdentifier(Prefix r, LineIdentifier p, LineIdentifier q) {
-    print(r);
     LineIdentifier id = new LineIdentifier();
-    
+
     for(int i = 0; i < r.length(); ++i) {
       int d = r[i];
       int s;
       int c;
       
-      if(d == p[i].digit) {
+      if(p.length() > i && d == p[i].digit) {
         s = p[i].repid;
         c = p[i].clock;
-      } else if(d == q[i].digit) {
+      } else if(q.length() > i && d == q[i].digit) {
         s = q[i].repid;
         c = q[i].clock;
       } else {

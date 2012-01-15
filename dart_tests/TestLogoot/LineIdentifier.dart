@@ -37,13 +37,13 @@ class LineIdentifier {
       return false;
     } else if(other == LineIdentifier.lastIDL()) {
       return true;
-    } else if(this.positions.length > 0 && other.length() > 0) {
-      for(int i = 0; i < this.positions.length; ++i) {
-        if(i >= other.length()) {
+    } else if(this.positions.length > 0 && other.positions.length > 0) {
+      for(int i = 0; i < other.positions.length; ++i) {
+        if(i >= this.positions.length) {
           return true;
         } else if(this.positions[i] < other.positions[i]) {
           return true;
-        } else if(!(this.positions[i] == other.positions[i])) {
+        } else if(this.positions[i] > other.positions[i]) {
           return false;
         }
       } 
