@@ -3,6 +3,7 @@ package alma.logoot.client;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import alma.logoot.shared.LogootConf;
 import alma.logoot.shared.LogootEngine;
 import alma.logoot.shared.LogootIdContainer;
 import alma.logoot.shared.LogootIdentifier;
@@ -29,7 +30,7 @@ public class R5A implements EntryPoint {
 
 	LinkedList<LogootIdContainer> idTable = new LinkedList<LogootIdContainer>();
 	LinkedList<LogootIdContainer> idTableRec = new LinkedList<LogootIdContainer>();
-	LogootIdentifier ID = new LogootIdentifier(0, 1547, 0);
+	LogootIdentifier ID = new LogootIdentifier(0, 7, 0);
 
 	final TextArea textArea = new TextArea();
 	final FlexTable log = new FlexTable();
@@ -49,9 +50,7 @@ public class R5A implements EntryPoint {
 		RootPanel.get("textReceiver").add(textReceiver);
 
 		// RootPanel.get("logContainer").add(log);
-		LogootIdContainer id = new LogootIdContainer();
-		id.add(new LogootIdentifier(15, 1, 1));
-		id.add(new LogootIdentifier(5, 1, 2));
+		
 		textArea.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -117,10 +116,10 @@ public class R5A implements EntryPoint {
 
 	private void initIdTable() {
 		LogootIdContainer first = new LogootIdContainer();
-		first.add(new LogootIdentifier(0, 0, 0));
+		first.add(new LogootIdentifier(1, 0, 0));
 
 		LogootIdContainer last = new LogootIdContainer();
-		last.add(new LogootIdentifier(99, 0, 0));
+		last.add(new LogootIdentifier(LogootConf.BASE, 0, 0));
 		idTable.add(first);
 		idTable.add(last);
 		idTableRec.add(first);
@@ -196,6 +195,11 @@ public class R5A implements EntryPoint {
 				}
 				send(patch);
 			}
+		}
+		if (!textArea.getText().equals(textReceiver.getText())) {
+			textReceiver.addStyleName("error");
+		} else {
+			textReceiver.removeStyleName("error");
 		}
 	}
 

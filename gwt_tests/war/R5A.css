@@ -36,6 +36,7 @@ h1 {
 table.log {
 	border: medium solid #6495ed;
 	border-collapse: collapse;
+	width: 100%;
 }
 table.log th {
 	font-family: monospace;
@@ -50,4 +51,13 @@ table.log td {
 	padding: 5px;
 	text-align: center;
 	background-color: #ffffff;
+}
+
+textarea {
+	width: 300px;
+	height: 300px;
+}
+
+.error {
+	border: 3px solid #FF0000 !important;
 }

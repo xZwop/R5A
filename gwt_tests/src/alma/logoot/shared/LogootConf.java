@@ -1,5 +1,5 @@
 package alma.logoot.shared;
 
 public class LogootConf {
-	final static Integer BASE=100;
+	public final static Integer BASE=100;
 }
