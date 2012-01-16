@@ -1,7 +1,10 @@
 package alma.logoot.shared;
 
 public class OpInsert extends Operation {
-	Character content;
+	/**
+	 * caractere de l'ajout
+	 */
+	private Character content;
 
 	public OpInsert(LogootIdContainer position, Character content) {
 		this.position = position;

@@ -1,80 +1,84 @@
 package alma.logoot.shared;
 
+/**
+ * Triplet representant une identifiant dans la base 
+ * @author driz
+ *
+ */
 public class LogootIdentifier implements Comparable<LogootIdentifier>{
 	
 	/**
-	 * Identifiant dans la base
+	 * digit dans la base [1, BASE[
 	 */
-	private int i;
+	private int digit;
 	
 	/**
 	 * Identifiant de site
 	 */
-	private int s;
+	private int identifier;
 	
 	/**
 	 * Valeur d'horloge
 	 */
-	private int r;
+	private int clock;
 	
-	public LogootIdentifier(int i, int s, int r) {
-		this.i = i;
-		this.s = s;
-		this.r = r;
+	public LogootIdentifier(int digit, int identifier, int clock) {
+		this.digit = digit;
+		this.identifier = identifier;
+		this.clock = clock;
 	}
 	
 	public LogootIdentifier(){
-		
 	}
 
-	public int getI() {
-		return i;
+	public int getDigit() {
+		return digit;
 	}
 
-	public void setI(int i) {
-		this.i = i;
+	public void setDigit(int i) {
+		this.digit = i;
 	}
 
-	public int getS() {
-		return s;
+	public int getIdentifier() {
+		return identifier;
 	}
 
-	public void setS(int s) {
-		this.s = s;
+	public void setIdentifier(int s) {
+		this.identifier = s;
 	}
 
-	public int getR() {
-		return r;
+	public int getClock() {
+		return clock;
 	}
 
-	public void setR(int r) {
-		this.r = r;
+	public void setClock(int clock) {
+		this.clock = clock;
 	}
 
 	/**
-	 * These def 23 (p59)
+	 * def 23 (p59)
 	 */
 	public int compareTo(LogootIdentifier o) {
-		if(this.i>o.getI()){
+		if(this.digit>o.getDigit()){
 			return 1;
-		}else if(this.i<o.getI()){
+		}else if(this.digit<o.getDigit()){
 			return -1;
 		}
-		if(this.s>o.getS()){
+		if(this.identifier>o.getIdentifier()){
 			return 1;
-		}else if(this.s<o.getS()){
+		}else if(this.identifier<o.getIdentifier()){
 			return -1;
 		}
-		if(this.r>o.getR()){
+		if(this.clock>o.getClock()){
 			return 1;
-		}else if(this.r<o.getR()){
+		}else if(this.clock<o.getClock()){
 			return -1;
 		}
 		return 0;
 	}
 	
 	public String toString() {
-		return "<"+i+", "+s+", "+r+">";
+		return "<"+digit+", "+identifier+", "+clock+">";
 	}
 	
 	

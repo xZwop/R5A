@@ -5,8 +5,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+ * Classe utilitaire comprenant les fonctions de manipulation des
+ * identifiants, notament les algos p61-63.
+ * 
+ * @author Driz
+ *
+ */
 public class LogootEngine {
-
+	
 	/**
 	 * 
 	 * @param p
@@ -84,17 +91,17 @@ public class LogootEngine {
 		int index = 0;
 		for (int i : prefix) {
 			LogootIdentifier triplet = new LogootIdentifier();
-			triplet.setI(i);
-			if (index < p.size() && i == p.getChaine().get(index).getI()) {
-				triplet.setR(p.getChaine().get(index).getR());
-				triplet.setS(p.getChaine().get(index).getS());
-			} else if (index < q.size() && i == q.getChaine().get(index).getI()) {
-				triplet.setR(q.getChaine().get(index).getR());
-				triplet.setS(q.getChaine().get(index).getS());
+			triplet.setDigit(i);
+			if (index < p.size() && i == p.get(index).getDigit()) {
+				triplet.setClock(p.get(index).getClock());
+				triplet.setIdentifier(p.get(index).getIdentifier());
+			} else if (index < q.size() && i == q.get(index).getDigit()) {
+				triplet.setClock(q.get(index).getClock());
+				triplet.setIdentifier(q.get(index).getIdentifier());
 			} else {
-				rep.setR(rep.getR() + 1);
-				triplet.setR(rep.getR());
-				triplet.setS(rep.getS());
+				rep.setClock(rep.getClock() + 1);
+				triplet.setClock(rep.getClock());
+				triplet.setIdentifier(rep.getIdentifier());
 			}
 			index++;
 			result.add(triplet);
@@ -102,13 +109,19 @@ public class LogootEngine {
 		return result;
 	}
 
-	static public BigInteger prefix(LogootIdContainer id, int index) {
+	/**
+	 * 
+	 * @param id Identifiant de caractère
+	 * @param n Nombre de triplet à prendre en compte
+	 * @return les n identifiants dans la base concatenés.
+	 */
+	static public BigInteger prefix(LogootIdContainer id, int n) {
 		String result = "";
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
-		for (int i = 0; i < index; i++) {
+		for (int i = 0; i < n; i++) {
 			String s = "";
 			if (i < id.size()) {
-				s = String.valueOf(id.getChaine().get(i).getI());
+				s = String.valueOf(id.get(i).getDigit());
 			}
 			while (s.length() < size)
 				s = "0" + s;

@@ -1,5 +1,15 @@
 package alma.logoot.shared;
 
+/**
+ * Variable de configuration.
+ * 
+ * @author Driz
+ * 
+ */
 public class LogootConf {
-	public final static Integer BASE=100;
+	/**
+	 * Valeur max de identifiant : <BASE ,0 ,0 >
+	 */
+	public static final int BASE = 100;
+	
 }
