@@ -6,37 +6,47 @@
     <script>
       // var BASE = 100;
     </script>
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
+    </script>
+    <script src="libs/aop.min.js"></script>
+    <script src="libs/aop-compat.1.0.min.js"></script>
     <script src="utils.js"></script>
     <script src="entities.js"></script>
     <script src="logoot.js"></script>
     <script>
+      Logoot.BOUNDARY = 10;
+
       var N;
+      var bound = (Logoot.BOUNDARY) ? Logoot.BOUNDARY.toString() : 'undefined';
 
       p = LineId.getDocumentStarter();
       q = LineId.getDocumentFinisher();
 
-      N = 7
+      N = 10;
       console.log('__________________________________________________________');
       console.log('BASE:' + BASE);
       console.log('DIGIT:' + DIGIT);
       console.log('p:' + p.toString());
       console.log('q:' + q.toString());
       console.log('N:' + N.toString());
-      console.log('generateLineId(p, q, N, undefined, 3, 10)');
+      console.log('Boundary:' + bound);
+      console.log('generateLineId(p, q, N, Boundary, 3, 10)');
       console.log('__________________________________________________________');
-      r = Logoot.generateLineId(p, q, N, 10, 3, 10);
+      r = Logoot.generateLineId(p, q, N, Logoot.BOUNDARY, 3, 10);
       console.log('RESULT: ' + r.toString());
 
-      N = 20;
+      N = 99;
       console.log('__________________________________________________________');
       console.log('BASE:' + BASE);
       console.log('DIGIT:' + DIGIT);
       console.log('p:' + p.toString());
       console.log('q:' + q.toString());
       console.log('N:' + N.toString());
-      console.log('generateLineId(p, q, N, undefined, 3, 10)');
+      console.log('Boundary:' + bound);
+      console.log('generateLineId(p, q, N, Boundary, 3, 10)');
       console.log('__________________________________________________________');
-      r = Logoot.generateLineId(p, q, N, 10, 3, 10);
+      r = Logoot.generateLineId(p, q, N, Logoot.BOUNDARY, 3, 10);
       console.log('RESULT: ' + r.toString());
 
       patch = [];

@@ -1,6 +1,6 @@
 //! BASE constant for position object (if not existe, BASE is set to MAX_INT).
 if (!BASE) {
-  var MAX_INT = Math.pow(2, 53);
+  var MAX_INT = Math.pow(2, 32);
   var BASE = MAX_INT;
 }
 
@@ -146,7 +146,7 @@ Position.prototype.toString = function() {
  * \return  New Position that is minimum value accepted.
  */
 Position.getMin = function() {
-  return new Position(0);
+  return new Position(1, 0, 0);
 }
 
 /*!
@@ -155,7 +155,7 @@ Position.getMin = function() {
  * \return  New Position that is maximum value accepted (aka \c BASE - 1).
  */
 Position.getMax = function() {
-  return new Position(BASE - 1);
+  return new Position(BASE - 1, 0, 0);
 }
 
 /*!

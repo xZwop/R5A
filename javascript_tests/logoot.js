@@ -338,7 +338,8 @@ Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
           endLineId.getPosition(i).getReplica(),
           endLineId.getPosition(i).getClock());
     } else {
-      position = new Position(d, replica, clock++);
+      position = new Position(d, replica, clock);
+      ++ clock;
     }
 
     lineId.add(position);

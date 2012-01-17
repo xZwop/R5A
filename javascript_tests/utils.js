@@ -111,7 +111,7 @@ function rand(min, max) {
  */
 var BINARYSEARCH_FROM_LEFT = 0;
 var BINARYSEARCH_FROM_RIGHT = 1;
-binarySearch = function(arr, value, low, high, compare, from) {
+function binarySearch(arr, value, low, high, compare, from) {
 
   if (high < low) {
     if (from == BINARYSEARCH_FROM_LEFT) {
@@ -140,9 +140,11 @@ binarySearch = function(arr, value, low, high, compare, from) {
 }
 
 //! \brief    String replace at function.
-replaceAt = function(str, index, char) {
+/*
+function replaceAt(str, index, char) {
   str.substr(0, index) + char + this.substr(index+char.length);
 }
+*/
 
 function getCaretPosition (ctrl) {
   var CaretPos = 0; // IE Support

@@ -1,10 +1,28 @@
 <html>
   <head>
+    <style>
+      h3 {color: red;}
+      textarea {width: 49%; height: 250px;}
+      div#idTable {width: 49%; height: 250px; float: right; overflow-y: auto;
+        border: 1px dotted black;}
+      div#idTable pre, div#idTable code {width: 100%;
+        white-space: normal !important;}
+    </style>
   </head>
   <body>
-    <h3 style="color:red">See JavaScript console for log</h3>
+    <h3>See JavaScript console for log</h3>
+    <textarea></textarea>
+    <div id="idTable">
+      <pre>
+        <code id="idTablePrintPanel">
+          <!-- Print idTable here -->
+        </code>
+      </pre>
+    </div>
 
-    <textarea style="width: 50%; height: 100px;"></textarea>
+    <br/>
+    <button id="idTablePrintButton">Print Logoot.idTable</button>
+
     <!--
     http://code.google.com/p/google-diff-match-patch/
     http://code.google.com/p/jquery-aop/
@@ -30,10 +48,16 @@
         var deleteDoc = function() {};
 
         logoot = new Logoot(dmp, insertDoc, deleteDoc);
+        Logoot.BOUNDARY = 10;
 
         $('textarea').keyup(function() {
           logoot.send($(this).val());
         });
+
+        $('#idTablePrintButton').click(function() {
+          $('#idTablePrintPanel').empty().html(logoot.toString());
+        });
+
         $('textarea').focus();
       });
     </script>
