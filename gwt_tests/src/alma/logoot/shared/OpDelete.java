@@ -2,6 +2,15 @@ package alma.logoot.shared;
 
 public class OpDelete extends Operation {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public OpDelete() {
+		
+	}
+	
 	public OpDelete(LogootIdContainer position) {
 		this.position = position;
 	}

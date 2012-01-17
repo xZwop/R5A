@@ -29,29 +29,27 @@ public class LogootEngine {
 	public static ArrayList<LogootIdContainer> generateLineIdentier(
 			LogootIdContainer p, LogootIdContainer q, int N,
 			LogootIdentifier rep) {
-		System.out.println("\t LogootEngine.generateLineIdentier(" + p + ","
-				+ q + ", " + N + ", " + rep + ")");
 
 		BigInteger MAXINT = new BigInteger(Integer.MAX_VALUE + "");
 		ArrayList<LogootIdContainer> list = new ArrayList<LogootIdContainer>();
 		int index = 0;
 		int interval = 0;
-		// BigInteger interval = new BigInteger("0");
 		while (interval < N) {
 			index++;
 			BigInteger intervalB = prefix(q, index).subtract(prefix(p, index));
 			intervalB = intervalB.subtract(new BigInteger("1"));
-			System.out.println("Intervale : " + intervalB);
 			if ((intervalB).compareTo(MAXINT) != -1)
 				interval = Integer.MAX_VALUE;
 			else
 				interval = intervalB.intValue();
 		}
-		System.out.println("Index : " + index);
-		int step = interval / N;
-
+		int step;
+		if (LogootConf.USEBOUNDARY) {
+			step = Math.min(LogootConf.BOUNDARY, interval/N);
+		} else {
+			step = interval / N;
+		}
 		BigInteger stepB = new BigInteger(step + "");
-		System.out.println("Step : " + step + "(" + stepB + ")");
 		BigInteger r = prefix(p, index);
 		Random random = new Random();
 		for (int j = 0; j < N; j++) {
@@ -62,8 +60,8 @@ public class LogootEngine {
 				rand = r.add(new BigInteger((random
 						.nextInt(step - 1) + 1) + ""));
 			}
-			System.out.println("Prefix(+rand)" + rand + "\n");
 			list.add(constructIdentifier(rand, p, q, rep));
+			p=list.get(list.size()-1);
 			r = r.add(stepB);
 		}
 		return list;

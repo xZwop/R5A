@@ -1,10 +1,19 @@
 package alma.logoot.shared;
+
+import java.io.Serializable;
+
 /**
  * Operation d'insertion ou d'ajout d'un caractere
  * @author driz
  *
  */
-public abstract class Operation {
+public abstract class Operation implements Serializable
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * La position concerné
 	 */
