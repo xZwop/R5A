@@ -1,6 +1,6 @@
 class LineIdentifier {
   static final int MAX = 100;
-  static final int NA = -1;
+  static final int NA = 1;
 
   List<Position> positions;
   
@@ -11,7 +11,7 @@ class LineIdentifier {
   static LineIdentifier firstIDL() {
     LineIdentifier idl = new LineIdentifier();
     
-    idl.conc(new Position(0, LineIdentifier.NA, LineIdentifier.NA));
+    idl.conc(new Position(1, LineIdentifier.NA, LineIdentifier.NA));
     
     return idl;
   }
