@@ -3,8 +3,11 @@
 #source('Replica.dart');
 #source('Operation.dart');
 #source('Position.dart');
-#source('Prefix.dart');
 #source('LineIdentifier.dart');
+#source('diff_match_patch/DiffClass.dart');
+#source('diff_match_patch/PatchClass.dart');
+#source('diff_match_patch/EncodeDecode.dart');
+#source('diff_match_patch/DMPClass.dart');
 
 class TestLogoot {
 
