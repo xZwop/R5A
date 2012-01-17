@@ -28,13 +28,12 @@ class Replica {
     this.neighbor = neighbor;
   }
 
-  // FIXME considere que tout est ajout, pour l'instant
   void logoot(event) {
-    print('===================================================================');
-    for(int i = 0; i < idTable.length; ++i) {
-      print(idTable[i]);
-    }
-    print('-------------------------------------------------------------------');
+    //print('===================================================================');
+    //for(int i = 0; i < idTable.length; ++i) {
+    //  print(idTable[i]);
+    //}
+    //print('-------------------------------------------------------------------');
     List<Operation> patch = new List<Operation>();
     DiffMatchPatch dmp = new DiffMatchPatch();
     String newText = this.textZone.value;
@@ -68,11 +67,11 @@ class Replica {
 
     deliver(patch, this.identifier);
     this.neighbor.deliver(patch, this.identifier);
-    print('-------------------------------------------------------------------');
-    for(int i = 0; i < idTable.length; ++i) {
-      print(idTable[i]);
-    }
-    print('===================================================================');
+    //print('-------------------------------------------------------------------');
+    //for(int i = 0; i < idTable.length; ++i) {
+    //  print(idTable[i]);
+    //}
+    //print('===================================================================');
     
     // DEBUG
     if(this.textZone.value == this.neighbor.textZone.value) {
@@ -189,9 +188,7 @@ class Replica {
         // cherche l'identifiant precedant le nouvel identifiant
         int position = closest(op.id);
 
-        if(position <= this.currentText.length) {
-          this.currentText = this.currentText.substring(0, position) + op.content + this.currentText.substring(position);
-        }
+        this.currentText = this.currentText.substring(0, position) + op.content + this.currentText.substring(position);
         
         if(!(this.identifier == identifier)) {
           // insertion du content a la position, dans le textarea
@@ -202,44 +199,37 @@ class Replica {
         idTable.insertRange(position + 1, 1, op.id);
       } else if(op.type == Operation.DELETION) {
         // cherche l'identifiat precedant l'identifiant a supprimer
-        int position = indexOf(op.id);
+        int position = closest(op.id) + 1;
+
+        this.currentText = this.currentText.substring(0, position - 1) + this.currentText.substring(position);
         
-        if(position != -1) {
-          if(this.currentText.length >= position + 1) {
-            this.currentText = this.currentText.substring(0, position - 1) + this.currentText.substring(position);
-          } else {
-            this.currentText = this.currentText.substring(0, position - 1);
-          }
+        if(!(this.identifier == identifier)) {
           this.textZone.value = this.currentText;
-          this.idTable.removeRange(position, 1);
+        }
+
+        this.idTable.removeRange(position, 1);
+      }
+    }
+  }
+  
+  int closest(LineIdentifier idl) {
+    int begin = 0;
+    int end = idTable.length - 1;
+    
+    while(begin <= end) {
+      int center = (begin + ((end - begin) / 2)).toInt();
+      
+      if((idTable[center] < idl) && !(idTable[center + 1] < idl)) {
+        return center;
+      } else {
+        if(idTable[center] < idl) {
+          begin = center + 1;
+        } else {
+          end = center - 1;
         }
       }
     }
-  }
-  
-  // TODO appliquer l'algorithme de recherche dicotomique
-  int closest(LineIdentifier idl) {
-    int index = 0;
 
-    for(int i = 0; i < idTable.length; ++i) {
-      if(idTable[i] < idl) {
-        index = i;
-      } else {
-        break;
-      }
-    }
-
-    return index;
-  }
-  
-  // TODO appliquer l'algorithme de recherche dicotomique
-  int indexOf(LineIdentifier idl) {
-    for(int i = 0; i < idTable.length; ++i) {
-      if(idTable[i] == idl) {
-        return i;
-      }
-    }
-
-    return -1;
+    return 0;
   }
 }
