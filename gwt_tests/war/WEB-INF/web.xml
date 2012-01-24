@@ -12,7 +12,7 @@
 	</welcome-file-list>
 	<servlet>
 		<servlet-name>logootServiceImpl</servlet-name>
-		<servlet-class>alma.logoot.server.LogootServiceImpl</servlet-class>
+		<servlet-class>alma.logoot.network.LogootServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>logootServiceImpl</servlet-name>

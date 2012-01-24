@@ -14,12 +14,12 @@
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='alma.logoot.client.R5A'/>
+  <entry-point class='alma.logoot.ui.gwt.R5A'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
-  <source path='shared'/>
-  <source path='server'/>
-  <servlet path="/logoot" class="alma.logoot.server.LogootServiceImpl"/>
+  <source path='ui.gwt'/>
+  <source path='logootengine'/>
+  <source path='network'/>
+  <servlet path="/logoot" class="alma.logoot.network.LogootServiceImpl"/>
 	
 </module>

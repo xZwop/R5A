@@ -1,4 +1,4 @@
-package alma.logoot.shared;
+package alma.logoot.logootengine;
 
 /**
  * Logoot Configuration.

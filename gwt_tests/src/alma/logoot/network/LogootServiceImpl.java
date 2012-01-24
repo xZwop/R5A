@@ -1,11 +1,11 @@
-package alma.logoot.server;
+package alma.logoot.network;
 
-import alma.logoot.client.LogootService;
-import alma.logoot.shared.LogootIdContainer;
-import alma.logoot.shared.LogootIdentifier;
-import alma.logoot.shared.OpInsert;
-import alma.logoot.shared.Operation;
-import alma.logoot.shared.Patch;
+import alma.logoot.logootengine.LogootIdContainer;
+import alma.logoot.logootengine.LogootIdentifier;
+import alma.logoot.logootengine.OpInsert;
+import alma.logoot.logootengine.Operation;
+import alma.logoot.logootengine.Patch;
+import alma.logoot.ui.gwt.LogootService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

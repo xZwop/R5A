@@ -1,4 +1,4 @@
-package alma.logoot.shared;
+package alma.logoot.logootengine;
 
 public class OpDelete extends Operation {
 

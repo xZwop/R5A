@@ -7,6 +7,16 @@ package alma.logoot.logootengine;
  */
 public interface IOperation {
 
-	// TODO
+	/**
+	 * 
+	 * @return true si l'operation est une insertion
+	 */
+	abstract public boolean isIns();
+	
+	/**
+	 * 
+	 * @return true si l'operation est une insertion
+	 */
+	abstract public boolean isDel();
 	
 }

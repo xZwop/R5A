@@ -1,19 +1,19 @@
-package alma.logoot.client;
+package alma.logoot.ui.gwt;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import alma.logoot.shared.LogootConf;
-import alma.logoot.shared.LogootEngine;
-import alma.logoot.shared.LogootIdContainer;
-import alma.logoot.shared.LogootIdentifier;
-import alma.logoot.shared.OpDelete;
-import alma.logoot.shared.OpInsert;
-import alma.logoot.shared.Operation;
-import alma.logoot.shared.Patch;
-import alma.logoot.shared.diff_match_patch;
-import alma.logoot.shared.diff_match_patch.Diff;
+import alma.logoot.logootengine.LogootConf;
+import alma.logoot.logootengine.LogootEngine;
+import alma.logoot.logootengine.LogootIdContainer;
+import alma.logoot.logootengine.LogootIdentifier;
+import alma.logoot.logootengine.OpDelete;
+import alma.logoot.logootengine.OpInsert;
+import alma.logoot.logootengine.Operation;
+import alma.logoot.logootengine.Patch;
+import alma.logoot.logootengine.diff_match_patch;
+import alma.logoot.logootengine.diff_match_patch.Diff;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -223,11 +223,11 @@ public class R5A implements EntryPoint {
 		old = textArea.getText();
 
 		int index = 0;
-		alma.logoot.shared.Patch patch = new alma.logoot.shared.Patch();
+		alma.logoot.logootengine.Patch patch = new alma.logoot.logootengine.Patch();
 		for (Diff d : diff) {
-			if (d.operation == alma.logoot.shared.diff_match_patch.Operation.EQUAL) {
+			if (d.operation == alma.logoot.logootengine.diff_match_patch.Operation.EQUAL) {
 				index += d.text.length();
-			} else if (d.operation == alma.logoot.shared.diff_match_patch.Operation.INSERT) {
+			} else if (d.operation == alma.logoot.logootengine.diff_match_patch.Operation.INSERT) {
 				LogootIdContainer p = idTable.get(index);
 				LogootIdContainer q = idTable.get(index + 1);
 				ArrayList<LogootIdContainer> idList = LogootEngine
@@ -241,7 +241,7 @@ public class R5A implements EntryPoint {
 				 */
 				LogootIdContainer lic2 = p;
 				for (LogootIdContainer lic : idList) {
-					alma.logoot.shared.Operation op = new OpInsert(lic,	d.text.charAt(i));
+					alma.logoot.logootengine.Operation op = new OpInsert(lic,	d.text.charAt(i));
 					patch.add(op);
 					log(index, d.text.charAt(i), lic, lic2, q);
 					lic2 = lic;
@@ -252,7 +252,7 @@ public class R5A implements EntryPoint {
 				for (int i = 0; i < d.text.length(); i++) {
 					LogootIdContainer position = idTable.get(index + 1);
 					idTable.remove(position);
-					alma.logoot.shared.Operation op = new OpDelete(position);
+					alma.logoot.logootengine.Operation op = new OpDelete(position);
 					patch.add(op);
 				}
 			}

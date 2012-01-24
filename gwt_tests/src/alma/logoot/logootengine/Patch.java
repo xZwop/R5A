@@ -1,6 +1,7 @@
-package alma.logoot.shared;
+package alma.logoot.logootengine;
 
 import java.util.ArrayList;
+
 
 /**
  * Ensemble d'operation

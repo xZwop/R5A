@@ -1,4 +1,4 @@
-package alma.logoot.shared;
+package alma.logoot.logootengine;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author driz
  *
  */
-public abstract class Operation implements Serializable
+public abstract class Operation implements Serializable,IOperation
 {
 	/**
 	 * 

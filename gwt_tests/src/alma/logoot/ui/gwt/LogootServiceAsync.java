@@ -1,8 +1,8 @@
-package alma.logoot.client;
+package alma.logoot.ui.gwt;
 
-import alma.logoot.shared.OpInsert;
-import alma.logoot.shared.Operation;
-import alma.logoot.shared.Patch;
+import alma.logoot.logootengine.OpInsert;
+import alma.logoot.logootengine.Operation;
+import alma.logoot.logootengine.Patch;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
