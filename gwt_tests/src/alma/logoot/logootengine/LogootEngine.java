@@ -2,18 +2,50 @@ package alma.logoot.logootengine;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+import alma.logoot.logootengine.diff_match_patch.Diff;
+
 /**
- * Classe utilitaire comprenant les fonctions de manipulation des
- * identifiants, notament les algos p61-63.
+ * Classe utilitaire comprenant les fonctions de manipulation des identifiants,
+ * notament les algos p61-63.
  * 
- * @author Driz
- *
+ * @author R5A
+ * 
  */
-public class LogootEngine {
-	
+public class LogootEngine implements ILogootEngine {
+
+	String oldText;
+	ArrayList<LogootIdContainer> idTable;
+	LogootIdentifier id;
+
+	private String getOldText() {
+		if (oldText == null)
+			oldText = "";
+		return oldText;
+	}
+
+	private void setOldText(String oldText) {
+		this.oldText = oldText;
+	}
+
+	private ArrayList<LogootIdContainer> getIdTable() {
+		if (idTable == null)
+			idTable = new ArrayList<LogootIdContainer>();
+		return idTable;
+	}
+
+	private LogootIdentifier getId() {
+		return id;
+	}
+
+	private void setId(LogootIdentifier id) {
+		this.id = id;
+	}
+
 	/**
 	 * 
 	 * @param p
@@ -21,10 +53,10 @@ public class LogootEngine {
 	 * @param q
 	 *            second identifiant de position
 	 * @param N
-	 *            nombre d'identifiant souhaités
+	 *            nombre d'identifiant souhaites
 	 * @param rep
-	 *            identifiant de la réplique
-	 * @return N identifiants pour la réplique s entre p et q
+	 *            identifiant de la replique
+	 * @return N identifiants pour la replique s entre p et q
 	 */
 	public static ArrayList<LogootIdContainer> generateLineIdentier(
 			LogootIdContainer p, LogootIdContainer q, int N,
@@ -45,7 +77,7 @@ public class LogootEngine {
 		}
 		int step;
 		if (LogootConf.USEBOUNDARY) {
-			step = Math.min(LogootConf.BOUNDARY, interval/N);
+			step = Math.min(LogootConf.BOUNDARY, interval / N);
 		} else {
 			step = interval / N;
 		}
@@ -57,11 +89,10 @@ public class LogootEngine {
 			if (step == 1) {
 				rand = r.add(new BigInteger("1"));
 			} else {
-				rand = r.add(new BigInteger((random
-						.nextInt(step - 1) + 1) + ""));
+				rand = r.add(new BigInteger((random.nextInt(step - 1) + 1) + ""));
 			}
 			list.add(constructIdentifier(rand, p, q, rep));
-			p=list.get(list.size()-1);
+			p = list.get(list.size() - 1);
 			r = r.add(stepB);
 		}
 		return list;
@@ -70,7 +101,7 @@ public class LogootEngine {
 	/**
 	 * 
 	 * @param r
-	 *            liste d'identifiants concaténés
+	 *            liste d'identifiants concatenes
 	 * @param p
 	 *            premier identifiant de position
 	 * @param q
@@ -78,7 +109,7 @@ public class LogootEngine {
 	 * @param rep
 	 *            defini horloge et id de la replique pour laquelle on genere la
 	 *            position
-	 * @return l'identifiant pour la replique définit par rep(id+horloge)
+	 * @return l'identifiant pour la replique definit par rep(id+horloge)
 	 */
 	static public LogootIdContainer constructIdentifier(BigInteger r,
 			LogootIdContainer p, LogootIdContainer q, LogootIdentifier rep) {
@@ -109,9 +140,11 @@ public class LogootEngine {
 
 	/**
 	 * 
-	 * @param id Identifiant de caractère
-	 * @param n Nombre de triplet à prendre en compte
-	 * @return les n identifiants dans la base concatenés.
+	 * @param id
+	 *            Identifiant de caractere
+	 * @param n
+	 *            Nombre de triplet a� prendre en compte
+	 * @return les n identifiants dans la base concatenes.
 	 */
 	static public BigInteger prefix(LogootIdContainer id, int n) {
 		String result = "";
@@ -144,6 +177,82 @@ public class LogootEngine {
 			result.addFirst(Integer.parseInt(cs));
 		}
 		return result;
+	}
+
+	@Override
+	public Collection<IOperation> generatePatch(String text) {
+
+		// Initialization by making a diff between the old text and the new one.
+		diff_match_patch diffEngine = new diff_match_patch();
+		LinkedList<Diff> diff = diffEngine.diff_main(getOldText(), text, false);
+		setOldText(text);
+		int index = 0;
+		Collection<IOperation> patch = new ArrayList<IOperation>();
+
+		// For each difference, we need to add or delete some positions.
+		for (Diff d : diff) {
+			if (d.operation == alma.logoot.logootengine.diff_match_patch.Operation.EQUAL) {
+				index += d.text.length();
+			} else if (d.operation == alma.logoot.logootengine.diff_match_patch.Operation.INSERT) {
+				LogootIdContainer p = getIdTable().get(index);
+				LogootIdContainer q = getIdTable().get(index + 1);
+				ArrayList<LogootIdContainer> idList = LogootEngine
+						.generateLineIdentier(p, q, d.text.length(), getId());
+				// Mise a jour idTable
+				getIdTable().addAll(index + 1, idList);
+				// Creation operations
+				int i = 0;
+				for (LogootIdContainer lic : idList) {
+					alma.logoot.logootengine.Operation op = new OpInsert(lic,
+							d.text.charAt(i));
+					patch.add(op);
+					i++;
+				}
+				index += d.text.length();
+			} else { // DELETE
+				for (int i = 0; i < d.text.length(); i++) {
+					LogootIdContainer position = getIdTable().get(index + 1);
+					getIdTable().remove(position);
+					alma.logoot.logootengine.Operation op = new OpDelete(
+							position);
+					patch.add(op);
+				}
+			}
+		}
+		return patch;
+	}
+
+	@Override
+	public String deliver(Collection<IOperation> patch) {
+		for (IOperation o : patch)
+			deliver(o);
+		return getOldText();
+	}
+
+	private void deliver(IOperation op) {
+		if (op.isIns()) {
+			OpInsert o = (OpInsert) op;
+			int index = -Collections
+					.binarySearch(getIdTable(), o.getPosition()) - 1;
+			StringBuffer sb = new StringBuffer(getOldText());
+			sb.insert(index - 1, o.getContent());
+			setOldText(sb.toString());
+			getIdTable().add(index, o.getPosition());
+		} else {
+			OpDelete o = (OpDelete) op;
+			int index = Collections.binarySearch(getIdTable(), o.getPosition());
+			if (index > 0) {
+				StringBuffer sb = new StringBuffer(getOldText());
+				sb.deleteCharAt(index - 1);
+				setOldText(sb.toString());
+				getIdTable().remove(index);
+			}
+		}
+	}
+
+	@Override
+	public void setId(int id) {
+		setId(new LogootIdentifier(0, id, 0));
 	}
 
 }

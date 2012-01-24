@@ -3,35 +3,36 @@ package alma.logoot.logootengine;
 import java.io.Serializable;
 
 /**
- * Operation d'insertion ou d'ajout d'un caractere
- * @author driz
- *
+ * An operation consist in adding or removing a caractere.
+ * 
+ * @author R5A
+ * 
  */
-public abstract class Operation implements Serializable,IOperation
-{
+public abstract class Operation implements Serializable, IOperation {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * La position concerné
+	 * The position of the caractere.
 	 */
 	protected LogootIdContainer position;
-	
+
 	/**
-	 * 
-	 * @return true si l'operation est une insertion
+	 * @return true if the operation is an insert, else false.
 	 */
 	abstract public boolean isIns();
-	
+
 	/**
-	 * 
-	 * @return true si l'operation est une insertion
+	 * @return true if the operation is a delete, else false.
 	 */
 	abstract public boolean isDel();
-	
-	public LogootIdContainer getPosition(){
+
+	/**
+	 * @return the position of the caractere to delete or to add.
+	 */
+	public LogootIdContainer getPosition() {
 		return position;
 	}
 }

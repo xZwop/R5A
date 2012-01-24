@@ -10,12 +10,4 @@
 	<welcome-file-list>
 		<welcome-file>R5A.html</welcome-file>
 	</welcome-file-list>
-	<servlet>
-		<servlet-name>logootServiceImpl</servlet-name>
-		<servlet-class>alma.logoot.network.LogootServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>logootServiceImpl</servlet-name>
-		<url-pattern>/r5a/logoot</url-pattern>
-	</servlet-mapping>
 </web-app>

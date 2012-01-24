@@ -17,9 +17,8 @@
   <entry-point class='alma.logoot.ui.gwt.R5A'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='ui.gwt'/>
+  <source path='ui/gwt'/>
   <source path='logootengine'/>
   <source path='network'/>
-  <servlet path="/logoot" class="alma.logoot.network.LogootServiceImpl"/>
 	
 </module>
