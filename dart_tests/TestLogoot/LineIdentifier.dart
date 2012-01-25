@@ -2,10 +2,10 @@ class LineIdentifier {
   static final int MAX = 100;
   static final int NA = 1;
 
-  List<Position> positions;
+  List<Position> _positions;
   
   LineIdentifier() {
-    this.positions = new List<Position>();
+    this._positions = new List<Position>();
   }
   
   static LineIdentifier firstIDL() {
@@ -24,8 +24,14 @@ class LineIdentifier {
     return idl;
   }
   
+  List<Position> get position() => this.position;
+  
+  void set position(List<Position> position) {
+    this._positions = position;
+  }
+  
   operator ==(LineIdentifier other) {
-    return (this.positions == other.positions);
+    return (this._positions == other._positions);
   }
   
   operator <(LineIdentifier other) {
@@ -37,13 +43,13 @@ class LineIdentifier {
       return false;
     } else if(other == LineIdentifier.lastIDL()) {
       return true;
-    } else if(this.positions.length > 0 && other.positions.length > 0) {
-      for(int i = 0; i < other.positions.length; ++i) {
-        if(i >= this.positions.length) {
+    } else if(this._positions.length > 0 && other._positions.length > 0) {
+      for(int i = 0; i < other._positions.length; ++i) {
+        if(i >= this._positions.length) {
           return true;
-        } else if(this.positions[i] < other.positions[i]) {
+        } else if(this._positions[i] < other._positions[i]) {
           return true;
-        } else if(this.positions[i] > other.positions[i]) {
+        } else if(this._positions[i] > other._positions[i]) {
           return false;
         }
       } 
@@ -53,24 +59,36 @@ class LineIdentifier {
   }
   
   operator [](int index) {
-    return this.positions[index];
+    return this._positions[index];
   }
   
   String toString() {
     String result = "";
 
-    for(int i = 0; i < this.positions.length; ++i) {
-      result += this.positions[i].toString();
+    for(int i = 0; i < this._positions.length; ++i) {
+      result += this._positions[i].toString();
     }
     
     return result;
   }
   
+  static fromString(String descr) {
+    LineIdentifier idl = new LineIdentifier();
+    String stringIDL = descr.replaceAll('><', '>|<');
+    List<String> idls = stringIDL.split('|');
+    
+    for(int i = 0; i < idls.length; ++i) {
+      idl.conc(Position.fromString(idls[i]));
+    }
+
+    return idl;
+  }
+  
   void conc(Position position) {
-    this.positions.add(position);
+    this._positions.add(position);
   }
   
   int length() {
-    return this.positions.length;
+    return this._positions.length;
   }
 }

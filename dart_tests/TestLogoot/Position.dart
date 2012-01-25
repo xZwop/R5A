@@ -1,28 +1,57 @@
 class Position {
-  int digit;
-  int repid;
-  int clock;
+  int _digit;
+  int _repid;
+  int _clock;
   
-  Position(this.digit, this.repid, this.clock) {
+  Position(this._digit, this._repid, this._clock) {
+  }
+  
+  int get digit() => this._digit;
+  
+  void set digit(int digit) {
+    this._digit = digit;
+  }
+  
+  int get repid() => this._repid;
+  
+  void set repid(int repid) {
+    this._repid = repid;
+  }
+  
+  int get clock() => this._clock;
+  
+  void set clock(int clock) {
+    this._clock = clock;
   }
   
   operator ==(Position other) {
-    return (this.digit == other.digit && this.repid == other.repid && this.clock == other.clock);
+    return (this._digit == other._digit && this._repid == other._repid && this._clock == other._clock);
   }
   
   operator <(Position other) {
-    return (this.digit < other.digit
-            || (this.digit == other.digit && this.repid < other.repid)
-            || ( this.digit == other.digit && this.repid == other.repid && this.clock < other.clock));
+    return (this._digit < other._digit
+            || (this._digit == other._digit && this._repid < other._repid)
+            || ( this._digit == other._digit && this._repid == other._repid && this._clock < other._clock));
   }
   
   operator >(Position other) {
-    return (this.digit > other.digit
-        || (this.digit == other.digit && this.repid > other.repid)
-        || ( this.digit == other.digit && this.repid == other.repid && this.clock > other.clock));
+    return (this._digit > other._digit
+        || (this._digit == other._digit && this._repid > other._repid)
+        || ( this._digit == other._digit && this._repid == other._repid && this._clock > other._clock));
   }
   
   String toString() {
-    return ('<' + this.digit + ', ' + this.repid + ', ' + this.clock + '>');
+    return ('<' + this._digit + ', ' + this._repid + ', ' + this._clock + '>');
+  }
+  
+  static fromString(String descr) {
+    if(descr.length > 2) {
+      String stringPos = descr.substring(1, descr.length - 1);
+      List<String> position = stringPos.split(',');
+      
+      return new Position(Math.parseInt(position[0]), Math.parseInt(position[1]), Math.parseInt(position[2]));
+    }
+    
+    return null;
   }
 }

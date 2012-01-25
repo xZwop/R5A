@@ -1,43 +1,60 @@
-class Replica {
+class Replica extends Isolate {
+  static final String INIT = 'init';
+  static final String DELIVER = 'deliver';
+
   static final num BASE = 100;
   static final num BOUNDARY = 10;
 
-  String name;
-  int identifier;
-  int clock;
-  var textZone;
-  Replica neighbor;
-  List<LineIdentifier> idTable;
-  String currentText;
+  String _name;
+  int _identifier;
+  int _clock;
+  var _textZone;
+  List<LineIdentifier> _idTable;
+  String _currentText;
+  SendPort _deliverPort;
 
-  Replica(this.name, this.identifier) {
-    this.clock = 1;
-    this.textZone = document.query('#' + this.name);
-    this.neighbor = null;
-    this.idTable = new List<LineIdentifier>();
-    this.currentText = "";
+  Replica(): super.light() {
+  }
 
-    this.idTable.add(LineIdentifier.firstIDL());
-    this.idTable.add(LineIdentifier.lastIDL());
+  void init(String name, int identifier, SendPort deliverPort) {
+    this._name = name;
+    this._identifier = identifier;
+    this._clock = 1;
+    this._idTable = new List<LineIdentifier>();
+    this._textZone = document.query('#' + this._name);
+    this._currentText = '';
+    this._deliverPort = deliverPort;
 
-    document.query('#label_' + this.name).innerHTML = this.name;
-    this.textZone.on.keyUp.add(logoot, false);
+    this._idTable.add(LineIdentifier.firstIDL());
+    this._idTable.add(LineIdentifier.lastIDL());
+
+    this._textZone.on.keyUp.add(logoot, false);
   }
   
-  void setNeighbor(Replica neighbor) {
-    this.neighbor = neighbor;
+  void main() {
+    this.port.receive((message, SendPort replyTo) {
+      switch(message['id']) {
+        case INIT:
+          init(message['args'][0], message['args'][1], message['args'][2]);
+        break;
+
+        case DELIVER:
+          deliver(LogootPatch.fromString(message["args"][0]), message['args'][1]);
+        break;
+      }
+    });
   }
 
   void logoot(event) {
     //print('===================================================================');
-    //for(int i = 0; i < idTable.length; ++i) {
-    //  print(idTable[i]);
+    //for(int i = 0; i < this._idTable.length; ++i) {
+    //  print(this._idTable[i]);
     //}
     //print('-------------------------------------------------------------------');
-    List<Operation> patch = new List<Operation>();
+    LogootPatch patch = new LogootPatch();
     DiffMatchPatch dmp = new DiffMatchPatch();
-    String newText = this.textZone.value;
-    List<Diff> diffs = dmp.diff_main(this.currentText, newText, false);
+    String newText = this._textZone.value;
+    List<Diff> diffs = dmp.diff_main(this._currentText, newText, false);
     int index = 0;
 
     for(int i = 0; i < diffs.length; ++i) {
@@ -47,9 +64,9 @@ class Replica {
       if(d.operation == DIFF_EQUAL) {
         index += nbChar;
       } else if(d.operation == DIFF_INSERT) {
-        LineIdentifier p = idTable[index];
-        LineIdentifier q = idTable[index + 1];
-        List<LineIdentifier> newLinesID = this.generateLineIdentifiers(p, q, nbChar, BOUNDARY);
+        LineIdentifier p = this._idTable[index];
+        LineIdentifier q = this._idTable[index + 1];
+        List<LineIdentifier> newLinesID = generateLineIdentifiers(p, q, nbChar, BOUNDARY);
         
         for(int j = 0; j < newLinesID.length; ++j) {
           patch.add(new Operation(Operation.INSERTION, newLinesID[j], d.text[j]));
@@ -58,27 +75,21 @@ class Replica {
         index += nbChar;
       } else if(d.operation == DIFF_DELETE) {
         for(int j = 0; j < nbChar; ++j) {
-          LineIdentifier toRemove = idTable[index + 1];
+          LineIdentifier toRemove = this._idTable[index + 1];
           
           patch.add(new Operation(Operation.DELETION, toRemove, ""));
         }
       }
     }
 
-    deliver(patch, this.identifier);
-    this.neighbor.deliver(patch, this.identifier);
-    //print('-------------------------------------------------------------------');
-    //for(int i = 0; i < idTable.length; ++i) {
-    //  print(idTable[i]);
-    //}
-    //print('===================================================================');
-    
-    // DEBUG
-    if(this.textZone.value == this.neighbor.textZone.value) {
-      print("Les deux clients ont la meme version :)");
-    } else {
-      print("Les deux clients n'ont pas la meme version :(");
+    deliver(patch, this._identifier);
+    List<String> test = new List<String>();
+    this._deliverPort.call({'id' : DELIVER, 'args' : [patch.toString(), this._identifier]});
+    print('-------------------------------------------------------------------');
+    for(int i = 0; i < this._idTable.length; ++i) {
+      print(this._idTable[i]);
     }
+    print('===================================================================');
   }
   
   List<LineIdentifier> generateLineIdentifiers(LineIdentifier p, LineIdentifier q, int N, int boundary) {
@@ -170,8 +181,8 @@ class Replica {
         s = q[i].repid;
         c = q[i].clock;
       } else {
-        s = this.identifier;
-        c = this.clock++;
+        s = this._identifier;
+        c = this._clock++;
       }
       
       id.conc(new Position(d, s, c));
@@ -180,49 +191,49 @@ class Replica {
     return id;
   }
   
-  void deliver(List<Operation> patch, int identifier) {
-    for(int i = 0; i < patch.length; ++i) {
+  void deliver(LogootPatch patch, int identifier) {
+    for(int i = 0; i < patch.length(); ++i) {
       Operation op = patch[i];
       
       if(op.type == Operation.INSERTION) {
         // cherche l'identifiant precedant le nouvel identifiant
         int position = closest(op.id);
 
-        this.currentText = this.currentText.substring(0, position) + op.content + this.currentText.substring(position);
+        this._currentText = this._currentText.substring(0, position) + op.content + this._currentText.substring(position);
         
-        if(!(this.identifier == identifier)) {
+        if(!(this._identifier == identifier)) {
           // insertion du content a la position, dans le textarea
-          this.textZone.value = this.currentText;
+          this._textZone.value = this._currentText;
         }
 
         // ajout du nouvel identifiant, a la bonne position
-        idTable.insertRange(position + 1, 1, op.id);
+        this._idTable.insertRange(position + 1, 1, op.id);
       } else if(op.type == Operation.DELETION) {
         // cherche l'identifiat precedant l'identifiant a supprimer
         int position = closest(op.id) + 1;
 
-        this.currentText = this.currentText.substring(0, position - 1) + this.currentText.substring(position);
+        this._currentText = this._currentText.substring(0, position - 1) + this._currentText.substring(position);
         
-        if(!(this.identifier == identifier)) {
-          this.textZone.value = this.currentText;
+        if(!(this._identifier == identifier)) {
+          this._textZone.value = this._currentText;
         }
 
-        this.idTable.removeRange(position, 1);
+        this._idTable.removeRange(position, 1);
       }
     }
   }
   
   int closest(LineIdentifier idl) {
     int begin = 0;
-    int end = idTable.length - 1;
+    int end = this._idTable.length - 1;
     
     while(begin <= end) {
       int center = (begin + ((end - begin) / 2)).toInt();
       
-      if((idTable[center] < idl) && !(idTable[center + 1] < idl)) {
+      if((this._idTable[center] < idl) && !(this._idTable[center + 1] < idl)) {
         return center;
       } else {
-        if(idTable[center] < idl) {
+        if(this._idTable[center] < idl) {
           begin = center + 1;
         } else {
           end = center - 1;
