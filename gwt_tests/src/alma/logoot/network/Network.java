@@ -7,14 +7,26 @@ public class Network implements INetwork {
 
 	private IReceiveListener receiveListener;
 	private NetworkServiceAsync service = GWT.create(NetworkService.class);
-	// Le network peut être unique - Dans ce cas la ce n'est pas le controlleur qui va le crééer, mais il doit s'y connecter en connaissant son addresse.
-	// Il peut aussi être multiple - Un par client. 
+	// Le network peut ï¿½tre unique - Dans ce cas la ce n'est pas le controlleur qui va le crï¿½ï¿½er, mais il doit s'y connecter en connaissant son addresse.
+	// Il peut aussi ï¿½tre multiple - Un par client. 
 	
 	@Override
-	public void send(Object o) {
+	public void send(String o) {
 		// TODO Auto-generated method stub
 		// Envoyer l'objet vers le serveur.
-		service.send(o, null);
+		System.out.println(o);
+		service.send(o, new AsyncCallback<Void>() {
+			
+			@Override
+			public void onSuccess(Void result) {
+				System.out.println("Network.send.onSuccess");
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("Network.send.onFailure");
+			}
+		});
 	}
 
 	@Override
@@ -32,10 +44,10 @@ public class Network implements INetwork {
 	}
 	
 	private void invokeWaiting(){
-		service.waitForChange(new AsyncCallback<Object>() {
+		service.waitForChange(new AsyncCallback<String>() {
 			
 			@Override
-			public void onSuccess(Object result) {
+			public void onSuccess(String result) {
 				receiveListener.receive(result);
 				invokeWaiting();
 			}

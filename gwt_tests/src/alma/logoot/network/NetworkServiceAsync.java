@@ -4,8 +4,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface NetworkServiceAsync {
 
-	void send(Object o, AsyncCallback<Void> callback);
+	void send(String o, AsyncCallback<Void> callback);
 
-	void waitForChange(AsyncCallback<Object> callback);
+	void waitForChange(AsyncCallback<String> callback);
 
 }
