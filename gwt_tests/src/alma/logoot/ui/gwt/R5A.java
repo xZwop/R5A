@@ -18,11 +18,8 @@ public class R5A implements IUI {
 	private IChangeListener changeListener;
 	private final TextArea textArea = new TextArea();
 
-	/**
-	 * This is the init point method.
-	 */
-	public void init() {
-
+	
+	public R5A() {
 		// Initialization of the textarea.
 		RootPanel.get("textAreaContainer").add(textArea);
 
@@ -41,7 +38,7 @@ public class R5A implements IUI {
 			}
 		});
 	}
-
+	
 	/**
 	 * 
 	 */

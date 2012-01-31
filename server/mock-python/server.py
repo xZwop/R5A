@@ -11,7 +11,7 @@ import socket
 import threading
 
 HOST = 'localhost'
-REGISTER_PORT, SEND_PORT = 9997, 9998
+REGISTER_PORT, SEND_PORT = 9991, 9992
 
 class Flooder:
   '''
@@ -27,7 +27,7 @@ class Flooder:
     if not self.__flood.has_key(client_address):
       print "New for flood: %s to flood on port %s "\
           % (client_address, receiver_port)
-      self.__flood[client_address] = int(receiver_port)
+      self.__flood[client_address] = receiver_port
 
     return "%s%d" % (client_address[0], client_address[1])
 
@@ -41,23 +41,10 @@ class Flooder:
         sock.connect((client_address[0], receiver_port))
         sock.send(data)
       except Exception as e:
-        print "Unexpected error: ", e
+        pass
       finally:
         sock.close()
 
-  def flood_excepaddr(self, data, excepaddr):
-    '''
-    Flood data to all users, excepted the one give in parameter.
-    '''
-    for client_address, receiver_port in self.__flood.iteritems():
-      if client_address != excepaddr:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-          sock.connect((client_address[0], receiver_port))
-          sock.send(data)
-        finally:
-          sock.close()
-      
   def __init__(self):
     self.__flood = {}
 
@@ -72,9 +59,12 @@ class RegistrationHandler(SocketServer.BaseRequestHandler):
     '''
     Register client for flood.
     '''
-    port = self.request.recv(1024).strip()
-    uniquid = self.server.flooder.add(self.client_address, port)
-    self.request.send(uniquid)
+    try:
+      port = int(self.request.recv(1024))
+      uniquid = self.server.flooder.add(self.client_address, port)
+      self.request.send(uniquid)
+    except ValueError:
+      pass
 
 class Register(SocketServer.ThreadingTCPServer):
   '''
@@ -96,8 +86,10 @@ class SendHandler(SocketServer.BaseRequestHandler):
     '''
     Flood data to other registred clients.
     '''
-    data = self.request.recv(1024).strip()
-    self.server.flooder.flood_excepaddr(data, self.client_address)
+    data = self.request.recv(1024)
+    print data
+    flood_thread = threading.Thread(target = self.server.flooder.flood(data))
+    flood_thread.start()
 
 class Sender(SocketServer.ThreadingTCPServer):
   '''

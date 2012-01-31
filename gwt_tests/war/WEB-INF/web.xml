@@ -5,6 +5,14 @@
 	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
 	<!-- Servlets -->
+	<servlet>
+		<servlet-name>NetworkServiceImpl</servlet-name>
+		<servlet-class>alma.logoot.network.NetworkServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NetworkServiceImpl</servlet-name>
+		<url-pattern>/r5a/logoot</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

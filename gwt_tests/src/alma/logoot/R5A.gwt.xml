@@ -12,13 +12,16 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
-
+  <inherits name="name.pehl.piriti.json.JSON" />
+  
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='alma.logoot.ui.gwt.R5A'/>
+  <entry-point class='alma.logoot.controller.Controller'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='ui/gwt'/>
+  <source path='ui'/>
   <source path='logootengine'/>
   <source path='network'/>
+  <source path='controller'/>
 	
 </module>

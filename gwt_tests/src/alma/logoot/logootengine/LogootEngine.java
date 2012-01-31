@@ -32,9 +32,16 @@ public class LogootEngine implements ILogootEngine {
 		this.oldText = oldText;
 	}
 
-	private ArrayList<LogootIdContainer> getIdTable() {
-		if (idTable == null)
+	public ArrayList<LogootIdContainer> getIdTable() {
+		if (idTable == null) {
 			idTable = new ArrayList<LogootIdContainer>();
+			LogootIdContainer first = new LogootIdContainer();
+			first.add(new LogootIdentifier(1, 0, 0));
+			LogootIdContainer last = new LogootIdContainer();
+			last.add(new LogootIdentifier(LogootConf.BASE, 0, 0));
+			idTable.add(first);
+			idTable.add(last);
+		}
 		return idTable;
 	}
 
@@ -58,7 +65,7 @@ public class LogootEngine implements ILogootEngine {
 	 *            identifiant de la replique
 	 * @return N identifiants pour la replique s entre p et q
 	 */
-	public static ArrayList<LogootIdContainer> generateLineIdentier(
+	public ArrayList<LogootIdContainer> generateLineIdentier(
 			LogootIdContainer p, LogootIdContainer q, int N,
 			LogootIdentifier rep) {
 
@@ -111,7 +118,7 @@ public class LogootEngine implements ILogootEngine {
 	 *            position
 	 * @return l'identifiant pour la replique definit par rep(id+horloge)
 	 */
-	static public LogootIdContainer constructIdentifier(BigInteger r,
+	public LogootIdContainer constructIdentifier(BigInteger r,
 			LogootIdContainer p, LogootIdContainer q, LogootIdentifier rep) {
 		// TODO : Ici, la fonction risque de prendre des identifiants a la fois
 		// dans p et dans q.
@@ -143,10 +150,10 @@ public class LogootEngine implements ILogootEngine {
 	 * @param id
 	 *            Identifiant de caractere
 	 * @param n
-	 *            Nombre de triplet a  prendre en compte
+	 *            Nombre de triplet a prendre en compte
 	 * @return les n identifiants dans la base concatenes.
 	 */
-	static public BigInteger prefix(LogootIdContainer id, int n) {
+	public BigInteger prefix(LogootIdContainer id, int n) {
 		String result = "";
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
 		for (int i = 0; i < n; i++) {
@@ -161,7 +168,7 @@ public class LogootEngine implements ILogootEngine {
 		return new BigInteger(result);
 	}
 
-	static private LinkedList<Integer> prefixToList(BigInteger prefix) {
+	private LinkedList<Integer> prefixToList(BigInteger prefix) {
 		LinkedList<Integer> result = new LinkedList<Integer>();
 		String ts = String.valueOf(prefix.toString());
 		int size = new Integer(LogootConf.BASE - 1).toString().length();
@@ -196,8 +203,7 @@ public class LogootEngine implements ILogootEngine {
 			} else if (d.operation == alma.logoot.logootengine.diff_match_patch.Operation.INSERT) {
 				LogootIdContainer p = getIdTable().get(index);
 				LogootIdContainer q = getIdTable().get(index + 1);
-				ArrayList<LogootIdContainer> idList = LogootEngine
-						.generateLineIdentier(p, q, d.text.length(), getId());
+				ArrayList<LogootIdContainer> idList = generateLineIdentier(p, q, d.text.length(), getId());
 				// Mise a jour idTable
 				getIdTable().addAll(index + 1, idList);
 				// Creation operations
@@ -252,6 +258,7 @@ public class LogootEngine implements ILogootEngine {
 
 	@Override
 	public void setId(int id) {
+		System.out.println("LogootEngine - Reception d'un id : "+id);
 		setId(new LogootIdentifier(0, id, 0));
 	}
 
