@@ -1,12 +1,19 @@
-package alma.logoot.shared;
+package alma.logoot.logootengine;
+
+import java.io.Serializable;
 
 /**
  * Triplet representant une identifiant dans la base 
  * @author driz
  *
  */
-public class LogootIdentifier implements Comparable<LogootIdentifier>{
+public class LogootIdentifier implements Comparable<LogootIdentifier>, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * digit dans la base [1, BASE[
 	 */

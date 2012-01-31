@@ -1,10 +1,25 @@
-package alma.logoot.shared;
+package alma.logoot.logootengine;
 
 public class OpInsert extends Operation {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * caractere de l'ajout
 	 */
 	private Character content;
+
+	public OpInsert(){
+		
+	}
+	
+	
+	public void setContent(Character content) {
+		this.content = content;
+	}
+
 
 	public OpInsert(LogootIdContainer position, Character content) {
 		this.position = position;
