@@ -13,6 +13,6 @@ public interface IReceiveListener {
 	 * @param o
 	 *            the object to transmit.
 	 */
-	void receive(Object o);
+	void receive(String o);
 
 }
