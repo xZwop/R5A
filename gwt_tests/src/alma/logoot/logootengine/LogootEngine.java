@@ -9,6 +9,12 @@ import java.util.Random;
 
 import alma.logoot.logootengine.diff_match_patch.Diff;
 
+import com.google.gwt.core.client.GWT;
+import com.google.web.bindery.autobean.shared.AutoBean;
+import com.google.web.bindery.autobean.shared.AutoBeanCodex;
+import com.google.web.bindery.autobean.shared.AutoBeanFactory;
+import com.google.web.bindery.autobean.shared.AutoBeanUtils;
+
 /**
  * Classe utilitaire comprenant les fonctions de manipulation des identifiants,
  * notament les algos p61-63.
@@ -18,6 +24,7 @@ import alma.logoot.logootengine.diff_match_patch.Diff;
  */
 public class LogootEngine implements ILogootEngine {
 
+	MyFactory myFactory = GWT.create(MyFactory.class);
 	String oldText;
 	ArrayList<LogootIdContainer> idTable;
 	LogootIdentifier id;
@@ -187,7 +194,7 @@ public class LogootEngine implements ILogootEngine {
 	}
 
 	@Override
-	public Collection<IOperation> generatePatch(String text) {
+	public String generatePatch(String text) {
 
 		// Initialization by making a diff between the old text and the new one.
 		diff_match_patch diffEngine = new diff_match_patch();
@@ -203,7 +210,8 @@ public class LogootEngine implements ILogootEngine {
 			} else if (d.operation == alma.logoot.logootengine.diff_match_patch.Operation.INSERT) {
 				LogootIdContainer p = getIdTable().get(index);
 				LogootIdContainer q = getIdTable().get(index + 1);
-				ArrayList<LogootIdContainer> idList = generateLineIdentier(p, q, d.text.length(), getId());
+				ArrayList<LogootIdContainer> idList = generateLineIdentier(p,
+						q, d.text.length(), getId());
 				// Mise a jour idTable
 				getIdTable().addAll(index + 1, idList);
 				// Creation operations
@@ -225,12 +233,13 @@ public class LogootEngine implements ILogootEngine {
 				}
 			}
 		}
-		return patch;
+		return serializeToJson(patch);
 	}
 
 	@Override
-	public String deliver(Collection<IOperation> patch) {
-		for (IOperation o : patch)
+	public String deliver(String patch) {
+		Collection<IOperation> patched = deserializeFromJson(patch);
+		for (IOperation o : patched)
 			deliver(o);
 		return getOldText();
 	}
@@ -258,8 +267,24 @@ public class LogootEngine implements ILogootEngine {
 
 	@Override
 	public void setId(int id) {
-		System.out.println("LogootEngine - Reception d'un id : "+id);
+		System.out.println("LogootEngine - Reception d'un id : " + id);
 		setId(new LogootIdentifier(0, id, 0));
 	}
 
+	interface MyFactory extends AutoBeanFactory {
+		AutoBean<Collection<IOperation>> patch();
+	}
+
+	String serializeToJson(Collection<IOperation> patch) {
+		AutoBean<Collection<IOperation>> bean = AutoBeanUtils
+				.getAutoBean(patch);
+		return AutoBeanCodex.encode(bean).getPayload();
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	Collection<IOperation> deserializeFromJson(String json) {
+		AutoBean<Collection> bean = AutoBeanCodex.decode(myFactory,
+				Collection.class, json);
+		return bean.as();
+	}
 }
