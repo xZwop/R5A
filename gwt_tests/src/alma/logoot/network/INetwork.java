@@ -18,7 +18,7 @@ public interface INetwork {
 	 * @param o
 	 *            the object sent.
 	 */
-	void send(String o);
+	void send(Collection<IOperation> o);
 
 	/**
 	 * Allow a user to connect to the network.

@@ -5,7 +5,11 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Collection;
 
+import alma.logoot.logootengine.IOperation;
+
+import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class NetworkServiceImpl extends RemoteServiceServlet implements
@@ -22,35 +26,42 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = 1L;
 	private boolean register = false;
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void send(String o) {
+	public void send(Collection<IOperation> o) {
+		System.out.println("NetworkServiceImple.send");
 		System.out.println(o);
-		
-//		System.out.println("NetworkServiceImple.send");
-//		if (!register)
-//			register();
-//		// TODO : Send to Server by Ip
-//		try {
-//			// Socket scClient = new Socket(SERVERADDR, PORTSEND);
-//			// ObjectOutputStream output = new
-//			// ObjectOutputStream(scClient.getOutputStream());
-//			// output.writeObject(o);
-//			// scClient.close();
-//			String sentence = o;
-//			Socket clientSocket = new Socket(SERVERADDR, PORTSEND);
-//			DataOutputStream outToServer = new DataOutputStream(
-//					clientSocket.getOutputStream());
-//			outToServer.write(sentence.getBytes());
-//			clientSocket.close();
-//			register = true;
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
+		if (!register)
+			register();
+		// TODO : Send to Server by Ip
+		try {
+			Gson gson = new Gson();
+			String sentence = gson.toJson(o);
+			System.out.println(o);
+			
+//			Collection<IOperation> op = gson.fromJson(sentence, Collection.class);
+//			Collection<IOperation> op2 = (Collection<IOperation>) gson.fromJson(sentence, Collection.class);
+//			
+//			System.out.println("et now : "+op);
+//			System.out.println("et now : "+op2);
+			
+			
+			Socket clientSocket = new Socket(SERVERADDR, PORTSEND);
+			DataOutputStream outToServer = new DataOutputStream(
+					clientSocket.getOutputStream());
+			outToServer.write(sentence.getBytes());
+			clientSocket.close();
+			register = true;
+			System.out.println("NetworkServiceImple.send fin");
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.out.println("NetworkServiceImple.send fin");
+		}
 	}
 
 	@Override
-	public String waitForChange() {
+	public Collection<IOperation> waitForChange() {
 		System.out.println("NetworkServiceImple.waitForChange");
 		if (!register)
 			register();
@@ -61,7 +72,8 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 			String o = (String) input
 					.readObject();
 			scClient.close();
-			return o;
+			Gson gson = new Gson();
+			return gson.fromJson(o, Collection.class);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

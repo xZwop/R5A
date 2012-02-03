@@ -24,7 +24,6 @@ import com.google.web.bindery.autobean.shared.AutoBeanUtils;
  */
 public class LogootEngine implements ILogootEngine {
 
-	MyFactory myFactory = GWT.create(MyFactory.class);
 	String oldText;
 	ArrayList<LogootIdContainer> idTable;
 	LogootIdentifier id;
@@ -194,7 +193,7 @@ public class LogootEngine implements ILogootEngine {
 	}
 
 	@Override
-	public String generatePatch(String text) {
+	public Collection<IOperation> generatePatch(String text) {
 
 		// Initialization by making a diff between the old text and the new one.
 		diff_match_patch diffEngine = new diff_match_patch();
@@ -233,13 +232,16 @@ public class LogootEngine implements ILogootEngine {
 				}
 			}
 		}
-		return serializeToJson(patch);
+		// TODO : serialization
+		// return serializeToJson(person);
+		return patch;
 	}
 
 	@Override
-	public String deliver(String patch) {
-		Collection<IOperation> patched = deserializeFromJson(patch);
-		for (IOperation o : patched)
+	public String deliver(Collection<IOperation> patch) {
+		// TODO : Serialization
+		// System.out.println(deserializeFromJson(patch));
+		for (IOperation o : patch)
 			deliver(o);
 		return getOldText();
 	}
@@ -271,20 +273,57 @@ public class LogootEngine implements ILogootEngine {
 		setId(new LogootIdentifier(0, id, 0));
 	}
 
-	interface MyFactory extends AutoBeanFactory {
-		AutoBean<Collection<IOperation>> patch();
-	}
+	// interface MyFactory extends AutoBeanFactory {
+	// AutoBean<Collection<IOperation>> patch();
+	// }
+	//
+	// String serializeToJson(Collection<IOperation> patch) {
+	// AutoBean<Collection<IOperation>> bean = AutoBeanUtils
+	// .getAutoBean(patch);
+	// return AutoBeanCodex.encode(bean).getPayload();
+	// }
+	//
+	// @SuppressWarnings({ "unchecked", "rawtypes" })
+	// Collection<IOperation> deserializeFromJson(String json) {
+	// AutoBean<Collection> bean = AutoBeanCodex.decode(myFactory,
+	// Collection.class, json);
+	// return bean.as();
+	// }
 
-	String serializeToJson(Collection<IOperation> patch) {
-		AutoBean<Collection<IOperation>> bean = AutoBeanUtils
-				.getAutoBean(patch);
-		return AutoBeanCodex.encode(bean).getPayload();
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	Collection<IOperation> deserializeFromJson(String json) {
-		AutoBean<Collection> bean = AutoBeanCodex.decode(myFactory,
-				Collection.class, json);
-		return bean.as();
-	}
+	// interface Person {
+	// String getName();
+	//
+	// void setName(String name);
+	// }
+	//
+	// // Declare the factory type
+	// interface MyFactory extends AutoBeanFactory {
+	// AutoBean<Person> person();
+	// }
+	//
+	// MyFactory factory = GWT.create(MyFactory.class);
+	//
+	// Person makePerson() {
+	// // Construct the AutoBean
+	// AutoBean<Person> person = factory.person();
+	//
+	// // Return the Person interface shim
+	// return person.as();
+	// }
+	//
+	// String serializeToJson(Person person) {
+	// // Retrieve the AutoBean controller
+	// AutoBean<Person> bean = AutoBeanUtils.getAutoBean(person);
+	// System.out.println(person);
+	// System.out.println(bean);
+	// System.out.println(AutoBeanCodex.encode(bean));
+	// System.out.println(AutoBeanCodex.encode(bean).getPayload());
+	// return AutoBeanCodex.encode(bean).getPayload();
+	// }
+	//
+	// Person deserializeFromJson(String json) {
+	// AutoBean<Person> bean = AutoBeanCodex.decode(factory, Person.class,
+	// json);
+	// return bean.as();
+	// }
 }

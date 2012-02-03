@@ -17,7 +17,7 @@ public interface ILogootEngine {
 	 *            the new text to compare to an old one.
 	 * @return the list of operations to pass from the old text to the new one.
 	 */
-	String generatePatch(String text);
+	Collection<IOperation> generatePatch(String text);
 
 	/**
 	 * From a list of operations, update the table and the text.
@@ -26,7 +26,7 @@ public interface ILogootEngine {
 	 *            a list of operation.
 	 * @return the new text after the application of the operations.
 	 */
-	String deliver(String patch);
+	String deliver(Collection<IOperation> patch);
 
 	/**
 	 * Set the id of the client.

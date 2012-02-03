@@ -1,5 +1,9 @@
 package alma.logoot.network;
 
+import java.util.Collection;
+
+import alma.logoot.logootengine.IOperation;
+
 /**
  * 
  * @author R5A
@@ -13,6 +17,6 @@ public interface IReceiveListener {
 	 * @param o
 	 *            the object to transmit.
 	 */
-	void receive(String o);
+	void receive(Collection<IOperation> o);
 
 }

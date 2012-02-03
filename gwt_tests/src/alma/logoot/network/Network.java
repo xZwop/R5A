@@ -1,5 +1,9 @@
 package alma.logoot.network;
 
+import java.util.Collection;
+
+import alma.logoot.logootengine.IOperation;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -11,7 +15,7 @@ public class Network implements INetwork {
 	// Il peut aussi �tre multiple - Un par client. 
 	
 	@Override
-	public void send(String o) {
+	public void send(Collection<IOperation> o) {
 		// TODO Auto-generated method stub
 		// Envoyer l'objet vers le serveur.
 		System.out.println(o);
@@ -44,10 +48,10 @@ public class Network implements INetwork {
 	}
 	
 	private void invokeWaiting(){
-		service.waitForChange(new AsyncCallback<String>() {
+		service.waitForChange(new AsyncCallback<Collection<IOperation>>() {
 			
 			@Override
-			public void onSuccess(String result) {
+			public void onSuccess(Collection<IOperation> result) {
 				receiveListener.receive(result);
 				invokeWaiting();
 			}
