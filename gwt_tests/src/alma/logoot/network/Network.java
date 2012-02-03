@@ -11,8 +11,15 @@ public class Network implements INetwork {
 
 	private IReceiveListener receiveListener;
 	private NetworkServiceAsync service = GWT.create(NetworkService.class);
-	// Le network peut �tre unique - Dans ce cas la ce n'est pas le controlleur qui va le cr��er, mais il doit s'y connecter en connaissant son addresse.
-	// Il peut aussi �tre multiple - Un par client. 
+
+	// Le network peut �tre unique - Dans ce cas la ce n'est pas le
+	// controlleur qui va le cr��er, mais il doit s'y connecter en
+	// connaissant son addresse.
+	// Il peut aussi �tre multiple - Un par client.
+
+	public Network(){
+		initReceive();
+	}
 	
 	@Override
 	public void send(Collection<IOperation> o) {
@@ -20,12 +27,12 @@ public class Network implements INetwork {
 		// Envoyer l'objet vers le serveur.
 		System.out.println(o);
 		service.send(o, new AsyncCallback<Void>() {
-			
+
 			@Override
 			public void onSuccess(Void result) {
 				System.out.println("Network.send.onSuccess");
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				System.out.println("Network.send.onFailure");
@@ -37,8 +44,8 @@ public class Network implements INetwork {
 	public int connect() {
 		// TODO Auto-generated method stub.
 		// Initialiser le server
-		int id = (int) (Math.random()*1000000);
-		System.out.println("Id generated : "+id);
+		int id = (int) (Math.random() * 1000000);
+		System.out.println("Id generated : " + id);
 		return id;
 	}
 
@@ -46,16 +53,29 @@ public class Network implements INetwork {
 	public void addReceiverListener(IReceiveListener listener) {
 		this.receiveListener = listener;
 	}
-	
-	private void invokeWaiting(){
+
+	public native void initReceive() /*-{
+		var source = new EventSource('GetData');
+		source.onmessage = function(event) {
+			this.@alma.logoot.network.Network::receive(Ljava/util/Collection;)(event.data);
+		};
+	}-*/;
+
+	@SuppressWarnings("rawtypes")
+	private void receive(Collection text) {
+		Collection<IOperation> patch =  text;
+		receiveListener.receive(patch);
+	}
+
+	private void invokeWaiting() {
 		service.waitForChange(new AsyncCallback<Collection<IOperation>>() {
-			
+
 			@Override
 			public void onSuccess(Collection<IOperation> result) {
 				receiveListener.receive(result);
 				invokeWaiting();
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				System.err.println("Failure callback invokeWaiting");

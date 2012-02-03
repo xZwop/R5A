@@ -14,6 +14,17 @@
 		<url-pattern>/r5a/logoot</url-pattern>
 	</servlet-mapping>
 
+
+	<servlet>
+		<servlet-name>GetData</servlet-name>
+		<servlet-class>alma.logoot.network.GetData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetData</servlet-name>
+		<url-pattern>/r5a/GetData</url-pattern>
+	</servlet-mapping>
+
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>R5A.html</welcome-file>
