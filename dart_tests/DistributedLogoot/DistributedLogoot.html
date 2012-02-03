@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>DistributedLogoot</title>
+    <script type='text/javascript'>
+    	var source = new EventSource("http://localhost/~adrienbougouin/logoot/emission.php");
+    	var lastData = '';
+ 
+    	function processPush(event) {
+    		if(event.data != lastData) {
+    			var evt = document.createEvent("HTMLEvents");
+
+    			lastData = event.data;
+
+    			evt.initEvent('change', true, true);
+    			document.getElementById('receiver').value = lastData;
+    			document.getElementById('receiver').dispatchEvent(evt);
+    		}
+    	}
+    	
+        source.onmessage = processPush;
+    </script>
+  </head>
+  <body>
+    <h1>DistributedLogoot</h1>
+    <h2 id="status">Dart is not running...</h2>
+    <textarea id="textZone" style="width: 640px; height: 480px"></textarea>
+    <textarea id="receiver"></textarea>
+    <script type="text/javascript" src="DistributedLogoot.dart.app.js" style="visibility: hidden"></script>
+  </body>
+</html>
