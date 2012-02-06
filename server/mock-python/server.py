@@ -8,14 +8,12 @@ Server mock offer services to mock the P2P networks layer of logoot
 engine. Server mock not work as P2P for distribution it only do 
 floding to all client.
 '''
-from sets import Set
 import SocketServer
 import socket
 import threading
 
 HOST = 'localhost'
 REGISTER_PORT, SEND_PORT = 9991, 9992
-STATUS = 'stop'
 
 class Flooder:
   '''
@@ -29,9 +27,7 @@ class Flooder:
     Add new user for flooding and return unique id.
     '''
     if (client_address, receiver_port) not in self.__flood:
-      # print "New for flood: %s to flood on port %s "\
-      #     % (client_address, receiver_port)
-      self.__flood.add(client_address, receiver_port)
+      self.__flood.add((client_address, receiver_port))
 
     return "%s%d" % (client_address, receiver_port)
 
@@ -50,7 +46,7 @@ class Flooder:
         sock.close()
 
   def __init__(self):
-    self.__flood = Set()
+    self.__flood = set()
 
 class RegistrationHandler(SocketServer.BaseRequestHandler):
   '''
