@@ -1,8 +1,5 @@
 package alma.logoot.network;
 
-import java.util.Collection;
-
-import alma.logoot.logootengine.IOperation;
 
 
 /**
@@ -18,7 +15,7 @@ public interface INetwork {
 	 * @param o
 	 *            the object sent.
 	 */
-	void send(Collection<IOperation> o);
+	void send(String o);
 
 	/**
 	 * Allow a user to connect to the network.

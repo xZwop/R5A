@@ -8,6 +8,6 @@ public class OpInsert extends Operation {
 	}
 	
 	public OpInsert(LogootIdContainer position, Character content) {
-		super("insert", position, content);
+		super("i", position, content);
 	}
 }

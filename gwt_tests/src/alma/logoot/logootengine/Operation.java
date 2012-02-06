@@ -1,5 +1,6 @@
 package alma.logoot.logootengine;
 
+
 /**
  * An operation consist in adding or removing a caractere.
  * 
@@ -25,6 +26,17 @@ public class Operation implements IOperation {
 		this.position = position;
 	}
 
+	public Operation(String s) {
+		String[] splited = s.split("[;][ ]");
+		if (splited.length != 3) {
+			System.err.println("Operation : Deserialization error.");
+		} else {
+			this.setType(splited[0]);
+			this.setContent(splited[1].charAt(0));
+			this.setPosition(new LogootIdContainer(splited[2]));
+		}
+	}
+	
 	public String getType() {
 		return type;
 	}
@@ -49,12 +61,12 @@ public class Operation implements IOperation {
 
 	@Override
 	public boolean isIns() {
-		return this.type.equals("insert");
+		return this.type.equals("i");
 	}
 
 	@Override
 	public boolean isDel() {
-		return this.type.equals("delete");
+		return this.type.equals("d");
 	}
 
 	/**
@@ -69,6 +81,6 @@ public class Operation implements IOperation {
 	}
 
 	public String toString() {
-		return "[" + type + " : " + content + "," + position + "]";
+		return "[" + type + "; " + content + "; " + position + "]";
 	}
 }

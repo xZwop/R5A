@@ -1,6 +1,5 @@
 package alma.logoot.logootengine;
 
-import java.util.Collection;
 
 /**
  * 
@@ -17,7 +16,7 @@ public interface ILogootEngine {
 	 *            the new text to compare to an old one.
 	 * @return the list of operations to pass from the old text to the new one.
 	 */
-	Collection<IOperation> generatePatch(String text);
+	String generatePatch(String text);
 
 	/**
 	 * From a list of operations, update the table and the text.
@@ -26,7 +25,7 @@ public interface ILogootEngine {
 	 *            a list of operation.
 	 * @return the new text after the application of the operations.
 	 */
-	String deliver(Collection<IOperation> patch);
+	String deliver(String patch);
 
 	/**
 	 * Set the id of the client.

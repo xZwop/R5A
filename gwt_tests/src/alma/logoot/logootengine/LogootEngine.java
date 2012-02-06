@@ -9,12 +9,6 @@ import java.util.Random;
 
 import alma.logoot.logootengine.diff_match_patch.Diff;
 
-import com.google.gwt.core.client.GWT;
-import com.google.web.bindery.autobean.shared.AutoBean;
-import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import com.google.web.bindery.autobean.shared.AutoBeanFactory;
-import com.google.web.bindery.autobean.shared.AutoBeanUtils;
-
 /**
  * Classe utilitaire comprenant les fonctions de manipulation des identifiants,
  * notament les algos p61-63.
@@ -193,7 +187,7 @@ public class LogootEngine implements ILogootEngine {
 	}
 
 	@Override
-	public Collection<IOperation> generatePatch(String text) {
+	public String generatePatch(String text) {
 
 		// Initialization by making a diff between the old text and the new one.
 		diff_match_patch diffEngine = new diff_match_patch();
@@ -234,19 +228,36 @@ public class LogootEngine implements ILogootEngine {
 		}
 		// TODO : serialization
 		// return serializeToJson(person);
-		return patch;
+		return patch.toString();
 	}
 
 	@Override
-	public String deliver(Collection<IOperation> patch) {
-		// TODO : Serialization
-		// System.out.println(deserializeFromJson(patch));
-		for (IOperation o : patch)
+	public String deliver(String patch) {
+		Collection<IOperation> patched = new ArrayList<IOperation>();
+		try {
+			patch = patch.split("^[\\[]{2}")[1];
+			patch = patch.split("[\\]]{2}$")[0];
+			String[] splited = patch.split("[\\]],[ ][\\[]");
+			for (int i = 0; i < splited.length; i++) {
+				patched.add(new Operation(splited[i]));
+			}
+		} catch (Exception e) {
+			System.err.println("LogootEngine : Deserialization error.");
+		}
+		System.out.println("L'objet apres serialization : "+patched.getClass().getName()+ " "+ patched);
+		for (IOperation o : patched)
 			deliver(o);
 		return getOldText();
 	}
 
 	private void deliver(IOperation op) {
+		// TODO : FAIRE UNE VERIFICATION SUR LID, VERIFIER SI CE NEST PAS LE MEME QUE CELUI DU CLIENT
+		// ( sinon probleme dans la table des ids. )
+		Operation idsame = (Operation) op;
+		idsame.getPosition().get(idsame.getPosition().size()-1).getIdentifier();
+		if (idsame.getPosition().get(idsame.getPosition().size()-1).getIdentifier()==id.getIdentifier()){
+			return;
+		}
 		if (op.isIns()) {
 			OpInsert o = (OpInsert) op;
 			int index = -Collections
@@ -273,57 +284,4 @@ public class LogootEngine implements ILogootEngine {
 		setId(new LogootIdentifier(0, id, 0));
 	}
 
-	// interface MyFactory extends AutoBeanFactory {
-	// AutoBean<Collection<IOperation>> patch();
-	// }
-	//
-	// String serializeToJson(Collection<IOperation> patch) {
-	// AutoBean<Collection<IOperation>> bean = AutoBeanUtils
-	// .getAutoBean(patch);
-	// return AutoBeanCodex.encode(bean).getPayload();
-	// }
-	//
-	// @SuppressWarnings({ "unchecked", "rawtypes" })
-	// Collection<IOperation> deserializeFromJson(String json) {
-	// AutoBean<Collection> bean = AutoBeanCodex.decode(myFactory,
-	// Collection.class, json);
-	// return bean.as();
-	// }
-
-	// interface Person {
-	// String getName();
-	//
-	// void setName(String name);
-	// }
-	//
-	// // Declare the factory type
-	// interface MyFactory extends AutoBeanFactory {
-	// AutoBean<Person> person();
-	// }
-	//
-	// MyFactory factory = GWT.create(MyFactory.class);
-	//
-	// Person makePerson() {
-	// // Construct the AutoBean
-	// AutoBean<Person> person = factory.person();
-	//
-	// // Return the Person interface shim
-	// return person.as();
-	// }
-	//
-	// String serializeToJson(Person person) {
-	// // Retrieve the AutoBean controller
-	// AutoBean<Person> bean = AutoBeanUtils.getAutoBean(person);
-	// System.out.println(person);
-	// System.out.println(bean);
-	// System.out.println(AutoBeanCodex.encode(bean));
-	// System.out.println(AutoBeanCodex.encode(bean).getPayload());
-	// return AutoBeanCodex.encode(bean).getPayload();
-	// }
-	//
-	// Person deserializeFromJson(String json) {
-	// AutoBean<Person> bean = AutoBeanCodex.decode(factory, Person.class,
-	// json);
-	// return bean.as();
-	// }
 }

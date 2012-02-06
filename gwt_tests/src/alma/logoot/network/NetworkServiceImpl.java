@@ -4,11 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.Collection;
 
-import alma.logoot.logootengine.IOperation;
-
-import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class NetworkServiceImpl extends RemoteServiceServlet implements
@@ -26,28 +22,18 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	private boolean register = false;
 
 	@Override
-	public void send(Collection<IOperation> o) {
+	public void send(String o) {
 		System.out.println("NetworkServiceImple.send");
 		System.out.println(o);
 		if (!register)
 			register();
 		// TODO : Send to Server by Ip
 		try {
-			Gson gson = new Gson();
-			String sentence = gson.toJson(o);
-			System.out.println(o);
-			
-//			Collection<IOperation> op = gson.fromJson(sentence, Collection.class);
-//			Collection<IOperation> op2 = (Collection<IOperation>) gson.fromJson(sentence, Collection.class);
-//			
-//			System.out.println("et now : "+op);
-//			System.out.println("et now : "+op2);
-			
 			
 			Socket clientSocket = new Socket(SERVERADDR, PORTSEND);
 			DataOutputStream outToServer = new DataOutputStream(
 					clientSocket.getOutputStream());
-			outToServer.write(sentence.getBytes());
+			outToServer.write(o.getBytes());
 			clientSocket.close();
 			register = true;
 			System.out.println("NetworkServiceImple.send fin");
@@ -56,25 +42,6 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 			e.printStackTrace();
 			System.out.println("NetworkServiceImple.send fin");
 		}
-	}
-
-	@Override
-	public Collection<IOperation> waitForChange() {
-//		System.out.println("NetworkServiceImple.waitForChange");
-//		if (!register)
-//			register();
-//		try {
-//			Socket scClient = new Socket(SERVERADDR, PORTSEND);
-//			ObjectInputStream input = new ObjectInputStream(
-//					scClient.getInputStream());
-//			String o = (String) input
-//					.readObject();
-//			scClient.close();
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
-		return null;
 	}
 
 	private void register() {

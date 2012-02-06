@@ -18,5 +18,5 @@ public interface IOperation extends Serializable {
 	 * @return true if the operation is a delete, else false.
 	 */
 	abstract public boolean isDel();
-	
+
 }

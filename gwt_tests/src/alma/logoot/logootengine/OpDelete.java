@@ -8,6 +8,6 @@ public class OpDelete extends Operation {
 	}
 	
 	public OpDelete(LogootIdContainer position) {
-		super("delete", position);
+		super("d", position);
 	}
 }
