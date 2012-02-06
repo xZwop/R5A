@@ -57,6 +57,7 @@ public class Network implements INetwork {
 	public native void initReceive() /*-{
 		var source = new EventSource('GetData');
 		source.onmessage = function(event) {
+			alert("event");
 			this.@alma.logoot.network.Network::receive(Ljava/util/Collection;)(event.data);
 		};
 	}-*/;
