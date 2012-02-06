@@ -38,12 +38,14 @@ public class Controller implements EntryPoint, IChangeListener, IReceiveListener
 
 	@Override
 	public void change(String text) {
-		network.send(logootEngine.generatePatch(text));
+		Collection<IOperation> patch = logootEngine.generatePatch(text); 
+		if ( patch.size() != 0 )
+			network.send(patch);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void receive(Collection<IOperation> o) { 
+		System.out.println("Objet recu :"+o);
 		try {
 			String text = logootEngine.deliver(o);
 			ui.setText(text);

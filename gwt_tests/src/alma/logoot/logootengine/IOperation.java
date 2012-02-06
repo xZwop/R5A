@@ -1,21 +1,21 @@
 package alma.logoot.logootengine;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author R5A
  *
  */
-public interface IOperation {
+public interface IOperation extends Serializable {
 
 	/**
-	 * 
-	 * @return true si l'operation est une insertion
+	 * @return true if the operation is an insert, else false.
 	 */
 	abstract public boolean isIns();
 	
 	/**
-	 * 
-	 * @return true si l'operation est une insertion
+	 * @return true if the operation is a delete, else false.
 	 */
 	abstract public boolean isDel();
 	

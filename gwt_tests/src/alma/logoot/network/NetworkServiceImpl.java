@@ -3,7 +3,6 @@ package alma.logoot.network;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.Collection;
 
@@ -26,7 +25,6 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = 1L;
 	private boolean register = false;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void send(Collection<IOperation> o) {
 		System.out.println("NetworkServiceImple.send");
@@ -62,22 +60,20 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Collection<IOperation> waitForChange() {
-		System.out.println("NetworkServiceImple.waitForChange");
-		if (!register)
-			register();
-		try {
-			Socket scClient = new Socket(SERVERADDR, PORTSEND);
-			ObjectInputStream input = new ObjectInputStream(
-					scClient.getInputStream());
-			String o = (String) input
-					.readObject();
-			scClient.close();
-			Gson gson = new Gson();
-			return gson.fromJson(o, Collection.class);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+//		System.out.println("NetworkServiceImple.waitForChange");
+//		if (!register)
+//			register();
+//		try {
+//			Socket scClient = new Socket(SERVERADDR, PORTSEND);
+//			ObjectInputStream input = new ObjectInputStream(
+//					scClient.getInputStream());
+//			String o = (String) input
+//					.readObject();
+//			scClient.close();
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//		}
 		return null;
 	}
 

@@ -1,17 +1,24 @@
 package alma.logoot.network;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import alma.logoot.logootengine.Operation;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Servlet implementation class GetData
@@ -53,11 +60,20 @@ public class GetData extends HttpServlet {
 			BufferedReader inFromClient = new BufferedReader(
 					new InputStreamReader(connectionSocket.getInputStream()));
 			clientSentence = inFromClient.readLine();
-			out.println(clientSentence+"\n\n");
+			Gson gson = new Gson();
+			Type collectionType = new TypeToken<Collection<Operation>>() {
+			}.getType();
+			Collection<Operation> patch = gson.fromJson(clientSentence,
+					collectionType);
+			System.out.println("GetData avant envoie au client"
+					+ patch.getClass().getName());
+			for (Operation i : patch) {
+				System.out.println(i);
+				System.out.println(i.getClass().getName());
+			}
+			out.print("data: " + patch + "\n\n");
 			out.flush();
-			System.out.println("GetData : Reception du serveur :: "+clientSentence);
 		}
-
 	}
 
 	/**

@@ -17,10 +17,10 @@ public class Network implements INetwork {
 	// connaissant son addresse.
 	// Il peut aussi �tre multiple - Un par client.
 
-	public Network(){
+	public Network() {
 		initReceive();
 	}
-	
+
 	@Override
 	public void send(Collection<IOperation> o) {
 		// TODO Auto-generated method stub
@@ -35,6 +35,7 @@ public class Network implements INetwork {
 
 			@Override
 			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
 				System.out.println("Network.send.onFailure");
 			}
 		});
@@ -57,15 +58,16 @@ public class Network implements INetwork {
 	public native void initReceive() /*-{
 		var source = new EventSource('GetData');
 		source.onmessage = function(event) {
-			alert("event");
+			alert(event.data);
 			this.@alma.logoot.network.Network::receive(Ljava/util/Collection;)(event.data);
 		};
 	}-*/;
 
-	@SuppressWarnings("rawtypes")
-	private void receive(Collection text) {
-		Collection<IOperation> patch =  text;
-		receiveListener.receive(patch);
+	public void receive(Collection<IOperation> text) {
+		System.out.println("Network reception des donnees..");
+		// Gson gson = new Gson();
+		// Collection<IOperation> patch = gson.fromJson(text, Collection.class);
+		receiveListener.receive(text);
 	}
 
 	private void invokeWaiting() {
