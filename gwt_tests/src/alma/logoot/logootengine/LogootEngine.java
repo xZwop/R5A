@@ -20,7 +20,7 @@ public class LogootEngine implements ILogootEngine {
 
 	String oldText;
 	ArrayList<LogootIdContainer> idTable;
-	LogootIdentifier id;
+	LogootIdentifier id = new LogootIdentifier(0, -1, 0);
 
 	private String getOldText() {
 		if (oldText == null)
@@ -253,7 +253,7 @@ public class LogootEngine implements ILogootEngine {
 		// ( sinon probleme dans la table des ids. )
 		Operation o = (Operation) op;
 		o.getPosition().get(o.getPosition().size()-1).getIdentifier();
-		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier()==id.getIdentifier()){
+		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(id.getIdentifier())){
 			return;
 		}
 		if (o.isIns()) {
@@ -277,7 +277,7 @@ public class LogootEngine implements ILogootEngine {
 	@Override
 	public void setId(Integer id) {
 		System.out.println("LogootEngine - Reception d'un id : " + id);
-		setId(new LogootIdentifier(0, id, 0));
+		this.id.setIdentifier(id);
 	}
 
 }
