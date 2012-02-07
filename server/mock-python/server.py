@@ -35,23 +35,25 @@ class Flooder:
     self.__uniqueid += 1
     return "%d" % (self.__uniqueid)
 
-  def flood(self, data):
+  def flood(self, data, sender_address = None):
     '''
-    Flood data to all users.
+    Flood data to all user except sender.
     '''
     for (client_address, receiver_port) in self.__flood:
-      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      try:
-        sock.connect((client_address, receiver_port))
-        sock.send(data)
-        print "\t|->  Send {%s} to [%s:%d]"\
-            % (data, client_address, receiver_port)
-      except Exception as e:
-        print "\t|->  User [%s:%d] unreachable, delete it"\
-            % (client_address, receiver_port)
-        self.__flood.discard((client_address, receiver_port))
-      finally:
-        sock.close()
+      if sender_address is not None \
+          and client_address != sender_address: 
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+          sock.connect((client_address, receiver_port))
+          sock.send(data)
+          print "\t|->  Send {%s} to [%s:%d]"\
+              % (data, client_address, receiver_port)
+        except Exception as e:
+          print "\t|->  User [%s:%d] unreachable, delete it"\
+              % (client_address, receiver_port)
+          self.__flood.discard((client_address, receiver_port))
+        finally:
+          sock.close()
 
   def __init__(self):
     self.__flood = set()
@@ -96,7 +98,8 @@ class SendHandler(SocketServer.BaseRequestHandler):
     Flood data to other registred clients.
     '''
     data = self.request.recv(BUFFER)
-    flood_thread = threading.Thread(target = self.server.flooder.flood(data))
+    flood_thread = threading.Thread(target = self.server.flooder.flood(data,\
+        self.client_address[0]))
     flood_thread.start()
 
 class Sender(SocketServer.ThreadingTCPServer):
