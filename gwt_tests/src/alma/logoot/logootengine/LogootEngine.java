@@ -244,12 +244,12 @@ public class LogootEngine implements ILogootEngine {
 		}
 		System.out.println("L'objet apres serialization : "+patched.getClass().getName()+ " "+ patched);
 		
-		Operation o = (Operation) patched.get(0);
-		o.getPosition().get(o.getPosition().size()-1).getIdentifier();
-		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(id.getIdentifier())){
-			System.out.println("C'est moi je ne dois pas ecrire huhu.");
-			return null;
-		}
+//		Operation o = (Operation) patched.get(0);
+//		o.getPosition().get(o.getPosition().size()-1).getIdentifier();
+//		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(id.getIdentifier())){
+//			System.out.println("C'est moi je ne dois pas ecrire huhu.");
+//			return null;
+//		}
 		
 		for (IOperation op : patched)
 			deliver(op);
