@@ -11,12 +11,12 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 		NetworkService {
 
 	// private static final String SERVERADDR = "172.16.134.143";
-	// private static final String SERVERADDR = "localhost";
-	private static final String SERVERADDR = "localhost";
+	 private static final String SERVERADDR = "88.163.77.47";
+//	private static final String SERVERADDR = "http://driz.dyndns.org";
 
 	private static final int PORTREGISTER = 9991;
 	private static final int PORTSEND = 9992;
-	private static final String PORTCLIENT = "9990";
+	public static final int PORTCLIENT = 9990;
 
 	private static final long serialVersionUID = 1L;
 	private boolean register = false;
@@ -54,7 +54,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 					clientSocket.getOutputStream());
 			BufferedReader inFromServer = new BufferedReader(
 					new InputStreamReader(clientSocket.getInputStream()));
-			sentence = PORTCLIENT;
+			sentence = PORTCLIENT+"";
 			outToServer.write(sentence.getBytes());
 			modifiedSentence = inFromServer.readLine();
 			System.out.println("FROM SERVER: " + modifiedSentence);

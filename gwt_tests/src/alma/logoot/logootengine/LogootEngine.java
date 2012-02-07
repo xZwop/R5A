@@ -210,8 +210,7 @@ public class LogootEngine implements ILogootEngine {
 				// Creation operations
 				int i = 0;
 				for (LogootIdContainer lic : idList) {
-					alma.logoot.logootengine.Operation op = new OpInsert(lic,
-							d.text.charAt(i));
+					IOperation op = new Operation("i", lic, d.text.charAt(i));
 					patch.add(op);
 					i++;
 				}
@@ -220,8 +219,7 @@ public class LogootEngine implements ILogootEngine {
 				for (int i = 0; i < d.text.length(); i++) {
 					LogootIdContainer position = getIdTable().get(index + 1);
 					getIdTable().remove(position);
-					alma.logoot.logootengine.Operation op = new OpDelete(
-							position);
+					IOperation op = new Operation("d", position);
 					patch.add(op);
 				}
 			}
@@ -253,13 +251,12 @@ public class LogootEngine implements ILogootEngine {
 	private void deliver(IOperation op) {
 		// TODO : FAIRE UNE VERIFICATION SUR LID, VERIFIER SI CE NEST PAS LE MEME QUE CELUI DU CLIENT
 		// ( sinon probleme dans la table des ids. )
-		Operation idsame = (Operation) op;
-		idsame.getPosition().get(idsame.getPosition().size()-1).getIdentifier();
-		if (idsame.getPosition().get(idsame.getPosition().size()-1).getIdentifier()==id.getIdentifier()){
+		Operation o = (Operation) op;
+		o.getPosition().get(o.getPosition().size()-1).getIdentifier();
+		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier()==id.getIdentifier()){
 			return;
 		}
-		if (op.isIns()) {
-			OpInsert o = (OpInsert) op;
+		if (o.isIns()) {
 			int index = -Collections
 					.binarySearch(getIdTable(), o.getPosition()) - 1;
 			StringBuffer sb = new StringBuffer(getOldText());
@@ -267,7 +264,6 @@ public class LogootEngine implements ILogootEngine {
 			setOldText(sb.toString());
 			getIdTable().add(index, o.getPosition());
 		} else {
-			OpDelete o = (OpDelete) op;
 			int index = Collections.binarySearch(getIdTable(), o.getPosition());
 			if (index > 0) {
 				StringBuffer sb = new StringBuffer(getOldText());
