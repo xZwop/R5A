@@ -1,8 +1,5 @@
 package alma.logoot.network;
 
-import java.util.Collection;
-import alma.logoot.logootengine.IOperation;
-
 /**
  * The {@link INetwork} interface specifies the methods the
  * <code>Controller</code> will use to send and get patch for collaborative
@@ -15,14 +12,13 @@ import alma.logoot.logootengine.IOperation;
  * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
  */
 public interface INetwork {
-
   /**
    * Sends information over network.
    * 
    * @param object
    *          Object to send.
    */
-  void send(Collection<IOperation> object);
+  void send(String object);
 
   /**
    * Connect a new user to the network.
@@ -44,5 +40,5 @@ public interface INetwork {
    *          Listener to call at each new received informations.
    */
   void addReceiverListener(IReceiveListener listener);
-
 }
+

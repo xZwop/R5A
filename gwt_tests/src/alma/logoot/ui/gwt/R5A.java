@@ -53,6 +53,7 @@ public class R5A implements IUI {
 
 	@Override
 	public void setText(String text) {
+		System.out.println("UI.R5A.setText : "+text);
 		textArea.setText(text);
 	}
 

@@ -1,10 +1,7 @@
 package alma.logoot.controller;
 
-import java.util.Collection;
-
 import alma.logoot.logootengine.FactoryLogootEngine;
 import alma.logoot.logootengine.ILogootEngine;
-import alma.logoot.logootengine.IOperation;
 import alma.logoot.network.FactoryNetwork;
 import alma.logoot.network.INetwork;
 import alma.logoot.network.IReceiveListener;
@@ -38,12 +35,15 @@ public class Controller implements EntryPoint, IChangeListener, IReceiveListener
 
 	@Override
 	public void change(String text) {
-		network.send(logootEngine.generatePatch(text));
+		String patch = logootEngine.generatePatch(text); 
+		if ( !patch.equals("[]"))
+			network.send(patch);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void receive(Collection<IOperation> o) { 
+	public void receive(String o) { 
+		System.out.println("Objet recu :"+o);
+		System.out.println("Objet de type : "+o.getClass().getName());
 		try {
 			String text = logootEngine.deliver(o);
 			ui.setText(text);

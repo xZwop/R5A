@@ -1,5 +1,7 @@
 package alma.logoot.logootengine;
 
+import java.io.Serializable;
+
 /**
  * The {@link IOperation} interface specifies the type of Operation.
  * 
@@ -9,8 +11,7 @@ package alma.logoot.logootengine;
  * @author Alexandre Prenza prenza.a{at}gmail{dot}com
  * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
  */
-public interface IOperation {
-
+public interface IOperation extends Serializable {
   /**
    * Test if the operation is an insertion.
    * 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 '''
 Server mock.
 
@@ -7,6 +7,7 @@ Server mock offer services to mock the P2P networks layer of logoot
 engine. Server mock not work as P2P for distribution it only do 
 floding to all client.
 '''
+
 import SocketServer
 import socket
 import threading
@@ -25,21 +26,19 @@ class Flooder:
     '''
     Add new user for flooding and return unique id.
     '''
-    if not self.__flood.has_key(client_address):
-      print "New for flood: %s to flood on port %s "\
-          % (client_address, receiver_port)
-      self.__flood[client_address] = receiver_port
+    if (client_address, receiver_port) not in self.__flood:
+      self.__flood.add((client_address, receiver_port))
 
-    return "%s%d" % (client_address[0], client_address[1])
+    return "%s%d" % (client_address, receiver_port)
 
   def flood(self, data):
     '''
     Flood data to all users.
     '''
-    for client_address, receiver_port in self.__flood.iteritems():
+    for (client_address, receiver_port) in self.__flood:
       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       try:
-        sock.connect((client_address[0], receiver_port))
+        sock.connect((client_address, receiver_port))
         sock.send(data)
       except Exception as e:
         pass
@@ -47,7 +46,7 @@ class Flooder:
         sock.close()
 
   def __init__(self):
-    self.__flood = {}
+    self.__flood = set()
 
 class RegistrationHandler(SocketServer.BaseRequestHandler):
   '''
@@ -62,7 +61,7 @@ class RegistrationHandler(SocketServer.BaseRequestHandler):
     '''
     try:
       port = int(self.request.recv(1024))
-      uniquid = self.server.flooder.add(self.client_address, port)
+      uniquid = self.server.flooder.add(self.client_address[0], port)
       self.request.send(uniquid)
     except ValueError:
       pass

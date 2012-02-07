@@ -1,7 +1,5 @@
 package alma.logoot.logootengine;
 
-import java.util.Collection;
-
 /**
  * The {@link ILogootEngine} interface specifies the methods the
  * <code>Controller</code> will use to maintain text.
@@ -25,7 +23,7 @@ public interface ILogootEngine {
    *          The new text to compare to an old one.
    * @return Collection of operations to pass from a old text, to a new one.
    */
-  Collection<IOperation> generatePatch(String text);
+  String generatePatch(String text);
 
   /**
    * Generates a collection of operations to pass from a old text, to a new one.
@@ -38,7 +36,7 @@ public interface ILogootEngine {
    *          The new text to compare to an old one.
    * @return Collection of operations to pass from a old text, to a new one.
    */
-  String deliver(Collection<IOperation> patch);
+  String deliver(String patch);
 
   /**
    * Set client id.

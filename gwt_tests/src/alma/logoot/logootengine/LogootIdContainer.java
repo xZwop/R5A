@@ -1,5 +1,6 @@
 package alma.logoot.logootengine;
 
+
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,19 @@ public class LogootIdContainer extends ArrayList<LogootIdentifier> implements
 
 	public LogootIdContainer() {
 		super();
+	}
+
+	public LogootIdContainer(String s) {
+		try {
+			s = s.split("^[<]")[1];
+			s = s.split("[>]$")[0];
+		} catch (Exception e) {
+			System.err.println("LogootIdContainer : Deserialization error.");
+		}
+		String[] splited = s.split("[>][<]");
+		for ( int i = 0; i < splited.length; i++) {
+			this.add(new LogootIdentifier(splited[i]));
+		}
 	}
 
 	public String toString() {

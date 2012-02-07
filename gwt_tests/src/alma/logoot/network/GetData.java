@@ -1,7 +1,6 @@
 package alma.logoot.network;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -24,7 +23,6 @@ public class GetData extends HttpServlet {
 	 */
 	public GetData() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	private void proceed(HttpServletRequest request,
@@ -37,34 +35,25 @@ public class GetData extends HttpServlet {
 		response.setHeader("cache-control",
 				"no-cache,no-store,max-age=0,max-stale=0");
 		response.setHeader("Accept-Charset", "utf-8");
-		response.setContentType("text/event-stream;charset=utf-8");
+		response.setContentType("text/event-stream;charset=utf-8;");
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		// int messagesSent = 0;
 		/*
 		 * ouverture socket
 		 */
 		String clientSentence;
-		String capitalizedSentence;
-		// Create a welcoming socket at port 9990
-		System.out.println("Creation de la socket sur le port 9990");
+		System.out.println("GetData : Creation de la socket sur le port 9990");
 		ServerSocket welcomeSocket = new ServerSocket(9990);
-		// Wait on welcoming socket for contact by client
 		while (true) {
-			System.out.println("Acceptation de la socket");
+			System.out.println("GetData : Acceptation de la socket");
 			Socket connectionSocket = welcomeSocket.accept();
-			// Create input stream attached to socket
 			BufferedReader inFromClient = new BufferedReader(
 					new InputStreamReader(connectionSocket.getInputStream()));
-			// Create output stream attached to socket
-			// Read in line from socket
 			clientSentence = inFromClient.readLine();
-			out.println(clientSentence);
+			out.print("data: " + clientSentence + "\n\n");
 			out.flush();
-			System.out.println("Reception du serveur :: "+clientSentence);
-			// Write out line to socket
-		}// End of the while loop, loop back and wait for another client
-			// connection
-
+		}
 	}
 
 	/**

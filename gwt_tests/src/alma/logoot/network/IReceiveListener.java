@@ -1,9 +1,5 @@
 package alma.logoot.network;
 
-import java.util.Collection;
-
-import alma.logoot.logootengine.IOperation;
-
 /**
  * The {@link IReceiveListener} interface specifies the method the
  * {@link INetwork} will use at each received informations.
@@ -15,7 +11,6 @@ import alma.logoot.logootengine.IOperation;
  * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
  */
 public interface IReceiveListener {
-
   /**
    * Notify the user who registered the listener.
    * 
@@ -25,6 +20,6 @@ public interface IReceiveListener {
    * @param object
    *          Received object.
    */
-  void receive(Collection<IOperation> object);
+	void receive(String object);
 }
 

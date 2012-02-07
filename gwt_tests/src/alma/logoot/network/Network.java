@@ -1,28 +1,22 @@
 package alma.logoot.network;
 
-import java.util.Collection;
-
-import alma.logoot.logootengine.IOperation;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Network implements INetwork {
 
+	
+	public static Network instance = null;
 	private IReceiveListener receiveListener;
 	private NetworkServiceAsync service = GWT.create(NetworkService.class);
 
-	// Le network peut �tre unique - Dans ce cas la ce n'est pas le
-	// controlleur qui va le cr��er, mais il doit s'y connecter en
-	// connaissant son addresse.
-	// Il peut aussi �tre multiple - Un par client.
-
-	public Network(){
+	public Network() {
+		instance = this;
 		initReceive();
 	}
-	
+
 	@Override
-	public void send(Collection<IOperation> o) {
+	public void send(String o) {
 		// TODO Auto-generated method stub
 		// Envoyer l'objet vers le serveur.
 		System.out.println(o);
@@ -35,6 +29,7 @@ public class Network implements INetwork {
 
 			@Override
 			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
 				System.out.println("Network.send.onFailure");
 			}
 		});
@@ -57,31 +52,15 @@ public class Network implements INetwork {
 	public native void initReceive() /*-{
 		var source = new EventSource('GetData');
 		source.onmessage = function(event) {
-			this.@alma.logoot.network.Network::receive(Ljava/util/Collection;)(event.data);
+			alert(event.data);
+			var me = @alma.logoot.network.Network::instance;
+			me.@alma.logoot.network.Network::receive(Ljava/lang/String;)(event.data);
 		};
 	}-*/;
 
-	@SuppressWarnings("rawtypes")
-	private void receive(Collection text) {
-		Collection<IOperation> patch =  text;
-		receiveListener.receive(patch);
+	public void receive(String text) {
+		System.out.println("Network reception des donnees.."+text);
+		receiveListener.receive(text);
 	}
-
-	private void invokeWaiting() {
-		service.waitForChange(new AsyncCallback<Collection<IOperation>>() {
-
-			@Override
-			public void onSuccess(Collection<IOperation> result) {
-				receiveListener.receive(result);
-				invokeWaiting();
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				System.err.println("Failure callback invokeWaiting");
-				invokeWaiting();
-			}
-		});
-	}
-
+	
 }

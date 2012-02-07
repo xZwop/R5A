@@ -38,6 +38,17 @@ public class LogootIdentifier implements Comparable<LogootIdentifier>, Serializa
 	public LogootIdentifier(){
 	}
 
+	public LogootIdentifier(String s) {
+		String[] splited = s.split("[,][ ]");
+		if (splited.length != 3) {
+			System.err.println("ILogootIdentifier : Deserialization error.");
+		} else {
+			this.digit = new Integer(splited[0]);
+			this.identifier = new Integer(splited[1]);
+			this.clock = new Integer(splited[2]);
+		}
+	}
+
 	public int getDigit() {
 		return digit;
 	}
