@@ -275,7 +275,7 @@ public class LogootEngine implements ILogootEngine {
 	}
 
 	@Override
-	public void setId(int id) {
+	public void setId(Integer id) {
 		System.out.println("LogootEngine - Reception d'un id : " + id);
 		setId(new LogootIdentifier(0, id, 0));
 	}

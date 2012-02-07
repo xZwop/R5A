@@ -10,8 +10,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class NetworkServiceImpl extends RemoteServiceServlet implements
 		NetworkService {
 
-	// private static final String SERVERADDR = "172.16.134.143";
-	 private static final String SERVERADDR = "88.163.77.47";
+	 private static final String SERVERADDR = "172.16.134.143";
+//	 private static final String SERVERADDR = "88.163.77.47";
 //	private static final String SERVERADDR = "http://driz.dyndns.org";
 
 	private static final int PORTREGISTER = 9991;
@@ -19,14 +19,13 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	public static final int PORTCLIENT = 9990;
 
 	private static final long serialVersionUID = 1L;
-	private boolean register = false;
 
 	@Override
 	public void send(String o) {
 		System.out.println("NetworkServiceImple.send");
 		System.out.println(o);
-		if (!register)
-			register();
+//		if (!register)
+//			register();
 		// TODO : Send to Server by Ip
 		try {
 			
@@ -35,7 +34,6 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 					clientSocket.getOutputStream());
 			outToServer.write(o.getBytes());
 			clientSocket.close();
-			register = true;
 			System.out.println("NetworkServiceImple.send fin");
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -44,7 +42,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
-	private void register() {
+	public String register() {
 		System.out.println("NetworkServiceImple.register");
 		try {
 			String sentence;
@@ -59,11 +57,12 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 			modifiedSentence = inFromServer.readLine();
 			System.out.println("FROM SERVER: " + modifiedSentence);
 			clientSocket.close();
-			register = true;
 			System.out.println("Fin de l'enregistrement client.");
+			return modifiedSentence;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			return null;
 		}
 	}
 

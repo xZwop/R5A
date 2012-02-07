@@ -44,6 +44,6 @@ public interface ILogootEngine {
    * @param id
    *          Unique client id over all Logoot client.
    */
-  void setId(int id);
+  void setId(Integer id);
 }
 

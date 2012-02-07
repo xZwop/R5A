@@ -28,7 +28,7 @@ public interface INetwork {
    * 
    * @return A unique identifier of the user on the network.
    */
-  int connect();
+  Integer connect();
 
   /**
    * Allow a user to listen to a network.
@@ -40,5 +40,7 @@ public interface INetwork {
    *          Listener to call at each new received informations.
    */
   void addReceiverListener(IReceiveListener listener);
+  
+  public Integer getId();
 }
 

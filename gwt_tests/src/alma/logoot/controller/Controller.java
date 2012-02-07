@@ -27,14 +27,15 @@ public class Controller implements EntryPoint, IChangeListener, IReceiveListener
 		network = FactoryNetwork.getInstance();
 		network.addReceiverListener(this);
 		// -> Recuperer l'id du client en appelant le network
-		int id = network.connect();
+		Integer id = network.connect();
 		// On initalise le logootengine grace a l'id recupere sur le network.
 		logootEngine = FactoryLogootEngine.getInstance();
-		logootEngine.setId(id);
+//		logootEngine.setId(id);
 	}
 
 	@Override
 	public void change(String text) {
+		logootEngine.setId(network.getId());
 		String patch = logootEngine.generatePatch(text); 
 		if ( !patch.equals("[]"))
 			network.send(patch);

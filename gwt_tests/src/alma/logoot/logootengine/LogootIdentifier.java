@@ -22,14 +22,14 @@ public class LogootIdentifier implements Comparable<LogootIdentifier>, Serializa
 	/**
 	 * Identifiant de site
 	 */
-	private int identifier;
+	private Integer identifier;
 	
 	/**
 	 * Valeur d'horloge
 	 */
 	private int clock;
 	
-	public LogootIdentifier(int digit, int identifier, int clock) {
+	public LogootIdentifier(int digit, Integer identifier, int clock) {
 		this.digit = digit;
 		this.identifier = identifier;
 		this.clock = clock;
@@ -57,7 +57,7 @@ public class LogootIdentifier implements Comparable<LogootIdentifier>, Serializa
 		this.digit = i;
 	}
 
-	public int getIdentifier() {
+	public Integer getIdentifier() {
 		return identifier;
 	}
 
