@@ -231,7 +231,7 @@ public class LogootEngine implements ILogootEngine {
 
 	@Override
 	public String deliver(String patch) {
-		Collection<IOperation> patched = new ArrayList<IOperation>();
+		ArrayList<IOperation> patched = new ArrayList<IOperation>();
 		try {
 			patch = patch.split("^[\\[]{2}")[1];
 			patch = patch.split("[\\]]{2}$")[0];
@@ -243,8 +243,16 @@ public class LogootEngine implements ILogootEngine {
 			System.err.println("LogootEngine : Deserialization error.");
 		}
 		System.out.println("L'objet apres serialization : "+patched.getClass().getName()+ " "+ patched);
-		for (IOperation o : patched)
-			deliver(o);
+		
+		Operation o = (Operation) patched.get(0);
+		o.getPosition().get(o.getPosition().size()-1).getIdentifier();
+		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(id.getIdentifier())){
+			System.out.println("C'est moi je ne dois pas ecrire huhu.");
+			return null;
+		}
+		
+		for (IOperation op : patched)
+			deliver(op);
 		return getOldText();
 	}
 
@@ -252,10 +260,6 @@ public class LogootEngine implements ILogootEngine {
 		// TODO : FAIRE UNE VERIFICATION SUR LID, VERIFIER SI CE NEST PAS LE MEME QUE CELUI DU CLIENT
 		// ( sinon probleme dans la table des ids. )
 		Operation o = (Operation) op;
-		o.getPosition().get(o.getPosition().size()-1).getIdentifier();
-		if (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(id.getIdentifier())){
-			return;
-		}
 		if (o.isIns()) {
 			int index = -Collections
 					.binarySearch(getIdTable(), o.getPosition()) - 1;

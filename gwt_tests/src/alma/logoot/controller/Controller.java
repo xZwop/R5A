@@ -51,7 +51,8 @@ public class Controller implements EntryPoint, IChangeListener,
 		System.out.println("Objet de type : " + o.getClass().getName());
 		try {
 			String text = logootEngine.deliver(o);
-			ui.setText(text);
+			if (text != null)
+				ui.setText(text);
 		} catch (ClassCastException e) {
 			System.err
 					.println("Error, failed to cast the received object into a collection of operations");
