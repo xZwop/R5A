@@ -44,7 +44,7 @@ public class GetData extends HttpServlet {
 		 */
 		String clientSentence;
 		System.out.println("GetData : Creation de la socket sur le port 9990");
-		ServerSocket welcomeSocket = new ServerSocket(9990);
+		ServerSocket welcomeSocket = new ServerSocket(NetworkServiceImpl.PORTCLIENT);
 		while (true) {
 			System.out.println("GetData : Acceptation de la socket");
 			Socket connectionSocket = welcomeSocket.accept();
