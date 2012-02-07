@@ -50,7 +50,10 @@ public class GetData extends HttpServlet {
 			Socket connectionSocket = welcomeSocket.accept();
 			BufferedReader inFromClient = new BufferedReader(
 					new InputStreamReader(connectionSocket.getInputStream()));
-			clientSentence = inFromClient.readLine();
+//			clientSentence = inFromClient.readLine();
+			char[] buffer=new char[4096];
+			inFromClient.read(buffer);
+			clientSentence=(new String(buffer).trim().replaceAll("\n", "<br>"));
 			out.print("data: " + clientSentence + "\n\n");
 			out.flush();
 		}

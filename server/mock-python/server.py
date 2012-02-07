@@ -14,6 +14,7 @@ import threading
 
 HOST = ''
 REGISTER_PORT, SEND_PORT = 9991, 9992
+BUFFER = 4096
 
 class Flooder:
   '''
@@ -26,10 +27,13 @@ class Flooder:
     '''
     Add new user for flooding and return unique id.
     '''
+    print "\t|-> Add user [%s:%d]" % (client_address, receiver_port)
+
     if (client_address, receiver_port) not in self.__flood:
       self.__flood.add((client_address, receiver_port))
 
-    return "%s%d" % (client_address, receiver_port)
+    self.__uniqueid += 1
+    return "%d" % (self.__uniqueid)
 
   def flood(self, data):
     '''
@@ -40,13 +44,18 @@ class Flooder:
       try:
         sock.connect((client_address, receiver_port))
         sock.send(data)
+        print "\t|->  Send {%s} to [%s:%d]"\
+            % (data, client_address, receiver_port)
       except Exception as e:
-        pass
+        print "\t|->  User [%s:%d] unreachable, delete it"\
+            % (client_address, receiver_port)
+        self.__flood.discard((client_address, receiver_port))
       finally:
         sock.close()
 
   def __init__(self):
     self.__flood = set()
+    self.__uniqueid = 0
 
 class RegistrationHandler(SocketServer.BaseRequestHandler):
   '''
@@ -60,7 +69,7 @@ class RegistrationHandler(SocketServer.BaseRequestHandler):
     Register client for flood.
     '''
     try:
-      port = int(self.request.recv(1024))
+      port = int(self.request.recv(BUFFER))
       uniquid = self.server.flooder.add(self.client_address[0], port)
       self.request.send(uniquid)
     except ValueError:
@@ -86,8 +95,7 @@ class SendHandler(SocketServer.BaseRequestHandler):
     '''
     Flood data to other registred clients.
     '''
-    data = self.request.recv(1024)
-    print data
+    data = self.request.recv(BUFFER)
     flood_thread = threading.Thread(target = self.server.flooder.flood(data))
     flood_thread.start()
 
@@ -141,6 +149,9 @@ if __name__ == '__main__':
   server = Server()
   stop = False
 
+  server.start()
+  print '##-> Server Started'
+
   while not stop:
     print """
     1. Start
@@ -151,10 +162,13 @@ if __name__ == '__main__':
 
     if choice == 1:
       server.start()
+      print '##-> Server Started'
     elif choice == 2:
       server.stop()
       stop = True
+      print '##-> Server Stop'
     elif choice == 3:
       server.stop()
       server.start()
+      print '##-> Server Restart'
 

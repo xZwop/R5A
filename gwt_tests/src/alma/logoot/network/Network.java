@@ -78,13 +78,16 @@ public class Network implements INetwork {
 		var source = new EventSource('GetData');
 		source.onmessage = function(event) {
 //			alert(event.data);
+			var text = event.data.replace(/<br>/g, '\n');
 			var me = @alma.logoot.network.Network::instance;
-			me.@alma.logoot.network.Network::receive(Ljava/lang/String;)(event.data);
+			me.@alma.logoot.network.Network::receive(Ljava/lang/String;)(text);
 		};
 	}-*/;
 
 	public void receive(String text) {
 		System.out.println("Network reception des donnees.." + text);
+//		text.replaceAll("br", "\n");
+//		System.out.println("Network apres remplacement "+ text);
 		receiveListener.receive(text);
 	}
 
