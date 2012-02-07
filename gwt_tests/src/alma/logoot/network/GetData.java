@@ -29,8 +29,7 @@ public class GetData extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out
 				.println("Begin for session: "
-						+ request.getSession(true).getId() + " "
-						+ response.getWriter());
+						+ request.getSession(true).getId());
 		response.setHeader("pragma", "no-cache,no-store");
 		response.setHeader("cache-control",
 				"no-cache,no-store,max-age=0,max-stale=0");
