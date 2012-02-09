@@ -49,10 +49,6 @@ public class LogootEngine implements ILogootEngine {
 		return id;
 	}
 
-	private void setId(LogootIdentifier id) {
-		this.id = id;
-	}
-
 	/**
 	 * 
 	 * @param p

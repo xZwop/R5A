@@ -20,18 +20,13 @@ public class Controller implements EntryPoint, IChangeListener,
 
 	@Override
 	public void onModuleLoad() {
-		// TODO Auto-generated method stub
 		// On initialise la vue.
 		ui = FactoryUI.getInstance();
 		ui.addChangeListener(this);
 		// On initialise le network.
 		network = FactoryNetwork.getInstance();
 		network.addReceiverListener(this);
-		// -> Recuperer l'id du client en appelant le network
-		Integer id = network.connect();
-		// On initalise le logootengine grace a l'id recupere sur le network.
 		logootEngine = FactoryLogootEngine.getInstance();
-		// logootEngine.setId(id);
 	}
 
 	@Override
