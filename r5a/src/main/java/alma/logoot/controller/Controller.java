@@ -11,6 +11,15 @@ import alma.logoot.ui.IUI;
 
 import com.google.gwt.core.client.EntryPoint;
 
+/**
+ * The {@link IUI} Factory.
+ * 
+ * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
+ * @author Adrien Drouet drizz764{at}gmail{dot}com
+ * @author Alban Ménager alban.menager{at}gmail{dot}com
+ * @author Alexandre Prenza prenza.a{at}gmail{dot}com
+ * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
+ */
 public class Controller implements EntryPoint, IChangeListener,
     IReceiveListener {
 
@@ -47,8 +56,8 @@ public class Controller implements EntryPoint, IChangeListener,
       if (text != null)
         ui.setText(text);
     } catch (ClassCastException e) {
-      System.err
-          .println("Error, failed to cast the received object into a collection of operations");
+      System.err.println("Error, failed to cast the received object into a "
+          + "collection of operations");
     }
   }
 }
