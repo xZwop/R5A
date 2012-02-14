@@ -1,6 +1,5 @@
 package alma.logoot.ui;
 
-
 /**
  * The {@link IUI} Factory.
  * 

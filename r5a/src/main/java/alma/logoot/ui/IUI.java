@@ -26,7 +26,8 @@ public interface IUI {
   /**
    * Set UI text value.
    * 
-   * @param text The text to set.
+   * @param text
+   *          The text to set.
    */
   void setText(String text);
 }

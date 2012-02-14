@@ -23,4 +23,3 @@ public interface IChangeListener {
    */
   void change(String text);
 }
-
