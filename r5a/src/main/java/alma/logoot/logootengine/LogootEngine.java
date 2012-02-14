@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
+import com.google.gwt.user.client.Window;
 
 import alma.logoot.logootengine.utils.diff_match_patch;
 import alma.logoot.logootengine.utils.diff_match_patch.Diff;

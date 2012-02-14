@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
-
-<web-app>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+  version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>alma.logoot.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>logootSendDataServlet</servlet-name>
+    <servlet-class>alma.logoot.network.NetworkServiceImpl</servlet-class>
   </servlet>
-
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/r5a/greet</url-pattern>
+    <servlet-name>logootSendDataServlet</servlet-name>
+    <url-pattern>/r5a/logoot</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>logootGetDataServlet</servlet-name>
+    <servlet-class>alma.logoot.network.GetData</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logootGetDataServlet</servlet-name>
+    <url-pattern>/r5a/getData</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->
