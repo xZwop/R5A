@@ -1,6 +1,5 @@
 package alma.logoot.logootengine;
 
-
 /**
  * The {@link ILogootEngine} Factory.
  * 

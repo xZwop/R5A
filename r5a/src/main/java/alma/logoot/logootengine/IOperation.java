@@ -3,7 +3,7 @@ package alma.logoot.logootengine;
 import java.io.Serializable;
 
 /**
- * The {@link IOperation} interface specifies the type of Operation.
+ * The {@link IOperation} interface specifies the type of Logoot Operation.
  * 
  * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
@@ -26,4 +26,3 @@ public interface IOperation extends Serializable {
    */
   public boolean isDel();
 }
-

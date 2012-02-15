@@ -3,7 +3,7 @@ package alma.logoot.logootengine;
 import java.io.Serializable;
 
 /**
- * Position is a ordered triplet.
+ * Logoot Position is a ordered triplet.
  * 
  * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class Position implements Comparable<Position>, Serializable {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 8727581451647621694L;
 
   /**
    * Integer in range <code>[1..BASE[</code>.
@@ -142,5 +142,23 @@ public class Position implements Comparable<Position>, Serializable {
    */
   public String toString() {
     return "<" + digit + ", " + replica + ", " + clock + ">";
+  }
+
+  /**
+   * Returns minimum position value possible.
+   * 
+   * @return New Position that is minimum value accepted.
+   */
+  public static Position getMin() {
+    return new Position(1, 0, 0);
+  }
+
+  /**
+   * Returns maximum position value possible.
+   * 
+   * @return New Position that is maximum value accepted.
+   */
+  public static Position getMax() {
+    return new Position(LogootConf.BASE - 1, 0, 0);
   }
 }

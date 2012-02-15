@@ -5,25 +5,66 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
-import com.google.gwt.user.client.Window;
 
 import alma.logoot.logootengine.utils.diff_match_patch;
 import alma.logoot.logootengine.utils.diff_match_patch.Diff;
 
 /**
- * Classe utilitaire comprenant les fonctions de manipulation des identifiants,
- * notament les algos p61-63.
+ * Logoot algorithm implementation.
  * 
- * @author R5A
+ * Logoot algorithm, {@link ILogootEngine} implementation. For works this
+ * implementation use the diff_match_patch library.
  * 
+ * @see http://code.google.com/p/google-diff-match-patch
+ * 
+ * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
+ * @author Adrien Drouet drizz764{at}gmail{dot}com
+ * @author Alban Ménager alban.menager{at}gmail{dot}com
+ * @author Alexandre Prenza prenza.a{at}gmail{dot}com
+ * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
  */
 public class LogootEngine implements ILogootEngine {
 
   String oldText;
-  ArrayList<LogootIdContainer> idTable;
-  Position id = new Position(0, -1, 0);
+  
+  /**
+   * Diff Match Patch Component.
+   * @see http://code.google.com/p/google-diff-match-patch
+   */
+  private diff_match_patch diffEngine;
+  
+  /**
+   * Logoot model.
+   */
+  private List<LineId> idTable;
 
+  /**
+   * User unique id.
+   */
+  private int replica;
+  
+  /**
+   * User Clock.
+   */
+  private int clock;
+  
+  /**
+   * Logoot Constructor.
+   */
+  public LogootEngine() {
+    this.diffEngine = new diff_match_patch();
+    this.idTable = new ArrayList<LineId>();
+    
+    // Initilize logoot model with start and end document.
+    this.idTable.add(LineId.getDocumentStarter());
+    this.idTable.add(LineId.getDocumentFinisher());
+    
+    this.replica = -1;
+    this.clock = 0;
+  }
+  
   private String getOldText() {
     if (oldText == null)
       oldText = "";
@@ -34,21 +75,8 @@ public class LogootEngine implements ILogootEngine {
     this.oldText = oldText;
   }
 
-  public ArrayList<LogootIdContainer> getIdTable() {
-    if (idTable == null) {
-      idTable = new ArrayList<LogootIdContainer>();
-      LogootIdContainer first = new LogootIdContainer();
-      first.add(new Position(1, 0, 0));
-      LogootIdContainer last = new LogootIdContainer();
-      last.add(new Position(LogootConf.BASE, 0, 0));
-      idTable.add(first);
-      idTable.add(last);
-    }
-    return idTable;
-  }
-
-  private Position getId() {
-    return id;
+  public List<LineId> getIdTable() {
+    return this.idTable;
   }
 
   /**
@@ -59,15 +87,11 @@ public class LogootEngine implements ILogootEngine {
    *          second identifiant de position
    * @param N
    *          nombre d'identifiant souhaites
-   * @param rep
-   *          identifiant de la replique
-   * @return N identifiants pour la replique s entre p et q
    */
-  public ArrayList<LogootIdContainer> generateLineIdentier(LogootIdContainer p,
-      LogootIdContainer q, int N, Position rep) {
+  public ArrayList<LineId> generateLineIdentier(LineId p, LineId q, int N) {
 
     BigInteger MAXINT = new BigInteger(Integer.MAX_VALUE + "");
-    ArrayList<LogootIdContainer> list = new ArrayList<LogootIdContainer>();
+    ArrayList<LineId> list = new ArrayList<LineId>();
     int index = 0;
     int interval = 0;
     while (interval < N) {
@@ -95,7 +119,7 @@ public class LogootEngine implements ILogootEngine {
       } else {
         rand = r.add(new BigInteger((random.nextInt(step - 1) + 1) + ""));
       }
-      list.add(constructIdentifier(rand, p, q, rep));
+      list.add(constructIdentifier(rand, p, q));
       p = list.get(list.size() - 1);
       r = r.add(stepB);
     }
@@ -115,11 +139,10 @@ public class LogootEngine implements ILogootEngine {
    *          position
    * @return l'identifiant pour la replique definit par rep(id+horloge)
    */
-  public LogootIdContainer constructIdentifier(BigInteger r,
-      LogootIdContainer p, LogootIdContainer q, Position rep) {
+  public LineId constructIdentifier(BigInteger r, LineId p, LineId q) {
     // TODO : Ici, la fonction risque de prendre des identifiants a la fois
     // dans p et dans q.
-    LogootIdContainer result = new LogootIdContainer();
+    LineId result = new LineId();
     LinkedList<Integer> prefix = prefixToList(r);
     int index = 0;
     for (int i : prefix) {
@@ -132,9 +155,8 @@ public class LogootEngine implements ILogootEngine {
         triplet.setClock(q.get(index).getClock());
         triplet.setReplica(q.get(index).getReplica());
       } else {
-        rep.setClock(rep.getClock() + 1);
-        triplet.setClock(rep.getClock());
-        triplet.setReplica(rep.getReplica());
+        triplet.setClock(++ this.clock);
+        triplet.setReplica(this.replica);
       }
       index++;
       result.add(triplet);
@@ -150,7 +172,7 @@ public class LogootEngine implements ILogootEngine {
    *          Nombre de triplet a prendre en compte
    * @return les n identifiants dans la base concatenes.
    */
-  public BigInteger prefix(LogootIdContainer id, int n) {
+  public BigInteger prefix(LineId id, int n) {
     String result = "";
     int size = new Integer(LogootConf.BASE - 1).toString().length();
     for (int i = 0; i < n; i++) {
@@ -187,8 +209,7 @@ public class LogootEngine implements ILogootEngine {
   public String generatePatch(String text) {
 
     // Initialization by making a diff between the old text and the new one.
-    diff_match_patch diffEngine = new diff_match_patch();
-    LinkedList<Diff> diff = diffEngine.diff_main(getOldText(), text, false);
+    LinkedList<Diff> diff = this.diffEngine.diff_main(getOldText(), text, false);
     setOldText(text);
     int index = 0;
     Collection<IOperation> patch = new ArrayList<IOperation>();
@@ -198,25 +219,24 @@ public class LogootEngine implements ILogootEngine {
       if (d.operation == alma.logoot.logootengine.utils.diff_match_patch.Operation.EQUAL) {
         index += d.text.length();
       } else if (d.operation == alma.logoot.logootengine.utils.diff_match_patch.Operation.INSERT) {
-        LogootIdContainer p = getIdTable().get(index);
-        LogootIdContainer q = getIdTable().get(index + 1);
-        ArrayList<LogootIdContainer> idList = generateLineIdentier(p, q,
-            d.text.length(), getId());
+        LineId p = getIdTable().get(index);
+        LineId q = getIdTable().get(index + 1);
+        ArrayList<LineId> idList = generateLineIdentier(p, q, d.text.length());
         // Mise a jour idTable
         getIdTable().addAll(index + 1, idList);
         // Creation operations
         int i = 0;
-        for (LogootIdContainer lic : idList) {
-          IOperation op = new Operation("i", lic, d.text.charAt(i));
+        for (LineId lic : idList) {
+          IOperation op = Operation.insertOperation(lic, d.text.charAt(i));
           patch.add(op);
           i++;
         }
         index += d.text.length();
       } else { // DELETE
         for (int i = 0; i < d.text.length(); i++) {
-          LogootIdContainer position = getIdTable().get(index + 1);
-          getIdTable().remove(position);
-          IOperation op = new Operation("d", position);
+          LineId lineId = getIdTable().get(index + 1);
+          getIdTable().remove(lineId);
+          IOperation op = Operation.deleteOperation(lineId);
           patch.add(op);
         }
       }
@@ -261,13 +281,13 @@ public class LogootEngine implements ILogootEngine {
     // ( sinon probleme dans la table des ids. )
     Operation o = (Operation) op;
     if (o.isIns()) {
-      int index = -Collections.binarySearch(getIdTable(), o.getPosition()) - 1;
+      int index = -Collections.binarySearch(getIdTable(), o.getLineId()) - 1;
       StringBuffer sb = new StringBuffer(getOldText());
       sb.insert(index - 1, o.getContent());
       setOldText(sb.toString());
-      getIdTable().add(index, o.getPosition());
+      getIdTable().add(index, o.getLineId());
     } else {
-      int index = Collections.binarySearch(getIdTable(), o.getPosition());
+      int index = Collections.binarySearch(getIdTable(), o.getLineId());
       if (index > 0) {
         StringBuffer sb = new StringBuffer(getOldText());
         sb.deleteCharAt(index - 1);
@@ -280,6 +300,6 @@ public class LogootEngine implements ILogootEngine {
   @Override
   public void setId(Integer id) {
     System.out.println("LogootEngine - Reception d'un id : " + id);
-    this.id.setReplica(id);
+    this.replica = id;
   }
 }

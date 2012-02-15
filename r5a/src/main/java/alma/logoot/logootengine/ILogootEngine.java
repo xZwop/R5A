@@ -1,6 +1,5 @@
 package alma.logoot.logootengine;
 
-
 /**
  * The {@link ILogootEngine} interface specifies the methods the
  * <code>Controller</code> will use to maintain text.
@@ -47,4 +46,3 @@ public interface ILogootEngine {
    */
   void setId(Integer id);
 }
-
