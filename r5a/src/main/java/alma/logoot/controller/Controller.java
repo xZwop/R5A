@@ -12,8 +12,29 @@ import alma.logoot.ui.IUI;
 import com.google.gwt.core.client.EntryPoint;
 
 /**
- * The {@link IUI} Factory.
+ * The Controller, main entry point program.
  * 
+ * Controller is in charge of instantiate and manage UI, Network and Logoot
+ * components. To be reactive at each text change in the UI, the Controller
+ * implements {@link IChangeListener}. And to be reactive at each new patch
+ * send over network, implements {@link IReceiveListener}.
+ * 
+ * The flow is the following :
+ *  <ul>
+ *    <li>In change method:</li>
+ *    <li><ol>
+ *      <li>Uses {@link ILogootEngine} to generate a patch;</li>
+ *      <li>Say patch is generated from local changes;</li>
+ *      <li>Send patch to receive method</li>
+ *    </ol></li>
+ *    <li>In receive method:</li>
+ *    <li><ol>
+ *      <li>Update model from {@link ILogootEngine} with patch</li>
+ *      <li>If this local generated patches, send it over network</li>
+ *      <li>Else, update {@link IUI} with new text</li>
+ *    </ol></li>
+ *  </ul>
+ *    
  * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
  * @author Alban Ménager alban.menager{at}gmail{dot}com
@@ -26,6 +47,7 @@ public class Controller implements EntryPoint, IChangeListener,
   private IUI ui = FactoryUI.getInstance();
   private INetwork network = FactoryNetwork.getInstance();
   private ILogootEngine logootEngine = FactoryLogootEngine.getInstance();
+  private boolean isLocalGeneratedPatch = false;
 
   @Override
   public void onModuleLoad() {

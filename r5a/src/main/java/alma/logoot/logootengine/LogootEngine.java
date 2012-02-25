@@ -27,14 +27,17 @@ import alma.logoot.logootengine.utils.diff_match_patch.Diff;
  */
 public class LogootEngine implements ILogootEngine {
 
-  String oldText;
-  
+  /**
+   * The current text in model (Id Table).
+   */
+  private String currentText;
+
   /**
    * Diff Match Patch Component.
    * @see http://code.google.com/p/google-diff-match-patch
    */
   private diff_match_patch diffEngine;
-  
+
   /**
    * Logoot model.
    */
@@ -44,35 +47,112 @@ public class LogootEngine implements ILogootEngine {
    * User unique id.
    */
   private int replica;
-  
+
   /**
    * User Clock.
    */
   private int clock;
-  
+
   /**
    * Logoot Constructor.
    */
   public LogootEngine() {
     this.diffEngine = new diff_match_patch();
     this.idTable = new ArrayList<LineId>();
-    
-    // Initilize logoot model with start and end document.
-    this.idTable.add(LineId.getDocumentStarter());
-    this.idTable.add(LineId.getDocumentFinisher());
-    
+    this.currentText = "";
     this.replica = -1;
     this.clock = 0;
-  }
-  
-  private String getOldText() {
-    if (oldText == null)
-      oldText = "";
-    return oldText;
+
+    // Initilize logoot model with start and end document
+    this.idTable.add(LineId.getDocumentStarter());
+    this.idTable.add(LineId.getDocumentFinisher());
   }
 
-  private void setOldText(String oldText) {
-    this.oldText = oldText;
+  @Override
+  public String deliver(String patch) {
+    ArrayList<IOperation> patched = new ArrayList<IOperation>();
+    try {
+      patch = patch.split("^[\\[]{2}")[1];
+      patch = patch.split("[\\]]{2}$")[0];
+      String[] splited = patch.split("[\\]],[ ][\\[]");
+      for (int i = 0; i < splited.length; i++) {
+        patched.add(new Operation(splited[i]));
+      }
+    } catch (Exception e) {
+      System.err.println("LogootEngine : Deserialization error.");
+    }
+    System.out.println("L'objet apres serialization : "
+        + patched.getClass().getName() + " " + patched);
+
+    // Operation o = (Operation) patched.get(0);
+    // o.getPosition().get(o.getPosition().size()-1).getIdentifier();
+    // if
+    // (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(
+    //    id.getIdentifier())){
+    // System.out.println("C'est moi je ne dois pas ecrire huhu.");
+    // return null;
+    // }
+
+    for (IOperation op : patched)
+      deliver(op);
+    return getCurrentText();
+  }
+
+  @Override
+  public String generatePatch(String text) {
+    // Initialization by making a diff between the old text and the new one.
+    LinkedList<Diff> diff = this.diffEngine.diff_main(getCurrentText(), text,
+        false);
+    setCurrentText(text);
+    int index = 0;
+    Collection<IOperation> patch = new ArrayList<IOperation>();
+
+    // For each difference, we need to add or delete some positions.
+    for (Diff d : diff) {
+      if (d.operation == alma.logoot.logootengine.utils.diff_match_patch.Operation.EQUAL) {
+        index += d.text.length();
+      } else if (d.operation == alma.logoot.logootengine.utils.diff_match_patch.Operation.INSERT) {
+        LineId p = getIdTable().get(index);
+        LineId q = getIdTable().get(index + 1);
+        ArrayList<LineId> idList = generateLineIdentier(p, q, d.text.length());
+        // Mise a jour idTable
+        getIdTable().addAll(index + 1, idList);
+        // Creation operations
+        int i = 0;
+        for (LineId lic : idList) {
+          IOperation op = Operation.insertOperation(lic, d.text.charAt(i));
+          patch.add(op);
+          i++;
+        }
+        index += d.text.length();
+      } else { // DELETE
+        for (int i = 0; i < d.text.length(); i++) {
+          LineId lineId = getIdTable().get(index + 1);
+          getIdTable().remove(lineId);
+          IOperation op = Operation.deleteOperation(lineId);
+          patch.add(op);
+        }
+      }
+    }
+    // TODO : serialization
+    // return serializeToJson(person);
+    return patch.toString();
+  }
+
+  @Override
+  public void setId(Integer id) {
+    System.out.println("LogootEngine - Reception d'un id : " + id);
+    this.replica = id;
+  }
+
+  private String getCurrentText() {
+    if (currentText == null)
+      currentText = "";
+    return currentText;
+  }
+
+  private void setCurrentText(String currentText) {
+    this.currentText = currentText;
   }
 
   public List<LineId> getIdTable() {
@@ -205,76 +285,6 @@ public class LogootEngine implements ILogootEngine {
     return result;
   }
 
-  @Override
-  public String generatePatch(String text) {
-
-    // Initialization by making a diff between the old text and the new one.
-    LinkedList<Diff> diff = this.diffEngine.diff_main(getOldText(), text, false);
-    setOldText(text);
-    int index = 0;
-    Collection<IOperation> patch = new ArrayList<IOperation>();
-
-    // For each difference, we need to add or delete some positions.
-    for (Diff d : diff) {
-      if (d.operation == alma.logoot.logootengine.utils.diff_match_patch.Operation.EQUAL) {
-        index += d.text.length();
-      } else if (d.operation == alma.logoot.logootengine.utils.diff_match_patch.Operation.INSERT) {
-        LineId p = getIdTable().get(index);
-        LineId q = getIdTable().get(index + 1);
-        ArrayList<LineId> idList = generateLineIdentier(p, q, d.text.length());
-        // Mise a jour idTable
-        getIdTable().addAll(index + 1, idList);
-        // Creation operations
-        int i = 0;
-        for (LineId lic : idList) {
-          IOperation op = Operation.insertOperation(lic, d.text.charAt(i));
-          patch.add(op);
-          i++;
-        }
-        index += d.text.length();
-      } else { // DELETE
-        for (int i = 0; i < d.text.length(); i++) {
-          LineId lineId = getIdTable().get(index + 1);
-          getIdTable().remove(lineId);
-          IOperation op = Operation.deleteOperation(lineId);
-          patch.add(op);
-        }
-      }
-    }
-    // TODO : serialization
-    // return serializeToJson(person);
-    return patch.toString();
-  }
-
-  @Override
-  public String deliver(String patch) {
-    ArrayList<IOperation> patched = new ArrayList<IOperation>();
-    try {
-      patch = patch.split("^[\\[]{2}")[1];
-      patch = patch.split("[\\]]{2}$")[0];
-      String[] splited = patch.split("[\\]],[ ][\\[]");
-      for (int i = 0; i < splited.length; i++) {
-        patched.add(new Operation(splited[i]));
-      }
-    } catch (Exception e) {
-      System.err.println("LogootEngine : Deserialization error.");
-    }
-    System.out.println("L'objet apres serialization : "
-        + patched.getClass().getName() + " " + patched);
-
-    // Operation o = (Operation) patched.get(0);
-    // o.getPosition().get(o.getPosition().size()-1).getIdentifier();
-    // if
-    // (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(id.getIdentifier())){
-    // System.out.println("C'est moi je ne dois pas ecrire huhu.");
-    // return null;
-    // }
-
-    for (IOperation op : patched)
-      deliver(op);
-    return getOldText();
-  }
-
   private void deliver(IOperation op) {
     // TODO : FAIRE UNE VERIFICATION SUR LID, VERIFIER SI CE NEST PAS LE MEME
     // QUE CELUI DU CLIENT
@@ -282,24 +292,19 @@ public class LogootEngine implements ILogootEngine {
     Operation o = (Operation) op;
     if (o.isIns()) {
       int index = -Collections.binarySearch(getIdTable(), o.getLineId()) - 1;
-      StringBuffer sb = new StringBuffer(getOldText());
+      StringBuffer sb = new StringBuffer(getCurrentText());
       sb.insert(index - 1, o.getContent());
-      setOldText(sb.toString());
+      setCurrentText(sb.toString());
       getIdTable().add(index, o.getLineId());
     } else {
       int index = Collections.binarySearch(getIdTable(), o.getLineId());
       if (index > 0) {
-        StringBuffer sb = new StringBuffer(getOldText());
+        StringBuffer sb = new StringBuffer(getCurrentText());
         sb.deleteCharAt(index - 1);
-        setOldText(sb.toString());
+        setCurrentText(sb.toString());
         getIdTable().remove(index);
       }
     }
   }
-
-  @Override
-  public void setId(Integer id) {
-    System.out.println("LogootEngine - Reception d'un id : " + id);
-    this.replica = id;
-  }
 }
+
