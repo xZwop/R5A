@@ -1,10 +1,6 @@
-package alma.logoot.client;
+package alma.logoot.controller;
 
-import alma.logoot.shared.FieldVerifier;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
 /**
  * GWT JUnit <b>integration</b> tests must extend GWTTestCase.
@@ -29,12 +25,14 @@ public class GwtTestr5a extends GWTTestCase {
    * Tests the FieldVerifier.
    */
   public void testFieldVerifier() {
+    /*
     assertFalse(FieldVerifier.isValidName(null));
     assertFalse(FieldVerifier.isValidName(""));
     assertFalse(FieldVerifier.isValidName("a"));
     assertFalse(FieldVerifier.isValidName("ab"));
     assertFalse(FieldVerifier.isValidName("abc"));
     assertTrue(FieldVerifier.isValidName("abcd"));
+    */
   }
 
   /**
@@ -42,6 +40,7 @@ public class GwtTestr5a extends GWTTestCase {
    * GreetingService and verify the response.
    */
   public void testGreetingService() {
+    /*
     // Create the service that we will test.
     GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
     ServiceDefTarget target = (ServiceDefTarget) greetingService;
@@ -69,6 +68,7 @@ public class GwtTestr5a extends GWTTestCase {
         finishTest();
       }
     });
+    */
   }
 
 
