@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <!-- POM file generated with GWT webAppCreator -->
   <modelVersion>4.0.0</modelVersion>
@@ -60,6 +60,38 @@
 
     <plugins>
 
+      <!-- Jetty -->
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.10</version>
+        <configuration>
+          <scanIntervalSeconds>10</scanIntervalSeconds>
+          <stopKey>foo</stopKey>
+          <stopPort>9999</stopPort>
+        </configuration>
+        <executions>
+          <execution>
+            <id>start-jetty</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <scanIntervalSeconds>0</scanIntervalSeconds>
+              <daemon>true</daemon>
+            </configuration>
+          </execution>
+          <execution>
+            <id>stop-jetty</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- GWT Maven Plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -71,8 +103,8 @@
               <goal>compile</goal>
               <goal>test</goal>
               <!-- 
-              <goal>i18n</goal>
-              -->
+                <goal>i18n</goal>
+                -->
               <goal>generateAsync</goal>
             </goals>
           </execution>
@@ -83,8 +115,8 @@
           <runTarget>r5a.html</runTarget>
           <hostedWebapp>${webappDirectory}</hostedWebapp>
           <!-- 
-          <i18nMessagesBundle>alma.logoot.client.Messages</i18nMessagesBundle>
-          -->
+            <i18nMessagesBundle>alma.logoot.client.Messages</i18nMessagesBundle>
+            -->
         </configuration>
       </plugin>
 
@@ -115,7 +147,7 @@
         </configuration>
       </plugin>
     </plugins>
-    
+
     <pluginManagement>
       <plugins>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -168,8 +200,8 @@
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <versionRange>[2.4.0,)</versionRange>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <versionRange>[2.4.0,)</versionRange>
                     <goals>
                       <goal>resources</goal>
                       <goal>compile</goal>
@@ -181,9 +213,9 @@
                 </pluginExecution>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                   <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <versionRange>[2.1.1,)</versionRange>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <versionRange>[2.1.1,)</versionRange>
                     <goals>
                       <goal>exploded</goal>
                     </goals>
@@ -198,7 +230,7 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    
+
   </build>
 
 </project>
