@@ -20,6 +20,6 @@ public interface IReceiveListener {
    * @param object
    *          Received object.
    */
-	void receive(String object);
+	public void receive(String object);
 }
 

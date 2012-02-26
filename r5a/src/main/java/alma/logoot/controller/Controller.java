@@ -4,6 +4,7 @@ import alma.logoot.logootengine.FactoryLogootEngine;
 import alma.logoot.logootengine.ILogootEngine;
 import alma.logoot.network.FactoryNetwork;
 import alma.logoot.network.INetwork;
+import alma.logoot.network.IAfterConnectionListener;
 import alma.logoot.network.IReceiveListener;
 import alma.logoot.ui.FactoryUI;
 import alma.logoot.ui.IChangeListener;
@@ -42,7 +43,7 @@ import com.google.gwt.core.client.EntryPoint;
  * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
  */
 public class Controller implements EntryPoint, IChangeListener,
-    IReceiveListener {
+    IReceiveListener, IAfterConnectionListener {
 
   private IUI ui = FactoryUI.getInstance();
   private INetwork network = FactoryNetwork.getInstance();
@@ -54,19 +55,38 @@ public class Controller implements EntryPoint, IChangeListener,
     // On initialise la vue.
     ui.addChangeListener(this);
 
-    // On initialise le network.
+    // On initialise le network et on se connecte.
     network.addReceiverListener(this);
+    network.addAfterConectionListener(this);
+    network.connect();
   }
 
   @Override
   public void change(String text) {
-    // TODO on set l'id du client a chaque saisie de caractere, ce qu'il ne
-    // faudrais pas obligatoirement faire, il faut vériofier que le client
-    // n'a ps l'id -1 sinon il ne faudrait pas remplacer.
-    logootEngine.setId(network.getId());
     String patch = logootEngine.generatePatch(text);
     if (!patch.equals("[]"))
       network.send(patch);
+  }
+
+  @Override
+  public void afterConnect(int id) {
+    logootEngine.setId(id);
+  }
+
+  // L'objet passé en paramètre est le contexte pour reconstruire l'idTable
+  // du Logoot.
+  @Override
+  public void afterConnect(int id, Object context) {
+    logootEngine.setId(id);
+    String c = (String) context;
+    try {
+      String text = logootEngine.deliver(c);
+      if (text != null)
+        ui.setText(text);
+    } catch (ClassCastException e) {
+      System.err.println("Error, failed to cast the received object into a "
+          + "collection of operations");
+    }
   }
 
   @Override
@@ -83,3 +103,4 @@ public class Controller implements EntryPoint, IChangeListener,
     }
   }
 }
+

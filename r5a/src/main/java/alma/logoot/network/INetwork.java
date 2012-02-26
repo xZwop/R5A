@@ -18,17 +18,18 @@ public interface INetwork {
    * @param object
    *          Object to send.
    */
-  void send(String object);
+  public void send(String object);
 
   /**
    * Connect a new user to the network.
    * 
    * Connect a user to the network. You must register with connect before sends
-   * informations with <code>INetwork::send()</code>.
-   * 
-   * @return A unique identifier of the user on the network.
+   * informations with <code>INetwork::send()</code>. At end of connexion, the
+   * object given in <code>INetwork::addAfterConectionListener()</code> will
+   * be call with the unique id of current host on network and an extrat
+   * object (if any).
    */
-  Integer connect();
+  public void connect();
 
   /**
    * Allow a user to listen to a network.
@@ -39,8 +40,17 @@ public interface INetwork {
    * @param listener
    *          Listener to call at each new received informations.
    */
-  void addReceiverListener(IReceiveListener listener);
-  
-  public Integer getId();
+  public void addReceiverListener(IReceiveListener listener);
+
+  /**
+   * Process to do after connection.
+   *
+   * After connexion on server, class given here will be call to execute
+   * specific code in asynchronous way.
+   *
+   * @param listener
+   *          Listener to call after conexion.
+   */
+  public void addAfterConectionListener(IAfterConnectionListener listener);
 }
 
