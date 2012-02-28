@@ -1,7 +1,11 @@
 package alma.logoot.network;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
+
+import alma.logoot.network.p2p.P2PLayer;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -14,26 +18,35 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	public static final int PORTCLIENT = 9990;
 
 	private static final long serialVersionUID = 1L;
+	private P2PLayer p2p = P2PLayer.getInstance();
 
 	@Override
-	public void send(String o) {
-		System.out.println("NetworkServiceImple.send");
-		System.out.println(o);
+	public void send(String message) {
+		System.out.println("NetworkServiceImple.send: " + message);
+
 		try {
-			Socket clientSocket = new Socket(SERVERADDR, PORTSEND);
-			DataOutputStream outToServer = new DataOutputStream(
-					clientSocket.getOutputStream());
-			outToServer.write(o.getBytes());
-			clientSocket.close();
-			System.out.println("NetworkServiceImple.send fin");
+			sendToLocalUser(message);
+			sendToP2PUser(message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public String register() {
-		System.out.println("NetworkServiceImple.register");
-		return String.valueOf(++id);
+	private void sendToP2PUser(String message) {
+		p2p.sendMessage(message);
+	}
+
+	private void sendToLocalUser(String message) throws UnknownHostException,
+			IOException {
+		Socket clientSocket = new Socket(SERVERADDR, PORTSEND);
+		DataOutputStream outToServer = new DataOutputStream(
+				clientSocket.getOutputStream());
+		outToServer.write(message.getBytes());
+		clientSocket.close();
+		System.out.println("NetworkServiceImple.send fin");
+	}
+
+	public int register() {
+		return (p2p.getPeerID() * 1000 + ++id);
 	}
 }
-

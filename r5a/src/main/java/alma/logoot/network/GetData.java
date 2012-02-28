@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import alma.logoot.network.p2p.P2PLayer;
+import alma.logoot.network.p2p.interfaces.OnReceiveHandler;
+
 /**
  * Servlet implementation class GetData
  */
@@ -20,6 +23,8 @@ public class GetData extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<PrintWriter> clients=new ArrayList<PrintWriter>();
 	private static boolean first=true;
+	
+	private static P2PLayer p2p = P2PLayer.getInstance(); 
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -39,9 +44,20 @@ public class GetData extends HttpServlet {
 		response.setHeader("cache-control","no-cache,no-store,max-age=0,max-stale=0");
 		response.setHeader("Accept-Charset", "utf-8");
 		response.setContentType("text/event-stream;charset=utf-8;");
-		response.setCharacterEncoding("UTF-8");
+//		response.setCharacterEncoding("UTF-8");
 		clients.add(response.getWriter());
 		if(first){
+			p2p.setOnReceiveHandler(new OnReceiveHandler() {
+				
+				@Override
+				public void execute(String message) {
+					for(PrintWriter out:clients){
+						out.print("data: " + message + "\n\n");
+						out.flush();
+					}
+				}
+			});
+			
 			first=false;
 			String clientSentence;
 			System.out.println("GetData : Creation de la socket sur le port 9990");

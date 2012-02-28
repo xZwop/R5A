@@ -6,8 +6,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("logoot")
 public interface NetworkService extends RemoteService{
-	
 	void send(String o);
-	String register();
-	
+	int register();	
 }

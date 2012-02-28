@@ -290,6 +290,9 @@ public class LogootEngine implements ILogootEngine {
     // QUE CELUI DU CLIENT
     // ( sinon probleme dans la table des ids. )
     Operation o = (Operation) op;
+    if(o.getLineId().get(o.getLineId().size()-1).getReplica()==replica){
+    	return;
+    }
     if (o.isIns()) {
       int index = -Collections.binarySearch(getIdTable(), o.getLineId()) - 1;
       StringBuffer sb = new StringBuffer(getCurrentText());

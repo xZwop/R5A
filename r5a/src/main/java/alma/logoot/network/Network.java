@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class Network implements INetwork {
 	public static Network instance = null;
 	private IReceiveListener receiveListener;
-  private IAfterConnectionListener afterConnectionListener;
+	private IAfterConnectionListener afterConnectionListener;
 	private NetworkServiceAsync service = GWT.create(NetworkService.class);
 
 	public Network() {
@@ -33,19 +33,20 @@ public class Network implements INetwork {
 
 	@Override
 	public void connect() {
-		service.register(new AsyncCallback<String>() {
+		service.register(new AsyncCallback<Integer>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				System.err.println("Network : Erreur enregistrement au serveur.");
+				System.err
+						.println("Network : Erreur enregistrement au serveur.");
 				caught.printStackTrace();
 			}
 
 			@Override
-			public void onSuccess(String result) {
-				System.out.println("Network : Enregistrement au serveur." + result);
+			public void onSuccess(Integer result) {
+				System.out.println("Network : Enregistrement au serveur."
+						+ result);
 
-        int id = Integer.parseInt(result);
-        Network.this.afterConnectionListener.afterConnect(id);
+				Network.this.afterConnectionListener.afterConnect(result);
 			}
 		});
 	}
@@ -55,10 +56,10 @@ public class Network implements INetwork {
 		this.receiveListener = listener;
 	}
 
-  @Override
-  public void addAfterConectionListener(IAfterConnectionListener listener) {
-    this.afterConnectionListener = listener;
-  }
+	@Override
+	public void addAfterConectionListener(IAfterConnectionListener listener) {
+		this.afterConnectionListener = listener;
+	}
 
 	public native void initReceive() /*-{
 		var source = new EventSource('getData');
@@ -74,4 +75,3 @@ public class Network implements INetwork {
 		receiveListener.receive(text);
 	}
 }
-
