@@ -1,14 +1,12 @@
 package alma.logoot.network.multicast;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
+import net.jxta.platform.NetworkManager;
 import alma.logoot.network.multicast.interfaces.NetworkP2P;
 import alma.logoot.network.multicast.interfaces.OnReceiveHandler;
 import alma.logoot.network.multicast.utils.Receiver;
 import alma.logoot.network.multicast.utils.Sender;
-import net.jxta.platform.NetworkManager;
 
 public class P2PLayer implements NetworkP2P {
   private static P2PLayer instance = null;
@@ -20,7 +18,7 @@ public class P2PLayer implements NetworkP2P {
   private P2PLayer() {
   }
 
-  public P2PLayer getInstance() {
+  public static P2PLayer getInstance() {
     if (instance == null) {
       instance = new P2PLayer();
     }
@@ -29,22 +27,13 @@ public class P2PLayer implements NetworkP2P {
   }
 
   @Override
-  public String connect(OnReceiveHandler handler) {
+  public int connect() {
     if (peerID.equals("")) {
       this.manager = getManager();
       this.sender = new Sender(this.manager);
-      this.receiver = new Receiver(this.manager, handler);
-      this.receiver.start();
     }
 
-    String uniqueID = sender.getPeerID();
-    try {
-      uniqueID += InetAddress.getLocalHost().getHostAddress();
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-    }
-
-    return uniqueID;
+    return sender.getPeerID();
   }
 
   /**
@@ -77,5 +66,11 @@ public class P2PLayer implements NetworkP2P {
   public void stopConnection() {
     this.receiver.stopReceiver();
     this.manager.stopNetwork();
+  }
+
+  @Override
+  public void setOnReceiveHandler(OnReceiveHandler handler) {
+    this.receiver = new Receiver(this.manager, handler);
+    this.receiver.start();
   }
 }

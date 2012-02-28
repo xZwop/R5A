@@ -3,6 +3,7 @@ package alma.logoot.network.multicast.utils;
 import java.io.IOException;
 import java.net.DatagramPacket;
 
+import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.platform.NetworkManager;
 import net.jxta.socket.JxtaMulticastSocket;
@@ -55,10 +56,7 @@ public class Sender {
    * 
    * @return the peer ID.
    */
-  public String getPeerID() {
-    String ID = manager.getPeerID().toString();
-    System.out.println(ID);
-    ID = ID.substring(ID.lastIndexOf('-') + 1, ID.length());
-    return ID;
+  public int getPeerID() {
+    return manager.getPeerID().hashCode();
   }
 }

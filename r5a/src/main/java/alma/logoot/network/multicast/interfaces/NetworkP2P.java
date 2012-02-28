@@ -5,13 +5,9 @@ public interface NetworkP2P {
   /**
    * Connection to the P2P network.
    * 
-   * @param handler
-   *          the handler to know what to do on receive a message from the
-   *          network.
-   * 
    * @return the Connection ID (packet.getAddress())
    */
-  public String connect(OnReceiveHandler handler);
+  public int connect();
 
   /**
    * Send the message into the P2P network.
@@ -20,6 +16,15 @@ public interface NetworkP2P {
    *          the message to send.
    */
   public void sendMessage(String message);
+
+  /**
+   * Set The handler on OnReceive.
+   * 
+   * @param handler
+   *          the handler to know what to do on receive a message from the
+   *          network.
+   */
+  public void setOnReceiveHandler(OnReceiveHandler handler);
 
   /**
    * Stop the connection on the P2P network.
