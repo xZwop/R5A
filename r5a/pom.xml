@@ -22,6 +22,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>jxta</groupId>
+      <artifactId>jxta</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-servlet</artifactId>
       <version>${gwtVersion}</version>
@@ -142,8 +147,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
       </plugin>
     </plugins>
