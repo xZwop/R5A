@@ -48,7 +48,6 @@ public class Controller implements EntryPoint, IChangeListener,
   private IUI ui = FactoryUI.getInstance();
   private INetwork network = FactoryNetwork.getInstance();
   private ILogootEngine logootEngine = FactoryLogootEngine.getInstance();
-  private boolean isLocalGeneratedPatch = false;
 
   @Override
   public void onModuleLoad() {
