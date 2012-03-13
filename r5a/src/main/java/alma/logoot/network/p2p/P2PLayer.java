@@ -1,8 +1,6 @@
 package alma.logoot.network.p2p;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import net.jxta.platform.NetworkManager;
 import alma.logoot.network.p2p.interfaces.NetworkP2P;
@@ -18,7 +16,7 @@ public class P2PLayer implements NetworkP2P {
 	private Receiver receiver = null;
 
 	private P2PLayer() {
-		peerID = connect();
+		this.peerID = connect();
 	}
 
 	public static P2PLayer getInstance() {
@@ -34,7 +32,7 @@ public class P2PLayer implements NetworkP2P {
 		this.sender = new Sender(this.manager);
 		this.receiver = new Receiver(this.manager);
 
-		return sender.getPeerID();
+		return this.sender.getPeerID();
 	}
 
 	/**

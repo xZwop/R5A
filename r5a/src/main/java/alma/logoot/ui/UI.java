@@ -1,7 +1,7 @@
 package alma.logoot.ui;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -40,13 +40,20 @@ public class UI implements IUI {
    * Default {@link UI} constructor.
    */
   public UI() {
-    this.changeListeners = new TreeSet<IChangeListener>();
+    this.changeListeners = new HashSet<IChangeListener>();
     this.textArea = new TextArea();
 
     setHandlers();
 
     // Set the TextArea on GWT
-    RootPanel.get("textAreaContainer").add(textArea);
+    RootPanel header = RootPanel.get("header");
+    RootPanel content = RootPanel.get("content");
+
+    int contentHeight = RootPanel.getBodyElement().getOffsetHeight()
+        - header.getOffsetHeight();
+    
+    content.setHeight(contentHeight + "px");
+    content.add(this.textArea);
   }
 
   @Override

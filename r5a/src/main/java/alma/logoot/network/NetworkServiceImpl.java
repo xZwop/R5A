@@ -18,7 +18,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	public static final int PORTCLIENT = 9990;
 
 	private static final long serialVersionUID = 1L;
-	private P2PLayer p2p = P2PLayer.getInstance();
+	// private P2PLayer p2p = P2PLayer.getInstance();
 
 	@Override
 	public void send(String message) {
@@ -33,7 +33,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	}
 
 	private void sendToP2PUser(String message) {
-		p2p.sendMessage(message);
+		// p2p.sendMessage(message);
 	}
 
 	private void sendToLocalUser(String message) throws UnknownHostException,
@@ -47,6 +47,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public int register() {
-		return (p2p.getPeerID() * 1000 + ++id);
+	  return (++id);
+		// return (p2p.getPeerID() * 1000 + ++id);
 	}
 }

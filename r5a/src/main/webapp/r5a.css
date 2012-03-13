@@ -1,4 +1,9 @@
-/** Add css rules here for your application. */
+body,html {
+ height: 100%;
+ margin: 0;
+ padding: 0;
+ color: #444;
+}
 
 #header {
  width: 100%;
@@ -7,67 +12,59 @@
  background-image: url(images/logoot.png);
  background-repeat: no-repeat;
  background-position: right top;
- box-shadow: 0px 2px 12px #555;
- margin-bottom: 50px;
+ border-bottom: 3px solid #B2B2B2;
 }
 
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+#content {
+ width: 100%;
+ background-color: #ebebeb;
+ text-align: center;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+#content textarea {
+  margin-top: 10px;
+  width: 75%;
+  height: 90%;
+  border: none;
+  border-bottom: 2px solid #B2B2B2;
+  border-right: 2px solid #B2B2B2;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
-}
-
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+#content textarea:focus {
+ outline: 0;
+ outline: none;
 }
 
 table.log {
-  border: medium solid #6495ed;
-  border-collapse: collapse;
-  width: 100%;
+ border: medium solid #6495ed;
+ border-collapse: collapse;
+ width: 100%;
 }
+
 table.log th {
-  font-family: monospace;
-  border: thin solid #6495ed;
-  padding: 5px;
-  background-color: #D0E3FA;
-  background-image: url(sky.jpg);
+ font-family: monospace;
+ border: thin solid #6495ed;
+ padding: 5px;
+ background-color: #D0E3FA;
+ background-image: url(sky.jpg);
 }
+
 table.log td {
-  font-family: sans-serif;
-  border: thin solid #6495ed;
-  padding: 5px;
-  text-align: center;
-  background-color: #ffffff;
+ font-family: sans-serif;
+ border: thin solid #6495ed;
+ padding: 5px;
+ text-align: center;
+ background-color: #ffffff;
 }
 
 textarea {
-  width: 300px;
-  height: 300px;
+ width: 300px;
+ height: 300px;
 }
 
 .error {
-  border: 3px solid #FF0000 !important;
+ border: 3px solid #FF0000 !important;
 }
