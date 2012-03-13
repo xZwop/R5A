@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-<<<<<<< HEAD
-	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
-	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
-	<classpathentry including="**/*.java" kind="src" path="target/generated-sources/gwt"/>
-	<classpathentry excluding="**/*.java" kind="src" path="src/main/resources"/>
-	<classpathentry kind="var" path="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar" sourcepath="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.4.0/gwt-servlet-2.4.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/2.4.0/gwt-user-2.4.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/4.7/junit-4.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/jxta/jxse-shell/2.5/jxse-shell-2.5.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/jxta/jxta-jxse/2.5/jxta-jxse-2.5.jar"/>
-=======
 	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
 	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
@@ -25,7 +11,6 @@
 	<classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.4.0/gwt-servlet-2.4.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-user/2.4.0/gwt-user-2.4.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/junit/junit/4.7/junit-4.7.jar"/>
-	<classpathentry kind="lib" path="/Peer2PeerConnection/lib/jxta.jar"/>
->>>>>>> branch 'master' of https://driz764@github.com/xZwop/R5A.git
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jxta-jxse-2.5.jar"/>
 	<classpathentry kind="output" path="target/r5a-1.0-SNAPSHOT/WEB-INF/classes"/>
 </classpath>
