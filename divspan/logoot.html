@@ -4,6 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link type="text/css" rel="stylesheet" href="logoot.css">
 		<title>R5A Project - Logoot</title>
+		<script type='text/javascript' src='jquery.js'></script>
 	</head>
     <body>
 
@@ -18,4 +19,12 @@
 			</div>
 		 </div>
 	</body>
+	<script type="text/javascript">
+	document.getElementById("logoot").addEventListener("textInput",	OnTextInput, false);
+
+	function OnTextInput (event) {
+		//alert ("The following text has been entered: " + event.data);
+		document.getElementById("logoot").innerHTML += "span>"+event.data+"/span>";
+	}
+	</script>	
 </html>
