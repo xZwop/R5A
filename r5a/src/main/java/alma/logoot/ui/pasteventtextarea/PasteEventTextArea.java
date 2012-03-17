@@ -7,8 +7,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.TextArea;
 
 /**
- * The {@link PastEventTextArea} extends {@link TextArea} to add new binding
- * event. With {@link PastEventTextArea} you can add a paste handler which is
+ * The {@link PasteEventTextArea} extends {@link TextArea} to add new binding
+ * event. With {@link PasteEventTextArea} you can add a paste handler which is
  * reach at each paste in the {@link TextArea}.
  * 
  * @author Adrien Bougouin adrien.bougoin{at}gmail{dot}com
@@ -17,17 +17,17 @@ import com.google.gwt.user.client.ui.TextArea;
  * @author Alexandre Prenza prenza.a{at}gmail{dot}com
  * @author Ronan-Alexandre Cherrueau ronancherrueau{at}gmail{dot}com
  */
-public class PastEventTextArea extends TextArea {
+public class PasteEventTextArea extends TextArea {
 
   /**
-   * List of {@link PasteHandler} register for the {@link PastEventTextArea}.
+   * List of {@link PasteHandler} register for the {@link PasteEventTextArea}.
    */
   private List<PasteHandler> pasteHandlers;
 
   /**
-   * Constructor of {@link PastEventTextArea}.
+   * Constructor of {@link PasteEventTextArea}.
    */
-  public PastEventTextArea() {
+  public PasteEventTextArea() {
     super();
     sinkEvents(Event.ONPASTE);
 
