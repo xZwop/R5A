@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="logoot.css">
+    <title>R5A Project - Logoot</title>
+  </head>
+  <body>
+    <div id="header"></div>
+    <div id="logoot" contenteditable="true" onkeypress="insertion(event);" onkeydown="deletion(event);"><span class="logoot_limit" id="begin"></span><span class="logoot_limit" id="end"></span></div>
+  </body>
+  <script type="text/javascript">
+    var identifier = 1;
+
+    function insertion(event) {
+      var edit = document.getElementById("logoot");
+      var selection = window.getSelection();
+      var range = selection.getRangeAt(0);
+      var next = selection.anchorNode.parentNode.nextSibling;
+      var span = document.createElement("span");
+      var data = String.fromCharCode(event.keyCode);
+
+      // be sure that the next node is between the begin and the end span
+      if(next == document.getElementById("begin")) {
+        next = next.nextSibling;
+      } else if(next == null) {
+        next = document.getElementById("end");
+      }
+
+      var previousLineIdentifier = next.previousSibling.id;
+      var nextLineIdentifier = next.id;
+
+      // the previous or next span could be a cursor so the lineIdentifiers must be changed
+      while(document.getElementById(previousLineIdentifier).className != "logoot_character"
+            && document.getElementById(previousLineIdentifier).className != "logoot_limit") {
+        previousLineIdentifier = document.getElementById(previousLineIdentifier).previousSibling.id;
+      }
+      while(document.getElementById(nextLineIdentifier).className != "logoot_character"
+            && document.getElementById(nextLineIdentifier).className != "logoot_limit") {
+        nextLineIdentifier = document.getElementById(nextLineIdentifier).nextSibling.id;
+      }
+
+      // set the new span
+      span.innerHTML = data;
+      span.className = "logoot_character";
+      span.id = data; // TODO use the logoot engine
+
+      // insert the added character
+      edit.insertBefore(span, next);
+
+      // move the caret to the end of the inserted character
+      range.selectNode(span);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      // TODO notify other clients
+
+      // cancel the event, then the character is not added twice
+      event.returnValue = false;
+    }
+
+    function foreignInsertion(repID, data, newLineIdentifier, previousLineIdentifier) {
+      // do not process its own insertions
+      if(repID != identifier) {
+        var edit = document.getElementById("logoot");
+        var selection = window.getSelection();
+        var range = selection.getRangeAt(0);
+        var next = document.getElementById(previousLineIdentifier).nextSibling;
+        var span = document.createElement("span");
+
+        // set the new span
+        span.innerHTML = data;
+        span.id = newLineIdentifier;
+        span.style = undefined;
+
+        // insert the added character
+        edit.insertBefore(span, next);
+      }
+    }
+
+    function deletion(event) {
+      // TODO
+      switch(event.keyCode) {
+        // <-
+        case 8:
+          var edit = document.getElementById("logoot");
+          var selection = window.getSelection();
+
+          // TODO notify other clients
+
+          // TODO delete the character
+
+          // cancel the event, then the character is not added twice
+          event.returnValue = false;
+        break;
+
+        // del
+        case 46:
+          var edit = document.getElementById("logoot");
+          var selection = window.getSelection();
+          // TODO notify other clients
+
+          // TODO delete the character
+
+          // cancel the event, then the character is not added twice
+          event.returnValue = false;
+        break;
+      }
+    }
+
+    function foreignDeletion(repID, lineIdentifier) {
+      // do not process its own insertions
+      if(repID != identifier) {
+        var edit = document.getElementById("logoot");
+        var span = document.getElementById(lineIdentifier);
+
+        // delete the character
+        edit.removeChild(span);
+      }
+    }
+
+    function addCaretForRepID(repID, previousLineIdentifier) {
+      // do not (re)display its own caret
+      if(repID != identifier) {
+        var edit = document.getElementById("logoot");
+        var next = document.getElementById(previousLineIdentifier).nextSibling;
+        var span = document.createElement("span");
+
+        // delete the old caret (if it exists)
+        removeCaretForRepID(repID);
+
+        // set the span to be a special caret
+        span.className = "logoot_caret";
+        span.id = repID;
+        span.hidden = false;
+        span.innerHTML = "<font size=\"5\" face=\"arial\" style=\"color: " + caretColorForRepID(repID) + "\">|</font>";
+
+        // insert the caret
+        edit.insertBefore(span, next);
+      }
+    }
+
+    function removeCaretForRepID(repID) {
+      // do not (re)display its own caret
+      if(repID != identifier) {
+        var edit = document.getElementById("logoot");
+        var carets = document.getElementsByClassName("logoot_caret");
+
+        for(var i = 0; i < carets.length; ++i) {
+          if(carets[i].id = repID) {
+            edit.removeChild(carets[i]);
+          }
+        }
+      }
+    }
+
+    // TODO generate with the repID
+    function caretColorForRepID(repID) {
+      return "red";
+    }
+  </script>	
+</html>
+

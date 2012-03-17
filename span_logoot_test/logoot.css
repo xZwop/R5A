@@ -1,0 +1,21 @@
+body,html {
+ height: 100%;
+ margin: 0;
+ padding: 0;
+ color: #444;
+}
+
+#header {
+ width: 100%;
+ height: 315px;
+ background-color: #3b5998;
+ background-image: url(logoot.png);
+ background-repeat: no-repeat;
+ background-position: right top;
+ border-bottom: 3px solid #B2B2B2;
+}
+
+#logoot {
+  height: 60%
+}
+
