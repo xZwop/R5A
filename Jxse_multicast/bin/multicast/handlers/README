@@ -1,0 +1,14 @@
+response.setContentType("text/event-stream;charset=utf-8");
+[02/02/12 01:01:45] Drouet adrien: while (true) {  
+            out.print("data: {" + messagesSent++ + "}\n\n");  
+            out.flush(); 
+            try {  
+                Thread.sleep(5000);  
+            } catch (InterruptedException e) {  
+            }  
+            System.out.println("Sent " + messagesSent);  
+        }
+[02/02/12 01:02:11] Drouet adrien: var source = new EventSource('GetData');
+source.onmessage = function(event) {
+ $("#log").text($(this).text()+event.data);
+};

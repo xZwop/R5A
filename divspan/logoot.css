@@ -1,0 +1,35 @@
+body,html {
+ height: 100%;
+ margin: 0;
+ padding: 0;
+ color: #444;
+}
+
+#header {
+ width: 100%;
+ height: 315px;
+ background-color: #3b5998;
+ background-image: url(logoot.png);
+ background-repeat: no-repeat;
+ background-position: right top;
+ border-bottom: 3px solid #B2B2B2;
+}
+
+#content {
+ width: 100%;
+ background-color: #ebebeb;
+ text-align: left;
+}
+
+#content div {
+  background-color: #ffffff;
+  margin-top: 10px;
+  width: 75%;
+  height: 60%;
+  border: none;
+  border-bottom: 2px solid #B2B2B2;
+  border-right: 2px solid #B2B2B2;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+}
