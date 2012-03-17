@@ -54,8 +54,11 @@ public class GetData extends HttpServlet {
 
         @Override
         public void execute(String message) {
+          System.out.println("Receive from P2P network: " + message);
+          
+          String clientSentence = (message.replaceAll("\n", "<br>"));
           for (PrintWriter out : clients) {
-            out.print("data: " + message + "\n\n");
+            out.print("data: " + clientSentence + "\n\n");
             out.flush();
           }
         }

@@ -33,6 +33,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
   }
 
   private void sendToP2PUser(String message) {
+    System.out.println("Send on P2P network: " + message);
     p2p.sendMessage(message);
   }
 
