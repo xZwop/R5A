@@ -24,7 +24,7 @@ public class GetData extends HttpServlet {
   private static ArrayList<PrintWriter> clients = new ArrayList<PrintWriter>();
   private boolean master = false;
 
-  // private static P2PLayer p2p = P2PLayer.getInstance();
+  private static P2PLayer p2p = P2PLayer.getInstance();
 
   /**
    * @see HttpServlet#HttpServlet()
@@ -50,12 +50,17 @@ public class GetData extends HttpServlet {
     clients.add(response.getWriter());
 
     if (!master) {
-      /*
-       * p2p.setOnReceiveHandler(new OnReceiveHandler() {
-       * 
-       * @Override public void execute(String message) { for (PrintWriter out :
-       * clients) { out.print("data: " + message + "\n\n"); out.flush(); } } });
-       */
+      p2p.setOnReceiveHandler(new OnReceiveHandler() {
+
+        @Override
+        public void execute(String message) {
+          for (PrintWriter out : clients) {
+            out.print("data: " + message + "\n\n");
+            out.flush();
+          }
+        }
+      });
+
       master = true;
       System.out.println("GetData : Creation de la socket sur le port "
           + NetworkServiceImpl.PORTSEND);
@@ -90,9 +95,9 @@ public class GetData extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-     doGet(request, response);
+    doGet(request, response);
   }
-  
+
   public void destroy() {
     System.out.println("End servlet: " + getServletInfo());
     super.destroy();
