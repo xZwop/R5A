@@ -4,7 +4,7 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.user.client.Event;
 
 /**
- * Handler interface for Paste event in {@link PastEventTextArea}.
+ * Handler interface for Paste event in {@link PasteEventTextArea}.
  * 
  * @author Adrien Bougouin adrien.bougoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
@@ -15,7 +15,7 @@ import com.google.gwt.user.client.Event;
 public interface PasteHandler extends EventHandler {
 
   /**
-   * Called when Event.ONPASTE is fired on {@link PastEventTextArea}.
+   * Called when Event.ONPASTE is fired on {@link PasteEventTextArea}.
    * 
    * @param event
    *          The Event.ONPASTE that was fired.
