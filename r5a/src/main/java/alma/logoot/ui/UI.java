@@ -64,7 +64,10 @@ public class UI implements IUI {
   @Override
   public void setText(String text) {
     System.out.println("UI.R5A.setText : " + text);
+    
+    int curPos = textArea.getCursorPos();
     textArea.setText(text);
+    textArea.setCursorPos(curPos);
   }
 
   /**
