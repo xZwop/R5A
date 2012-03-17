@@ -77,16 +77,6 @@
               <goal>test</goal>
               <goal>generateAsync</goal>
             </goals>
-            <!--
-            <configuration>
-              <file>${project.basedir}/src/main/webapp/WEB-INF/lib/jxta-jxse-2.5.jar</file>
-              <groupId>net.jxta</groupId>
-              <artifactId>jxse-shell</artifactId>
-              <version>2.5</version>
-              <packaging>jar</packaging>
-              <generatePom>true</generatePom>
-            </configuration>
-          -->
           </execution>
         </executions>
         <!--
@@ -128,41 +118,14 @@
         </configuration>
       </plugin>
 
-      <!--
-      jxta-jxse not mavenified
-      -->
-      <!--
-      <plugin>
-        <groupId>com.googlecode.addjars-maven-plugin</groupId>
-        <artifactId>addjars-maven-plugin</artifactId>
-        <version>1.0.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>add-jars</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/src/main/webapp/WEB-INF/lib/</directory>
-                  <includes>
-                    <include>*.jar</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      -->
 
       <!--
-        Jetty-7: http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin
+        Jetty-6: http://wiki.eclipse.org/Jetty/Feature/Jetty_Maven_Plugin
       -->
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>7.0.0.pre5</version>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.10</version>
         <configuration>
           <stopPort>9966</stopPort>
           <stopKey>foo</stopKey>
