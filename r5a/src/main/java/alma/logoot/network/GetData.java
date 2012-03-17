@@ -22,9 +22,9 @@ import alma.logoot.network.p2p.interfaces.OnReceiveHandler;
 public class GetData extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static ArrayList<PrintWriter> clients = new ArrayList<PrintWriter>();
-  private static boolean first = true;
+  private boolean master = false;
 
-  private static P2PLayer p2p = P2PLayer.getInstance();
+  // private static P2PLayer p2p = P2PLayer.getInstance();
 
   /**
    * @see HttpServlet#HttpServlet()
@@ -45,32 +45,32 @@ public class GetData extends HttpServlet {
         "no-cache,no-store,max-age=0,max-stale=0");
     response.setHeader("Accept-Charset", "utf-8");
     response.setContentType("text/event-stream;charset=utf-8;");
-    // response.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
+
     clients.add(response.getWriter());
-    if (first) {
-      p2p.setOnReceiveHandler(new OnReceiveHandler() {
 
-        @Override
-        public void execute(String message) {
-          for (PrintWriter out : clients) {
-            out.print("data: " + message + "\n\n");
-            out.flush();
-          }
-        }
-      });
-
-      first = false;
-      String clientSentence;
-      System.out.println("GetData : Creation de la socket sur le port 9990");
+    if (!master) {
+      /*
+       * p2p.setOnReceiveHandler(new OnReceiveHandler() {
+       * 
+       * @Override public void execute(String message) { for (PrintWriter out :
+       * clients) { out.print("data: " + message + "\n\n"); out.flush(); } } });
+       */
+      master = true;
+      System.out.println("GetData : Creation de la socket sur le port "
+          + NetworkServiceImpl.PORTSEND);
       ServerSocket welcomeSocket = new ServerSocket(NetworkServiceImpl.PORTSEND);
+
       while (true) {
-        System.out.println("GetData : Acceptation de la socket");
         Socket connectionSocket = welcomeSocket.accept();
+        System.out.println("GetData : Acceptation de la socket");
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(
             connectionSocket.getInputStream()));
         char[] buffer = new char[4096];
         inFromClient.read(buffer);
-        clientSentence = (new String(buffer).trim().replaceAll("\n", "<br>"));
+
+        String clientSentence = (new String(buffer).trim().replaceAll("\n",
+            "<br>"));
         for (PrintWriter out : clients) {
           out.print("data: " + clientSentence + "\n\n");
           out.flush();
@@ -80,11 +80,21 @@ public class GetData extends HttpServlet {
     } else {
       while (true) {
         try {
-          Thread.sleep(100000);
+          Thread.sleep(10000);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
     }
+  }
+
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+     doGet(request, response);
+  }
+  
+  public void destroy() {
+    System.out.println("End servlet: " + getServletInfo());
+    super.destroy();
   }
 }
