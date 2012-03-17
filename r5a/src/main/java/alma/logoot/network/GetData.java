@@ -25,6 +25,9 @@ public class GetData extends HttpServlet {
   private boolean master = false;
 
   private static P2PLayer p2p = P2PLayer.getInstance();
+  
+  // private static final int BUFFER_SIZE = 4000000;
+  private static final int BUFFER_SIZE = 4096;
 
   /**
    * @see HttpServlet#HttpServlet()
@@ -74,7 +77,7 @@ public class GetData extends HttpServlet {
         System.out.println("GetData : Acceptation de la socket");
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(
             connectionSocket.getInputStream()));
-        char[] buffer = new char[4096];
+        char[] buffer = new char[BUFFER_SIZE];
         inFromClient.read(buffer);
 
         String clientSentence = (new String(buffer).trim().replaceAll("\n",

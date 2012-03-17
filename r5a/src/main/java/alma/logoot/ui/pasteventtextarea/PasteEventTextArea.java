@@ -11,6 +11,8 @@ import com.google.gwt.user.client.ui.TextArea;
  * event. With {@link PasteEventTextArea} you can add a paste handler which is
  * reach at each paste in the {@link TextArea}.
  * 
+ * @see http://stackoverflow.com/questions/9669425/paste-event-on-gwt
+ * 
  * @author Adrien Bougouin adrien.bougoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
  * @author Alban Ménager alban.menager{at}gmail{dot}com
@@ -37,7 +39,8 @@ public class PasteEventTextArea extends TextArea {
   /**
    * Add a new {@link PasteHandler} reach at each paste on TextArea.
    * 
-   * @param handler The {@link PasteHandler} to add.
+   * @param handler
+   *          The {@link PasteHandler} to add.
    */
   public void addPasteHandler(PasteHandler handler) {
     this.pasteHandlers.add(handler);
@@ -45,6 +48,7 @@ public class PasteEventTextArea extends TextArea {
 
   @Override
   public void onBrowserEvent(Event event) {
+    // System.out.println("Event catching: " + event.getType());
     super.onBrowserEvent(event);
     switch (event.getTypeInt()) {
     case Event.ONPASTE:

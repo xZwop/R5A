@@ -63,6 +63,7 @@ public class Controller implements EntryPoint, IChangeListener,
   @Override
   public void change(String text) {
     String patch = logootEngine.generatePatch(text);
+    System.out.println("\t\tIn Change Listener with patch " + patch);
     if (!patch.equals("[]"))
       network.send(patch);
   }

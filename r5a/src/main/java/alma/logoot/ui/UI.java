@@ -3,12 +3,16 @@ package alma.logoot.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import alma.logoot.ui.pasteventtextarea.PasteEventTextArea;
+import alma.logoot.ui.pasteventtextarea.PasteHandler;
+
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
 
 /**
  * The concrete {@link IUI} for gwt representation.
@@ -34,14 +38,33 @@ public class UI implements IUI {
   /**
    * Text Tool.
    */
-  private TextArea textArea;
+  private PasteEventTextArea textArea;
+
+  /**
+   * Timer to call change listeners after past event. Using timer cause the
+   * paste event is catch before text set in TextArea. So we call$
+   * UI.callChangeListeners in the future.
+   * 
+   * @see http://www.sencha.com/forum/showthread.php?113373-paste-event
+   */
+  private Timer afterPasteCallChangeListeners = new Timer() {
+    @Override
+    public void run() {
+      callChangeListeners();
+    }
+  };
+  
+  /**
+   * Laps time before call UI.callChangeListeners in ms.
+   */
+  public static final int CALL_TIMER = 200;
 
   /**
    * Default {@link UI} constructor.
    */
   public UI() {
     this.changeListeners = new HashSet<IChangeListener>();
-    this.textArea = new TextArea();
+    this.textArea = new PasteEventTextArea();
 
     setHandlers();
 
@@ -51,7 +74,7 @@ public class UI implements IUI {
 
     int contentHeight = RootPanel.getBodyElement().getOffsetHeight()
         - header.getOffsetHeight();
-    
+
     content.setHeight(contentHeight + "px");
     content.add(this.textArea);
   }
@@ -63,8 +86,6 @@ public class UI implements IUI {
 
   @Override
   public void setText(String text) {
-    System.out.println("UI.R5A.setText : " + text);
-    
     int curPos = textArea.getCursorPos();
     textArea.setText(text);
     textArea.setCursorPos(curPos);
@@ -75,17 +96,30 @@ public class UI implements IUI {
    * text change.
    */
   private void setHandlers() {
-    this.textArea.addKeyUpHandler(new KeyUpHandler() {
+    // Key Up Handler
+    textArea.addKeyUpHandler(new KeyUpHandler() {
       @Override
       public void onKeyUp(KeyUpEvent event) {
+        System.out.println("Ready to call Change Listener from key:");
         callChangeListeners();
       }
     });
 
-    this.textArea.addChangeHandler(new ChangeHandler() {
+    // Change Handler
+    textArea.addChangeHandler(new ChangeHandler() {
       @Override
       public void onChange(ChangeEvent event) {
+        System.out.println("Ready to call Change Listener from change:");
         callChangeListeners();
+      }
+    });
+
+    // Paste Handler
+    textArea.addPasteHandler(new PasteHandler() {
+      @Override
+      public void onPaste(Event event) {
+        System.out.println("Ready to call Change Listener from paste:");
+        afterPasteCallChangeListeners.schedule(CALL_TIMER);
       }
     });
   }
@@ -98,6 +132,8 @@ public class UI implements IUI {
     String text = this.textArea.getText();
 
     for (IChangeListener changeListener : this.changeListeners) {
+      System.out.println("\t\tCall Change Listener " + changeListener
+          + " with text " + text);
       changeListener.change(text);
     }
   }
