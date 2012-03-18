@@ -33,7 +33,7 @@ public class Network implements INetwork {
 
   @Override
   public void connect() {
-    service.register(new AsyncCallback<Long>() {
+    service.register(new AsyncCallback<Registration>() {
       @Override
       public void onFailure(Throwable caught) {
         System.err.println("Network : Erreur enregistrement au serveur.");
@@ -41,10 +41,12 @@ public class Network implements INetwork {
       }
 
       @Override
-      public void onSuccess(Long result) {
-        System.out.println("Network : Enregistrement au serveur." + result);
+      public void onSuccess(Registration registration) {
+        System.out.println("Network : Enregistrement au serveur: "
+            + registration);
 
-        Network.this.afterConnectionListener.afterConnect(result);
+        Network.this.afterConnectionListener.afterConnect(registration.getId(),
+            registration.getObject());
       }
     });
   }
@@ -60,13 +62,13 @@ public class Network implements INetwork {
   }
 
   public native void initReceive() /*-{
-    var source = new EventSource('getData');
-    source.onmessage = function(event) {
-      var text = event.data.replace(/<br>/g, '\n');
-      var me = @alma.logoot.network.Network::instance;
-      me.@alma.logoot.network.Network::receive(Ljava/lang/String;)(text);
-    };
-  }-*/;
+                                   var source = new EventSource('getData');
+                                   source.onmessage = function(event) {
+                                   var text = event.data.replace(/<br>/g, '\n');
+                                   var me = @alma.logoot.network.Network::instance;
+                                   me.@alma.logoot.network.Network::receive(Ljava/lang/String;)(text);
+                                   };
+                                   }-*/;
 
   public void receive(String text) {
     System.out.println("Network reception des donnees.." + text);

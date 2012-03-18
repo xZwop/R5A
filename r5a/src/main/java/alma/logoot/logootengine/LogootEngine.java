@@ -81,6 +81,7 @@ public class LogootEngine implements ILogootEngine {
       }
     } catch (Exception e) {
       System.err.println("LogootEngine : Deserialization error.");
+      e.printStackTrace();
     }
     System.out.println("L'objet apres serialization : "
         + patched.getClass().getName() + " " + patched);
@@ -147,8 +148,7 @@ public class LogootEngine implements ILogootEngine {
   }
 
   private String getCurrentText() {
-    if (currentText == null)
-      currentText = "";
+    if (currentText == null) { currentText = ""; }
     return currentText;
   }
 

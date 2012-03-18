@@ -53,7 +53,11 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
     System.out.println("NetworkServiceImple.send fin");
   }
 
-  public long register() {
-    return Math.abs(p2p.getPeerID() * MAX_HOST + ++id);
+  public Registration register() {
+    // TODO: Get context from other client.
+    long idRegistration = p2p.getPeerID() * MAX_HOST + ++id;
+    String contextPatch = "";
+    
+    return new Registration(idRegistration, contextPatch);
   }
 }

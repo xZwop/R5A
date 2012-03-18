@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Logoot Position is a ordered triplet.
  * 
- * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
+ * @author Adrien Bougouin adrien.bougoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
  * @author Alban Ménager alban.menager{at}gmail{dot}com
  * @author Alexandre Prenza prenza.a{at}gmail{dot}com
@@ -59,7 +59,7 @@ public class Position implements Comparable<Position>, Serializable {
       System.err.println("ILogootIdentifier : Deserialization error.");
     } else {
       this.digit = new Integer(splited[0]);
-      this.replica = new Integer(splited[1]);
+      this.replica = new Long(splited[1]);
       this.clock = new Integer(splited[2]);
     }
   }
