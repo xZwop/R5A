@@ -26,6 +26,13 @@ public interface ILogootEngine {
   String generatePatch(String text);
 
   /**
+   * Generates a patch that is the table model.
+   * 
+   * @return Collection of operation to construct table model.
+   */
+  String generatePatchFromModel();
+  
+  /**
    * Generates a collection of operations to pass from a old text, to a new one.
    * 
    * Generates a list of {@link Operation} from the previous text to this one.
