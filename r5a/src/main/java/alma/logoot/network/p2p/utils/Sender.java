@@ -40,11 +40,9 @@ public class Sender {
    *          the data to send
    */
   public void sendMessage(String data) {
-
     try {
       DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length());
       socket.send(packet);
-
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -55,7 +53,7 @@ public class Sender {
    * 
    * @return the peer ID.
    */
-  public int getPeerID() {
+  public long getPeerID() {
     return manager.getPeerID().hashCode();
   }
 }

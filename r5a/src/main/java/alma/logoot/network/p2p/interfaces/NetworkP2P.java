@@ -11,7 +11,7 @@ public interface NetworkP2P {
    */
   public void sendMessage(String message);
 
-  public int getPeerID();
+  public long getPeerID();
   
   public void setOnReceiveHandler(OnReceiveHandler handler);
 }

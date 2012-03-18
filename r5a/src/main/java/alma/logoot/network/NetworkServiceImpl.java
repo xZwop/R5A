@@ -13,6 +13,12 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
     NetworkService {
 
   private static final String SERVERADDR = "127.0.0.1";
+  
+  /**
+   * Max number of host connected to the node.
+   */
+  private static final int MAX_HOST = 100;
+  
   private static int id = 0;
   static final int PORTSEND = 9992;
   public static final int PORTCLIENT = 9990;
@@ -47,7 +53,7 @@ public class NetworkServiceImpl extends RemoteServiceServlet implements
     System.out.println("NetworkServiceImple.send fin");
   }
 
-  public int register() {
-    return Math.abs(p2p.getPeerID() * 1000 + ++id);
+  public long register() {
+    return Math.abs(p2p.getPeerID() * MAX_HOST + ++id);
   }
 }

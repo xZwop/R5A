@@ -23,7 +23,7 @@ public class Position implements Comparable<Position>, Serializable {
   /**
    * Unique replica identifier.
    */
-  private Integer replica;
+  private long replica;
 
   /**
    * Timestamps.
@@ -114,12 +114,12 @@ public class Position implements Comparable<Position>, Serializable {
    * 
    * @return The unique identifier.
    */
-  public Integer getReplica() {
+  public long getReplica() {
     return replica;
   }
 
-  public void setReplica(int s) {
-    this.replica = s;
+  public void setReplica(long replica) {
+    this.replica = replica;
   }
 
   /**

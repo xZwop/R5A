@@ -33,7 +33,7 @@ public class Network implements INetwork {
 
 	@Override
 	public void connect() {
-		service.register(new AsyncCallback<Integer>() {
+		service.register(new AsyncCallback<Long>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				System.err
@@ -42,7 +42,7 @@ public class Network implements INetwork {
 			}
 
 			@Override
-			public void onSuccess(Integer result) {
+			public void onSuccess(Long result) {
 				System.out.println("Network : Enregistrement au serveur."
 						+ result);
 

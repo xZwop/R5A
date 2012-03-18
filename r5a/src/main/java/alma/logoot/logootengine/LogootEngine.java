@@ -46,7 +46,7 @@ public class LogootEngine implements ILogootEngine {
   /**
    * User unique id.
    */
-  private int replica;
+  private long replica;
 
   /**
    * User Clock.
@@ -140,7 +140,7 @@ public class LogootEngine implements ILogootEngine {
   }
 
   @Override
-  public void setId(Integer id) {
+  public void setId(long id) {
     System.out.println("LogootEngine - Reception d'un id : " + id);
     this.replica = id;
   }

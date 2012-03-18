@@ -69,14 +69,13 @@ public class Controller implements EntryPoint, IChangeListener,
   }
 
   @Override
-  public void afterConnect(int id) {
+  public void afterConnect(long id) {
     logootEngine.setId(id);
   }
 
-  // L'objet passé en paramètre est le contexte pour reconstruire l'idTable
-  // du Logoot.
+  // Object is context to construct idTable of logoot at start.
   @Override
-  public void afterConnect(int id, Object context) {
+  public void afterConnect(long id, Object context) {
     logootEngine.setId(id);
     String c = (String) context;
     try {

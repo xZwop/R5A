@@ -10,7 +10,7 @@ import alma.logoot.network.p2p.utils.Sender;
 
 public class P2PLayer implements NetworkP2P {
   private static P2PLayer instance = null;
-  private int peerID = -1;
+  private long peerID = -1;
   private NetworkManager manager = null;
   private Sender sender = null;
   private Receiver receiver = null;
@@ -28,7 +28,7 @@ public class P2PLayer implements NetworkP2P {
     return instance;
   }
 
-  private int connect() {
+  private long connect() {
     if (!isConnected) {
       this.manager = getManager();
       this.sender = new Sender(this.manager);
@@ -64,7 +64,7 @@ public class P2PLayer implements NetworkP2P {
     this.sender.sendMessage(message);
   }
 
-  public int getPeerID() {
+  public long getPeerID() {
     return this.peerID;
   }
 
