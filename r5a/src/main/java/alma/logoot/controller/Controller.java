@@ -51,10 +51,10 @@ public class Controller implements EntryPoint, IChangeListener,
 
   @Override
   public void onModuleLoad() {
-    // On initialise la vue.
+    // Initialize view.
     ui.addChangeListener(this);
 
-    // On initialise le network et on se connecte.
+    // Initialize network and connect.
     network.addReceiverListener(this);
     network.addAfterConectionListener(this);
     network.connect();
