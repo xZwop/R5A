@@ -4,161 +4,219 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link type="text/css" rel="stylesheet" href="logoot.css">
     <title>R5A Project - Logoot</title>
-  </head>
-  <body>
-    <div id="header"></div>
-    <div id="logoot" contenteditable="true" onkeypress="insertion(event);" onkeydown="deletion(event);"><span class="logoot_limit" id="begin"></span><span class="logoot_limit" id="end"></span></div>
-  </body>
-  <script type="text/javascript">
-    var identifier = 1;
+    <script type="text/javascript" src="entities.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="logoot.js"></script>
+    <script type="text/javascript">
+      var EDITABLE_ID = "logoot";
+      var BEGIN_LINE_ID = JSON.stringify(LineId.getDocumentStarter());
+      var END_LINE_ID = JSON.stringify(LineId.getDocumentFinisher());
+      var CHARACTER_CLASS = "logoot_character";
+      var LIMIT_CLASS = "logoot_limit";
 
-    function insertion(event) {
-      var edit = document.getElementById("logoot");
-      var selection = window.getSelection();
-      var range = selection.getRangeAt(0);
-      var next = selection.anchorNode.parentNode.nextSibling;
-      var span = document.createElement("span");
-      var data = String.fromCharCode(event.keyCode);
+      // TODO must be generated
+      var identifier = 1;
+      var clock = 0;
 
-      // be sure that the next node is between the begin and the end span
-      if(next == document.getElementById("begin")) {
-        next = next.nextSibling;
-      } else if(next == null) {
-        next = document.getElementById("end");
+      function makeLogootEditor(divID) {
+        var edit = document.getElementById(divID);
+
+        edit.contentEditable = true;
+        edit.addEventListener("keypress", insertion, false);
+        edit.addEventListener("keydown", deletion, false);
+        edit.innerHTML = "<span class='"
+                         + LIMIT_CLASS
+                         + "' id='"
+                         + BEGIN_LINE_ID
+                         + "'></span><span class='"
+                         + LIMIT_CLASS
+                         + "' id='"
+                         + END_LINE_ID
+                         + "'></span>";
+
+        alert(edit.firstChild.id);
       }
 
-      var previousLineIdentifier = next.previousSibling.id;
-      var nextLineIdentifier = next.id;
-
-      // the previous or next span could be a cursor so the lineIdentifiers must be changed
-      while(document.getElementById(previousLineIdentifier).className != "logoot_character"
-            && document.getElementById(previousLineIdentifier).className != "logoot_limit") {
-        previousLineIdentifier = document.getElementById(previousLineIdentifier).previousSibling.id;
-      }
-      while(document.getElementById(nextLineIdentifier).className != "logoot_character"
-            && document.getElementById(nextLineIdentifier).className != "logoot_limit") {
-        nextLineIdentifier = document.getElementById(nextLineIdentifier).nextSibling.id;
-      }
-
-      // set the new span
-      span.innerHTML = data;
-      span.className = "logoot_character";
-      span.id = data; // TODO use the logoot engine
-
-      // insert the added character
-      edit.insertBefore(span, next);
-
-      // move the caret to the end of the inserted character
-      range.selectNode(span);
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
-
-      // TODO notify other clients
-
-      // cancel the event, then the character is not added twice
-      event.returnValue = false;
-    }
-
-    function foreignInsertion(repID, data, newLineIdentifier, previousLineIdentifier) {
-      // do not process its own insertions
-      if(repID != identifier) {
-        var edit = document.getElementById("logoot");
+      function insertion(event) {
+        var edit = document.getElementById(EDITABLE_ID);
         var selection = window.getSelection();
         var range = selection.getRangeAt(0);
-        var next = document.getElementById(previousLineIdentifier).nextSibling;
+        var next = selection.anchorNode.parentNode.nextSibling;
         var span = document.createElement("span");
+        var data = String.fromCharCode(event.keyCode);
+
+        // be sure that the next node is between the begin and the end span
+        if(next == document.getElementById(BEGIN_LINE_ID)) {
+          next = next.nextSibling;
+        } else if(next == null) {
+          next = document.getElementById(END_LINE_ID);
+        }
+
+        var previousLineIdentifier = next.previousSibling.id;
+        var nextLineIdentifier = next.id;
+
+        // the previous or next span could be a cursor so the lineIdentifiers must be changed
+        while(document.getElementById(previousLineIdentifier).className != CHARACTER_CLASS
+              && document.getElementById(previousLineIdentifier).className != LIMIT_CLASS) {
+          previousLineIdentifier = document.getElementById(previousLineIdentifier).previousSibling.id;
+        }
+        while(document.getElementById(nextLineIdentifier).className != CHARACTER_CLASS
+              && document.getElementById(nextLineIdentifier).className != LIMIT_CLASS) {
+          nextLineIdentifier = document.getElementById(nextLineIdentifier).nextSibling.id;
+        }
 
         // set the new span
         span.innerHTML = data;
-        span.id = newLineIdentifier;
-        span.style = undefined;
+        span.className = CHARACTER_CLASS;
+        span.id = data; // TODO delete and use the line below
+        /*
+        span.id = Logoot.generateLineId(LineId.fromString(previousLineIdentifier),
+                                        LineId.fromString(nextLineIdentifier),
+                                        1,
+                                        10,
+                                        identifier,
+                                        clock);
+        */
+        ++clock; // TODO not sure
 
         // insert the added character
         edit.insertBefore(span, next);
-      }
-    }
 
-    function deletion(event) {
-      // TODO
-      switch(event.keyCode) {
-        // <-
-        case 8:
-          var edit = document.getElementById("logoot");
+        // move the caret to the end of the inserted character
+        range.selectNode(span);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // TODO notify other clients
+
+        // cancel the event, then the character is not added twice
+        event.returnValue = false;
+      }
+
+      function foreignInsertion(repID, data, newLineIdentifier, previousLineIdentifier) {
+        // do not process its own insertions
+        if(repID != identifier) {
+          var edit = document.getElementById(EDITABLE_ID);
           var selection = window.getSelection();
+          var range = selection.getRangeAt(0);
+          var next = document.getElementById(previousLineIdentifier).nextSibling;
+          var span = document.createElement("span");
 
-          // TODO notify other clients
+          // set the new span
+          span.innerHTML = data;
+          span.id = newLineIdentifier;
+          span.style = undefined;
 
-          // TODO delete the character
-
-          // cancel the event, then the character is not added twice
-          event.returnValue = false;
-        break;
-
-        // del
-        case 46:
-          var edit = document.getElementById("logoot");
-          var selection = window.getSelection();
-          // TODO notify other clients
-
-          // TODO delete the character
-
-          // cancel the event, then the character is not added twice
-          event.returnValue = false;
-        break;
+          // insert the added character
+          edit.insertBefore(span, next);
+        }
       }
-    }
 
-    function foreignDeletion(repID, lineIdentifier) {
-      // do not process its own insertions
-      if(repID != identifier) {
-        var edit = document.getElementById("logoot");
-        var span = document.getElementById(lineIdentifier);
+      function deletion(event) {
+        switch(event.keyCode) {
+          // <-
+          case 8:
+            var edit = document.getElementById(EDITABLE_ID);
+            var selection = window.getSelection();
+            var range = document.createRange();
+            var span = selection.anchorNode.parentNode;
 
-        // delete the character
-        edit.removeChild(span);
+            // TODO notify other clients
+
+            if(span.id && span.className != LIMIT_CLASS) {
+              // move the caret to the end of the previous character
+              range.selectNode(span.previousSibling);
+              range.collapse(false);
+              selection.removeAllRanges();
+              selection.addRange(range);
+
+              // delete the character
+              edit.removeChild(span);
+            }
+
+            // cancel the event, then the character is not added twice
+            event.returnValue = false;
+          break;
+
+          // del
+          case 46:
+            var edit = document.getElementById(EDITABLE_ID);
+            var selection = window.getSelection();
+            var span = selection.anchorNode.parentNode;
+            var next = span.nextSibling;
+
+            // TODO notify other clients
+
+            // delete the character
+            if(next && next.className != LIMIT_CLASS) {
+              edit.removeChild(next);
+            }
+
+            // cancel the event, then the character is not added twice
+            event.returnValue = false;
+          break;
+        }
       }
-    }
 
-    function addCaretForRepID(repID, previousLineIdentifier) {
-      // do not (re)display its own caret
-      if(repID != identifier) {
-        var edit = document.getElementById("logoot");
-        var next = document.getElementById(previousLineIdentifier).nextSibling;
-        var span = document.createElement("span");
+      function foreignDeletion(repID, lineIdentifier) {
+        // do not process its own insertions
+        if(repID != identifier) {
+          var edit = document.getElementById(EDITABLE_ID);
+          var span = document.getElementById(lineIdentifier);
 
-        // delete the old caret (if it exists)
-        removeCaretForRepID(repID);
-
-        // set the span to be a special caret
-        span.className = "logoot_caret";
-        span.id = repID;
-        span.hidden = false;
-        span.innerHTML = "<font size=\"5\" face=\"arial\" style=\"color: " + caretColorForRepID(repID) + "\">|</font>";
-
-        // insert the caret
-        edit.insertBefore(span, next);
+          // delete the character
+          edit.removeChild(span);
+        }
       }
-    }
 
-    function removeCaretForRepID(repID) {
-      // do not (re)display its own caret
-      if(repID != identifier) {
-        var edit = document.getElementById("logoot");
-        var carets = document.getElementsByClassName("logoot_caret");
+      function addCaretForRepID(repID, previousLineIdentifier) {
+        // do not (re)display its own caret
+        if(repID != identifier) {
+          var edit = document.getElementById(EDITABLE_ID);
+          var next = document.getElementById(previousLineIdentifier).nextSibling;
+          var span = document.createElement("span");
 
-        for(var i = 0; i < carets.length; ++i) {
-          if(carets[i].id = repID) {
-            edit.removeChild(carets[i]);
+          // delete the old caret (if it exists)
+          removeCaretForRepID(repID);
+
+          // set the span to be a special caret
+          span.className = CARET_CLASS;
+          span.id = repID;
+          span.hidden = false;
+          span.innerHTML = "<font size=\"5\" face=\"arial\" style=\"color: " + caretColorForRepID(repID) + "\">|</font>";
+
+          // insert the caret
+          edit.insertBefore(span, next);
+        }
+      }
+
+      function removeCaretForRepID(repID) {
+        // do not (re)display its own caret
+        if(repID != identifier) {
+          var edit = document.getElementById(EDITABLE_ID);
+          var carets = document.getElementsByClassName(CARET_CLASS);
+
+          for(var i = 0; i < carets.length; ++i) {
+            if(carets[i].id = repID) {
+              edit.removeChild(carets[i]);
+            }
           }
         }
       }
-    }
 
-    // TODO generate with the repID
-    function caretColorForRepID(repID) {
-      return "red";
-    }
-  </script>	
+      // TODO generate with the repID
+      function caretColorForRepID(repID) {
+        return "red";
+      }
+    </script>	
+  </head>
+  <body>
+    <div id="header"></div>
+    <div id="logoot"></div>
+    <script type="text/javascript">
+      makeLogootEditor(EDITABLE_ID);
+    </script>
+  </body>
 </html>
 
