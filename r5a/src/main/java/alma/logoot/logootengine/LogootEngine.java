@@ -34,6 +34,7 @@ public class LogootEngine implements ILogootEngine {
 
   /**
    * Diff Match Patch Component.
+   * 
    * @see http://code.google.com/p/google-diff-match-patch
    */
   private diff_match_patch diffEngine;
@@ -46,7 +47,7 @@ public class LogootEngine implements ILogootEngine {
   /**
    * User unique id.
    */
-  private int replica;
+  private long replica;
 
   /**
    * User Clock.
@@ -80,6 +81,7 @@ public class LogootEngine implements ILogootEngine {
       }
     } catch (Exception e) {
       System.err.println("LogootEngine : Deserialization error.");
+      e.printStackTrace();
     }
     System.out.println("L'objet apres serialization : "
         + patched.getClass().getName() + " " + patched);
@@ -88,7 +90,7 @@ public class LogootEngine implements ILogootEngine {
     // o.getPosition().get(o.getPosition().size()-1).getIdentifier();
     // if
     // (o.getPosition().get(o.getPosition().size()-1).getIdentifier().equals(
-    //    id.getIdentifier())){
+    // id.getIdentifier())){
     // System.out.println("C'est moi je ne dois pas ecrire huhu.");
     // return null;
     // }
@@ -140,14 +142,13 @@ public class LogootEngine implements ILogootEngine {
   }
 
   @Override
-  public void setId(Integer id) {
+  public void setId(long id) {
     System.out.println("LogootEngine - Reception d'un id : " + id);
     this.replica = id;
   }
 
   private String getCurrentText() {
-    if (currentText == null)
-      currentText = "";
+    if (currentText == null) { currentText = ""; }
     return currentText;
   }
 
@@ -235,7 +236,7 @@ public class LogootEngine implements ILogootEngine {
         triplet.setClock(q.get(index).getClock());
         triplet.setReplica(q.get(index).getReplica());
       } else {
-        triplet.setClock(++ this.clock);
+        triplet.setClock(++this.clock);
         triplet.setReplica(this.replica);
       }
       index++;
@@ -290,8 +291,8 @@ public class LogootEngine implements ILogootEngine {
     // QUE CELUI DU CLIENT
     // ( sinon probleme dans la table des ids. )
     Operation o = (Operation) op;
-    if(o.getLineId().get(o.getLineId().size()-1).getReplica()==replica){
-    	return;
+    if (o.getLineId().get(o.getLineId().size() - 1).getReplica() == replica) {
+      return;
     }
     if (o.isIns()) {
       int index = -Collections.binarySearch(getIdTable(), o.getLineId()) - 1;
@@ -309,5 +310,19 @@ public class LogootEngine implements ILogootEngine {
       }
     }
   }
-}
 
+  @Override
+  public String generatePatchFromModel() {
+    Collection<IOperation> patch = new ArrayList<IOperation>();
+
+    int i = 0;
+    while (i < idTable.size()) {
+      IOperation op = Operation.insertOperation(idTable.get(i),
+          currentText.charAt(i));
+      patch.add(op);
+      ++i;
+    }
+
+    return patch.toString();
+  }
+}

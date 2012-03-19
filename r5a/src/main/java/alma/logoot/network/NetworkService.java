@@ -1,11 +1,10 @@
 package alma.logoot.network;
 
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("logoot")
-public interface NetworkService extends RemoteService{
-	void send(String o);
-	int register();	
+public interface NetworkService extends RemoteService {
+  void send(String o);
+  Registration register();
 }

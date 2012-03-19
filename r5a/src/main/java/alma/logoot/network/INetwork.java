@@ -5,7 +5,7 @@ package alma.logoot.network;
  * <code>Controller</code> will use to send and get patch for collaborative
  * work.
  * 
- * @author Adrien Bougouin adrien.bourgoin{at}gmail{dot}com
+ * @author Adrien Bougouin adrien.bougoin{at}gmail{dot}com
  * @author Adrien Drouet drizz764{at}gmail{dot}com
  * @author Alban Ménager alban.menager{at}gmail{dot}com
  * @author Alexandre Prenza prenza.a{at}gmail{dot}com
@@ -45,11 +45,11 @@ public interface INetwork {
   /**
    * Process to do after connection.
    *
-   * After connexion on server, class given here will be call to execute
+   * After connection on server, class given here will be call to execute
    * specific code in asynchronous way.
    *
    * @param listener
-   *          Listener to call after conexion.
+   *          Listener to call after connection.
    */
   public void addAfterConectionListener(IAfterConnectionListener listener);
 }

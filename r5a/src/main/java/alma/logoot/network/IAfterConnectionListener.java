@@ -14,18 +14,7 @@ public interface IAfterConnectionListener {
   /**
    * Call after success connection on network.
    * 
-   * After {@link INetwork} succed connection, this method is call with unique
-   * id of current host on network.
-   * 
-   * @param id
-   *          Unique host identifier on network.
-   */
-	public void afterConnect(int id);
-
-  /**
-   * Call after success connection on network.
-   * 
-   * After {@link INetwork} succed connection, this method is call with unique
+   * After {@link INetwork} succeed connection, this method is call with unique
    * id of current host on network.
    * 
    * @param id
@@ -33,6 +22,5 @@ public interface IAfterConnectionListener {
    * @param object
    *          Extra object information.
    */
-	public void afterConnect(int id, Object object);
+  public void afterConnect(long id, Object object);
 }
-
