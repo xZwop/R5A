@@ -1,11 +1,11 @@
-CRDT have some caracteristic:
+CRDT has some features:
 \begin{itemize}
 	\item The concurrent operations are natively commutative.
 	\item The document is a linear sequence of elements.
-	\item A unic position identifier.
+	\item A single position identifier.
 \end{itemize}~
 
-For the experiments, they select differents algorithms for generating the unic position identifier:
+Regarding to experiments, they select differents algorithms to generate the single position identifier:
 \begin{itemize}
 	\item Logoot
 	\item RGA
@@ -14,7 +14,7 @@ For the experiments, they select differents algorithms for generating the unic p
 	\item WOOTH
 \end{itemize}
 
-Figure \ref{fig:worst} p.\pageref{fig:worst} (with R the number of replicas and by H the number of operations on the document) shows the theoretical evaluation of this differents algorithms. RGA and Logoot have the bests results.
+The figure \ref{fig:worst} p.\pageref{fig:worst} (with R the number of replicas and by H the number of operations on the document) shows the theoretical evaluation of these differents algorithms. Thus we see that RGA and Logoot have the bests results.
 
 \begin{figure}[h]
   \center
