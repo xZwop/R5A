@@ -1,0 +1,24 @@
+CRDT has some features:
+\begin{itemize}
+	\item The concurrent operations are natively commutative.
+	\item The document is a linear sequence of elements.
+	\item A single position identifier.
+\end{itemize}~
+
+Regarding to experiments, they select differents algorithms to generate the single position identifier:
+\begin{itemize}
+	\item Logoot
+	\item RGA
+	\item WOOT
+	\item WOOTO
+	\item WOOTH
+\end{itemize}
+
+The figure \ref{fig:worst} p.\pageref{fig:worst} (with R the number of replicas and by H the number of operations on the document) shows the theoretical evaluation of these differents algorithms. Thus we see that RGA and Logoot have the bests results.
+
+\begin{figure}[h]
+  \center
+  \includegraphics[width=0.7\textwidth]{includes/worst.png}
+  \caption{Worst-case time-complexity analysis}
+  \label{fig:worst}
+\end{figure}

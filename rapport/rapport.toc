@@ -1,0 +1,11 @@
+\select@language {french}
+\contentsline {chapter}{Introduction}{3}{chapter*.2}
+\contentsline {chapter}{\numberline {1}Gestion de projet}{4}{chapter.1}
+\contentsline {chapter}{\numberline {2}Analyse}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Peer-to-Peer}{5}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Gossip}{6}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Jxta}{6}{subsection.2.1.2}
+\contentsline {chapter}{\numberline {3}Conception}{7}{chapter.3}
+\contentsline {chapter}{\numberline {4}R\IeC {\'e}alisation}{8}{chapter.4}
+\contentsline {chapter}{Conclusion}{9}{chapter*.3}
+\contentsline {chapter}{Bibliographie}{10}{chapter*.4}
