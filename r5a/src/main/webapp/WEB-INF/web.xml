@@ -23,15 +23,6 @@
     <url-pattern>/r5a/getData</url-pattern>
   </servlet-mapping>
   
-   <servlet>
-    <servlet-name>logootNetworkServiceImplTwoServlet</servlet-name>
-    <servlet-class>alma.logoot.network.NetworkServiceImplTwo</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>logootNetworkServiceImplTwoServlet</servlet-name>
-    <url-pattern>/r5a/networkServiceImplTwo</url-pattern>
-  </servlet-mapping>
-
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>r5a.html</welcome-file>
