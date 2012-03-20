@@ -53,7 +53,7 @@ public class GetData extends HttpServlet {
     clients.add(response.getWriter());
 
     if (!master) {
-      p2p.setOnReceiveHandler(new OnReceiveHandler() {
+      p2p.addOnReceiveHandler(new OnReceiveHandler() {
 
         @Override
         public void execute(String message) {
