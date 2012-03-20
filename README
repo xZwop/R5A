@@ -1,15 +1,19 @@
-
 Logoot Implementation with web technologies
 https://github.com/xZwop/R5A/wiki
 
-* directory R5A contains GWT applications with logoot implementation
+== LOGOOT JS ==
 
-== INSTALL ===
+cd /home/user/
+git clone git://github.com/xZwop/R5A.git
+cd R5A/r5aJS
+mvn jetty:run-exploded # This will launch new server on localhost:8080
 
-% cd R5A
-% mvn gwt:run
-
-(your browser should have the GWT plugin dev installed, the link to install will 
-be displayed)
+open localhost:8080/r5aJS in your browser and enjoy !
 
 
+== LOGOOT GWT ==
+
+cd /home/user/
+git clone git://github.com/xZwop/R5A.git
+cd R5A/r5a/
+mvn jetty:run-exploded # This will launch new server on localhost:8080
