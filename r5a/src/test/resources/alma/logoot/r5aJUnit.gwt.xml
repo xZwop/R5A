@@ -4,6 +4,6 @@
   <inherits name='alma.logoot.r5a' />
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/r5a/greet" class="alma.logoot.server.GreetingServiceImpl" />
+  <!-- <servlet path="/r5a/greet" class="alma.logoot.server.GreetingServiceImpl" /> -->
 
 </module>
