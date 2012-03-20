@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2011.3.10)  20 MAR 2012 21:35
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2011.3.10)  20 MAR 2012 23:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -35,36 +35,22 @@ File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 (/usr/local/texlive/2010/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2008/07/06 v3.8l The Babel package
 
-(/usr/local/texlive/2010/texmf-dist/tex/generic/babel/frenchb.ldf
-Language: frenchb 2009/03/16 v2.3d French support from the babel system
+(/usr/local/texlive/2010/texmf-dist/tex/generic/babel/english.ldf
+Language: english 2005/03/30 v3.3o English support from the babel system
 
 (/usr/local/texlive/2010/texmf-dist/tex/generic/babel/babel.def
 File: babel.def 2008/07/06 v3.8l Babel common definitions
 \babel@savecnt=\count87
 \U@D=\dimen103
 )
-Package babel Info: Making : an active character on input line 120.
-Package babel Info: Making ; an active character on input line 121.
-Package babel Info: Making ! an active character on input line 122.
-Package babel Info: Making ? an active character on input line 123.
-\FB@Mht=\dimen104
-\std@mcc=\count88
-\dec@mcc=\count89
-\parindentFFN=\dimen105
-
-*************************************
-* Local config file frenchb.cfg used
-*
-(/usr/local/texlive/2010/texmf-dist/tex/generic/babel/frenchb.cfg)))
-(/usr/local/texlive/2010/texmf-dist/tex/latex/carlisle/scalefnt.sty)
-(/usr/local/texlive/2010/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
-\KV@toks@=\toks14
-)
+\l@canadian = a dialect from \language\l@american 
+\l@australian = a dialect from \language\l@british 
+\l@newzealand = a dialect from \language\l@british 
+))
 (/usr/local/texlive/2010/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2008/03/30 v1.1d Input encoding file
-\inpenc@prehook=\toks15
-\inpenc@posthook=\toks16
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
 
 (/usr/local/texlive/2010/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
@@ -287,7 +273,7 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 ))
 (/usr/local/texlive/2010/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
-\@emptytoks=\toks17
+\@emptytoks=\toks16
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
@@ -307,6 +293,10 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (/usr/local/texlive/2010/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/07/13 v5.5 Page Geometry
 
+(/usr/local/texlive/2010/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks17
+)
 (/usr/local/texlive/2010/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2010/01/28 v2.1 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in pdf mode detected.
@@ -315,17 +305,17 @@ Package ifpdf Info: pdfTeX in pdf mode detected.
 Package: ifvtex 2010/03/01 v1.5 Switches for detecting VTeX and its modes (HO)
 Package ifvtex Info: VTeX not detected.
 )
-\Gm@cnth=\count90
-\Gm@cntv=\count91
-\c@Gm@tempcnt=\count92
-\Gm@bindingoffset=\dimen106
-\Gm@wd@mp=\dimen107
-\Gm@odd@mp=\dimen108
-\Gm@even@mp=\dimen109
-\Gm@layoutwidth=\dimen110
-\Gm@layoutheight=\dimen111
-\Gm@layouthoffset=\dimen112
-\Gm@layoutvoffset=\dimen113
+\Gm@cnth=\count88
+\Gm@cntv=\count89
+\c@Gm@tempcnt=\count90
+\Gm@bindingoffset=\dimen104
+\Gm@wd@mp=\dimen105
+\Gm@odd@mp=\dimen106
+\Gm@even@mp=\dimen107
+\Gm@layoutwidth=\dimen108
+\Gm@layoutheight=\dimen109
+\Gm@layouthoffset=\dimen110
+\Gm@layoutvoffset=\dimen111
 \Gm@dimlist=\toks18
 )
 (/usr/local/texlive/2010/texmf-dist/tex/latex/graphics/graphicx.sty
@@ -344,10 +334,10 @@ Package graphics Info: Driver file: pdftex.def on input line 91.
 
 (/usr/local/texlive/2010/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2010/02/14 v0.04n Graphics/color for pdfTeX
-\Gread@gobject=\count93
+\Gread@gobject=\count91
 ))
-\Gin@req@height=\dimen114
-\Gin@req@width=\dimen115
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
 )
 (/usr/local/texlive/2010/texmf-dist/tex/latex/pdfpages/pdfpages.sty
 Package: pdfpages 2010/01/12 v0.4j Insert pages of external PDF documents (AM)
@@ -357,15 +347,15 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
 (/usr/local/texlive/2010/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count94
-\calc@Bcount=\count95
-\calc@Adimen=\dimen116
-\calc@Bdimen=\dimen117
+\calc@Acount=\count92
+\calc@Bcount=\count93
+\calc@Adimen=\dimen114
+\calc@Bdimen=\dimen115
 \calc@Askip=\skip52
 \calc@Bskip=\skip53
 LaTeX Info: Redefining \setlength on input line 76.
 LaTeX Info: Redefining \addtolength on input line 77.
-\calc@Ccount=\count96
+\calc@Ccount=\count94
 \calc@Cskip=\skip54
 )
 (/usr/local/texlive/2010/texmf-dist/tex/latex/eso-pic/eso-pic.sty
@@ -402,7 +392,7 @@ File: pppdftex.def 2010/01/12 v0.4j Pdfpages driver for pdfTeX (AM)
 )
 \AM@pagebox=\box26
 \AM@toc@title=\toks19
-\c@AM@survey=\count97
+\c@AM@survey=\count95
 \AM@templatesizebox=\box27
 )
 (/usr/local/texlive/2010/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -446,9 +436,9 @@ Package: xcolor-patch 2009/12/12 xcolor patch
 (/usr/local/texlive/2010/texmf-dist/tex/latex/oberdiek/letltxmacro.sty
 Package: letltxmacro 2008/06/24 v1.3 Let assignment for LaTeX macros (HO)
 )
-\@linkdim=\dimen118
-\Hy@linkcounter=\count98
-\Hy@pagecounter=\count99
+\@linkdim=\dimen116
+\Hy@linkcounter=\count96
+\Hy@pagecounter=\count97
 
 (/usr/local/texlive/2010/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2010/06/18 v6.81g Hyperref: PDFDocEncoding definition (HO)
@@ -484,9 +474,9 @@ Package: bitset 2007/09/28 v1.0 Data type bit set (HO)
 (/usr/local/texlive/2010/texmf-dist/tex/generic/oberdiek/bigintcalc.sty
 Package: bigintcalc 2007/11/11 v1.1 Expandable big integer calculations (HO)
 ))
-\Fld@menulength=\count100
-\Field@Width=\dimen119
-\Fld@charsize=\dimen120
+\Fld@menulength=\count98
+\Field@Width=\dimen117
+\Fld@charsize=\dimen118
 \Field@toks=\toks20
 Package hyperref Info: Hyper figures OFF on input line 5137.
 Package hyperref Info: Link nesting OFF on input line 5142.
@@ -497,9 +487,9 @@ Package hyperref Info: Link coloring with OCG OFF on input line 5162.
 Package hyperref Info: PDF/A mode OFF on input line 5167.
 LaTeX Info: Redefining \ref on input line 5207.
 LaTeX Info: Redefining \pageref on input line 5211.
-\Hy@abspage=\count101
-\c@Item=\count102
-\c@Hfootnote=\count103
+\Hy@abspage=\count99
+\c@Item=\count100
+\c@Hfootnote=\count101
 )
 * hyperref using default driver hpdftex *
 (/usr/local/texlive/2010/texmf-dist/tex/latex/hyperref/hpdftex.def
@@ -509,8 +499,8 @@ File: hpdftex.def 2010/06/18 v6.81g Hyperref driver for pdfTeX
 Package: atveryend 2010/03/24 v1.5 Hooks at very end of document (HO)
 Package atveryend Info: \enddocument detected (standard).
 )
-\Fld@listcount=\count104
-\c@bookmark@seq@number=\count105
+\Fld@listcount=\count102
+\c@bookmark@seq@number=\count103
 
 (/usr/local/texlive/2010/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2010/03/16 v1.6 Rerun checks for auxiliary files (HO)
@@ -546,9 +536,6 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
 LaTeX Font Info:    ... okay on input line 51.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 51.
 LaTeX Font Info:    ... okay on input line 51.
-LaTeX Info: Redefining \degres on input line 51.
-LaTeX Info: Redefining \dots on input line 51.
-LaTeX Info: Redefining \up on input line 51.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -586,15 +573,15 @@ LaTeX Info: Redefining \up on input line 51.
 
 (/usr/local/texlive/2010/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count106
-\scratchdimen=\dimen121
+\scratchcounter=\count104
+\scratchdimen=\dimen119
 \scratchbox=\box28
-\nofMPsegments=\count107
-\nofMParguments=\count108
+\nofMPsegments=\count105
+\nofMParguments=\count106
 \everyMPshowfont=\toks21
-\MPscratchCnt=\count109
-\MPscratchDim=\dimen122
-\MPnumerator=\count110
+\MPscratchCnt=\count107
+\MPscratchDim=\dimen120
+\MPnumerator=\count108
 \everyMPtoPDFconversion=\toks22
 ) (/usr/local/texlive/2010/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
@@ -623,7 +610,7 @@ Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 (/usr/local/texlive/2010/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2009/12/18 v1.3 Cleanup title references (HO)
 )
-\c@section@level=\count111
+\c@section@level=\count109
 )
 LaTeX Info: Redefining \ref on input line 51.
 LaTeX Info: Redefining \pageref on input line 51.
@@ -658,18 +645,29 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 ]
 (./inputs/contexte.tex) (./inputs/etat_art.tex) (./inputs/issue.tex)
 (./inputs/approche.tex) (./inputs/contexte_scientifique.tex
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 3.
+
+(/usr/local/texlive/2010/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 3.
+
 <includes/worst.png, id=14, 769.87625pt x 249.93375pt>
 File: includes/worst.png Graphic file (type png)
 
-<use includes/worst.png>) (./inputs/contribution.tex
+<use includes/worst.png>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./inputs/contribution.tex
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2 <./includes/worst.png (PNG copy)>]
-<includes/operations.png, id=24, 739.76375pt x 241.90375pt>
+[2] <includes/operations.png, id=24, 739.76375pt x 241.90375pt>
 File: includes/operations.png Graphic file (type png)
 
 <use includes/operations.png>) (./inputs/resultats.tex
@@ -700,26 +698,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--30
  []
 
 
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 32--33
 
  []
 
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[3 <./includes/operations.png (PNG copy)> <./includes/users_operations_2g_repor
-t.png (PNG copy)> <./includes/users_operations_1t_big.png (PNG copy)>]
-<includes/characters_operations_2g_report.png, id=40, 459.7175pt x 372.39125pt>
+<includes/characters_operations_2g_report.png, id=33, 459.7175pt x 372.39125pt>
 File: includes/characters_operations_2g_report.png Graphic file (type png)
 <use includes/characters_operations_2g_report.png>
 Overfull \hbox (45.52371pt too wide) in paragraph at lines 38--40
 [][] 
  []
 
-<includes/characters_operations_1t_big.png, id=41, 553.06625pt x 449.68pt>
+<includes/characters_operations_1t_big.png, id=34, 553.06625pt x 449.68pt>
 File: includes/characters_operations_1t_big.png Graphic file (type png)
 
 <use includes/characters_operations_1t_big.png>
@@ -738,6 +732,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 37--49
  []
 
 
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 51--52
 
  []
@@ -747,7 +744,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 53--54
 
  []
 
-) (./inputs/conclusion.tex)
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[3 <./includes/worst.png (PNG copy)> <./includes/operations.png (PNG copy)>])
+(./inputs/conclusion.tex)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 86.
 
 
@@ -756,7 +760,15 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4 <./includes/characters_operations_2g_report.png (PNG copy)> <./includes/char
+[4 <./includes/users_operations_2g_report.png (PNG copy)> <./includes/users_ope
+rations_1t_big.png (PNG copy)>]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[5 <./includes/characters_operations_2g_report.png (PNG copy)> <./includes/char
 acters_operations_1t_big.png (PNG copy)>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 86.
  (./rapport.aux)
@@ -765,23 +777,24 @@ Package rerunfilecheck Info: File `rapport.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 7542 strings out of 493747
- 109371 string characters out of 3143546
- 205787 words of memory out of 3000000
- 10647 multiletter control sequences out of 15000+200000
- 13499 words of font info for 43 fonts, out of 3000000 for 9000
+ 7203 strings out of 493747
+ 104241 string characters out of 3143546
+ 198212 words of memory out of 3000000
+ 10310 multiletter control sequences out of 15000+200000
+ 13606 words of font info for 43 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 37i,11n,43p,473b,399s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 37i,11n,43p,466b,446s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2010/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-</usr/local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></
-usr/local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></us
-r/local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/
-local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/lo
-cal/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb>
-Output written on rapport.pdf (4 pages, 483350 bytes).
+</usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></u
+sr/local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr
+/local/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/l
+ocal/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/loc
+al/texlive/2010/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb>
+Output written on rapport.pdf (5 pages, 484628 bytes).
 PDF statistics:
- 72 PDF objects out of 1000 (max. 8388607)
- 54 compressed objects within 1 object stream
- 11 named destinations out of 1000 (max. 500000)
+ 80 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
+ 12 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
