@@ -1,2 +1,15 @@
+
 Logoot Implementation with web technologies
+https://github.com/xZwop/R5A/wiki
+
+* directory R5A contains GWT applications with logoot implementation
+
+== INSTALL ===
+
+% cd R5A
+% mvn gwt:run
+
+(your browser should have the GWT plugin dev installed, the link to install will 
+be displayed)
+
 
