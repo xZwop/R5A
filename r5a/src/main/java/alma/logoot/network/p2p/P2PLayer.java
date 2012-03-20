@@ -13,7 +13,6 @@ public class P2PLayer implements NetworkP2P {
   private long peerID = -1;
   private NetworkManager manager = null;
   private Sender sender = null;
-  private Receiver receiver = null;
   private boolean isConnected = false;
 
   private P2PLayer() {
@@ -32,7 +31,6 @@ public class P2PLayer implements NetworkP2P {
     if (!isConnected) {
       this.manager = getManager();
       this.sender = new Sender(this.manager);
-      this.receiver = new Receiver(this.manager);
       this.isConnected = true;
     }
 
@@ -68,12 +66,9 @@ public class P2PLayer implements NetworkP2P {
     return this.peerID;
   }
 
-  public void setOnReceiveHandler(OnReceiveHandler handler) {
-    if (this.receiver.isAlive()) {
-      this.receiver.stopReceiver();
-    }
-
-    this.receiver.setHandler(handler);
-    this.receiver.start();
+  public void addOnReceiveHandler(OnReceiveHandler handler) {
+    Receiver receiver = new Receiver(this.manager);
+    receiver.setHandler(handler);
+    receiver.start();
   }
 }
