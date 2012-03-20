@@ -9,14 +9,17 @@ var CHARACTER_CLASS = "logoot_character";
 var LIMIT_CLASS = "logoot_limit";
 var TYPE_INSERTION = "logoot_insertion"; 
 var TYPE_DELETION = "logoot_deletion";
-var PUSH_URL = "";
+
+var DOMAINE = "/r5a";
+var REGISTER_URL = DOMAINE + "/r5a/networkServiceImplTwo?action=register";
+var SEND_URL = DOMAINE + "/r5a/networkServiceImplTwo?action=send";
+var PUSH_URL = DOMAINE + "/r5a/getDataTwo";
 
 // generated in makeLogootEditor()
 var identifier = undefined;
 var logootPusher = undefined;
 
-function register()
-{
+function register() {
 	var http;
 	if (window.XMLHttpRequest)
 	{ // Mozilla, Safari, IE7 ...
@@ -27,26 +30,20 @@ function register()
 		http = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	http.open('GET', '/r5a/networkServiceImplTwo?action=register', true);
-	http.onreadystatechange = onRegister;
+	http.open('GET', REGISTER_URL, true);
+	http.onreadystatechange = function() {
+    if (http.readyState == 4) {
+      if (http.status == 200) {
+        identifier = http.responseText;
+        makeLogootEditor(EDITABLE_ID);
+      } else {
+        console.log('Pas glop pas glop');
+      }
+    }
+  }
+
 	http.send(null);	
 }  
-
-function onRegister()
-{
-	if (http.readyState == 4)
-	{
-		if (http.status == 200)
-		{
-			identifier = http.responseText;
-			makeLogootEditor(EDITABLE_ID);
-		}
-		else
-		{
-			console.log('Pas glop pas glop');
-		}
-	}
-}
 
 function makeLogootEditor(divID) {
   var edit = document.getElementById(divID);
@@ -222,8 +219,13 @@ function foreignInsertion(repID, keyCode, newLineIdentifier,
     var range = selection.getRangeAt(0);
     var next = document.getElementById(previousLineIdentifier).nextSibling;
     var span = document.createElement("span");
-	var data = string.fromCharCode(keyCode);
-	
+    var data = string.fromCharCode(keyCode);
+    
+    // space
+    if(event.keyCode==32) {
+      data = "&nbsp;";
+    }
+
     // set the new span
     span.innerHTML = data;
     span.id = newLineIdentifier;
@@ -314,25 +316,8 @@ function send(message)
 		http = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	http.open('GET', '/r5a/networkServiceImplTwo?action=send&message='+JSON.stringify(message), true);
+	http.open('GET', SEND_URL + '&message=' + JSON.stringify(message), true);
 	//http.onreadystatechange = handleAJAXReturn;
 	http.send(null);
 }
-	
-
-	 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
