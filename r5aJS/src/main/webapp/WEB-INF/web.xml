@@ -1,7 +1,31 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>SendData</servlet-name>
+		<servlet-class>alma.logoot.network.SendData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SendData</servlet-name>
+		<url-pattern>sendData</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetData</servlet-name>
+		<servlet-class>alma.logoot.network.GetData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetData</servlet-name>
+		<url-pattern>getData</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
 </web-app>

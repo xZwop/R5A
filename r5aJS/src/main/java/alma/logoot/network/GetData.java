@@ -69,8 +69,8 @@ public class GetData extends HttpServlet {
 
       master = true;
       System.out.println("GetData : Creation de la socket sur le port "
-          + NetworkServiceImpl.PORTSEND);
-      ServerSocket welcomeSocket = new ServerSocket(NetworkServiceImpl.PORTSEND);
+          + SendData.PORTSEND);
+      ServerSocket welcomeSocket = new ServerSocket(SendData.PORTSEND);
 
       while (true) {
         Socket connectionSocket = welcomeSocket.accept();

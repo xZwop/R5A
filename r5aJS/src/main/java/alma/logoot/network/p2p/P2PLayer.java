@@ -9,66 +9,68 @@ import alma.logoot.network.p2p.utils.Receiver;
 import alma.logoot.network.p2p.utils.Sender;
 
 public class P2PLayer implements NetworkP2P {
-  private static P2PLayer instance = null;
-  private long peerID = -1;
-  private NetworkManager manager = null;
-  private Sender sender = null;
-  private boolean isConnected = false;
+	private static P2PLayer instance = null;
+	private long peerID = -1;
+	private NetworkManager manager = null;
+	private Sender sender = null;
+	private boolean isConnected = false;
+	private Receiver receiver = null;
 
-  private P2PLayer() {
-    this.peerID = connect();
-  }
+	private P2PLayer() {
+		this.peerID = connect();
+	}
 
-  public static synchronized P2PLayer getInstance() {
-    if (instance == null) {
-      instance = new P2PLayer();
-    }
+	public static synchronized P2PLayer getInstance() {
+		if (instance == null) {
+			instance = new P2PLayer();
+		}
 
-    return instance;
-  }
+		return instance;
+	}
 
-  private long connect() {
-    if (!isConnected) {
-      this.manager = getManager();
-      this.sender = new Sender(this.manager);
-      this.isConnected = true;
-    }
+	private long connect() {
+		if (!isConnected) {
+			this.manager = getManager();
+			this.sender = new Sender(this.manager);
+			this.receiver = new Receiver(this.manager);
+			this.isConnected = true;
+		}
 
-    return this.sender.getPeerID();
-  }
+		return this.sender.getPeerID();
+	}
 
-  /**
-   * Create a new network manager if doesn't exist.
-   * 
-   * @return the network manager.
-   */
-  private NetworkManager getManager() {
-    if (this.manager == null) {
-      try {
-        this.manager = new net.jxta.platform.NetworkManager(
-            NetworkManager.ConfigMode.ADHOC, "JxtaMulticastSocketServer",
-            new File(new File(".cache"), "JxtaMulticastSocketServer").toURI());
-        this.manager.startNetwork();
-      } catch (Exception e) {
-        e.printStackTrace();
-        System.exit(-1);
-      }
-    }
+	/**
+	 * Create a new network manager if doesn't exist.
+	 * 
+	 * @return the network manager.
+	 */
+	private NetworkManager getManager() {
+		if (this.manager == null) {
+			try {
+				this.manager = new net.jxta.platform.NetworkManager(
+						NetworkManager.ConfigMode.ADHOC,
+						"JxtaMulticastSocketServer",
+						new File(new File(".cache"),
+								"JxtaMulticastSocketServer").toURI());
+				this.manager.startNetwork();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
 
-    return manager;
-  }
+		return manager;
+	}
 
-  public void sendMessage(String message) {
-    this.sender.sendMessage(message);
-  }
+	public void sendMessage(String message) {
+		this.sender.sendMessage(message);
+	}
 
-  public long getPeerID() {
-    return this.peerID;
-  }
+	public long getPeerID() {
+		return this.peerID;
+	}
 
-  public void addOnReceiveHandler(OnReceiveHandler handler) {
-    Receiver receiver = new Receiver(this.manager);
-    receiver.setHandler(handler);
-    receiver.start();
-  }
+	public void addOnReceiveHandler(OnReceiveHandler handler) {
+		this.receiver.setHandler(handler);
+	}
 }

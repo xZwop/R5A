@@ -10,10 +10,10 @@ var LIMIT_CLASS = "logoot_limit";
 var TYPE_INSERTION = "logoot_insertion"; 
 var TYPE_DELETION = "logoot_deletion";
 
-var DOMAINE = "/r5a";
-var REGISTER_URL = DOMAINE + "/r5a/networkServiceImplTwo?action=register";
-var SEND_URL = DOMAINE + "/r5a/networkServiceImplTwo?action=send";
-var PUSH_URL = DOMAINE + "/r5a/getDataTwo";
+var DOMAINE = "";
+var REGISTER_URL = DOMAINE + "/r5aJS/sendData?action=register";
+var SEND_URL = DOMAINE + "/r5aJS/sendData?action=send";
+var PUSH_URL = DOMAINE + "/r5aJS/getData";
 
 // generated in makeLogootEditor()
 var identifier = undefined;

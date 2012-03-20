@@ -15,7 +15,7 @@ import alma.logoot.network.p2p.P2PLayer;
 /**
  * Servlet implementation class SendData
  */
-public class NetworkServiceImplTwo extends HttpServlet {
+public class SendData extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final String SERVERADDR = "127.0.0.1";
