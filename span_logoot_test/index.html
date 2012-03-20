@@ -34,7 +34,6 @@
                          + END_LINE_ID
                          + "'></span>";
 
-        alert(edit.firstChild.id);
       }
 
       function insertion(event) {
@@ -44,13 +43,21 @@
         var next = selection.anchorNode.parentNode.nextSibling;
         var span = document.createElement("span");
         var data = String.fromCharCode(event.keyCode);
-
+  // espace
+  if(event.keyCode==32){
+   data = "&nbsp;";
+  }
         // be sure that the next node is between the begin and the end span
-        if(next == document.getElementById(BEGIN_LINE_ID)) {
-          next = next.nextSibling;
+  if(selection.baseOffset==0 || 
+   (selection.baseOffset==1 && selection.anchorNode.id == "logoot")){
+   next=document.getElementById(BEGIN_LINE_ID).nextSibling;
+  }else if(next == document.getElementById(BEGIN_LINE_ID)) {
+          next = next.nextSibling;  
         } else if(next == null) {
           next = document.getElementById(END_LINE_ID);
         }
+  
+  
 
         var previousLineIdentifier = next.previousSibling.id;
         var nextLineIdentifier = next.id;
@@ -75,8 +82,8 @@
                                         1,
                                         10,
                                         identifier,
-                                        clock);
-        */
+                                        clock);*/
+        
         ++clock; // TODO not sure
 
         // insert the added character
@@ -145,7 +152,10 @@
             var selection = window.getSelection();
             var span = selection.anchorNode.parentNode;
             var next = span.nextSibling;
-
+   if(selection.baseOffset==0 || 
+    (selection.baseOffset==1 && selection.anchorNode.id == "logoot")){
+    next=document.getElementById(BEGIN_LINE_ID).nextSibling;
+   }
             // TODO notify other clients
 
             // delete the character
@@ -209,7 +219,7 @@
       function caretColorForRepID(repID) {
         return "red";
       }
-    </script>	
+    </script> 
   </head>
   <body>
     <div id="header"></div>
@@ -219,4 +229,3 @@
     </script>
   </body>
 </html>
-

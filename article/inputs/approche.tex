@@ -1,0 +1,5 @@
+ The goal of this experiments is to select some algorithms based on optimistic replication and evaluate them on a decentralized real-time collaborative editing system. The evaluations will be based on real context on the sames conditions and using the same data flow.
+
+The first approach is \emph{Operation Transformation}. This approche takes into account the effect of concurrents operations. An \emph{Operation Transformation} is used to keep document consistency after severals concurrents operations. Google Docs use an algorithm named \emph{Jupiter} and use a vector clock to detect concurrents operations, but this solution doesn’t get on well in the peer-to-peer system.
+
+A new approach called \emph{Commutative Replicated Data Types} (CRDT) for peer-to-peer environment was introduced as a new class of replication mechanisms to preserve consistency. CRDT doesn't required concurrent operations detections because it's designed for concurrent operations to be natively commutative.

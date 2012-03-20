@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{manual_maven}
+Apache.
+\newblock {\em Maven Documentation}.
+
+\bibitem{server_sent_html5_rocks}
+Eric Bidelman.
+\newblock {S}tream {U}pdates {W}ith {S}erver-{S}ent {E}vents.
+\newblock http://www.html5rocks.com/en/tutorials/eventsource/basics/, November
+  2010.
+
+\bibitem{gossip}
+Yann Busnel.
+\newblock {S}tructuring {O}verlays {W}ith {G}ossip.
+
+\bibitem{these_weiss}
+Stéphane Weiss.
+\newblock {\em {E}dition collaborative massive sur réseaux Pair-à-Pair}.
+\newblock PhD thesis, Université Henri Pointcaré -- Nancy, 2010.
+
+\end{thebibliography}
