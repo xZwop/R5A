@@ -10,6 +10,8 @@ Logoot.BOUNDARY = undefined;
 function Logoot() {
 }
 
+Logoot.clock = 0;
+
 /*!
  * \brief   Generation of a position, logoot algorithm.
  *
@@ -22,7 +24,7 @@ function Logoot() {
  * \return  List of N LineId between previous and next LineId.
  */
 Logoot.generateLineId = function(previousLineId, nextLineId, N,
-    boundary, replica, clock) {
+    boundary, replica) {
   var prefPrev = 0;
   var prefNext = 0;
   var index = 0;
@@ -57,7 +59,7 @@ Logoot.generateLineId = function(previousLineId, nextLineId, N,
 
   for (var j = 1; j <= N; j++) {
     list.push(Logoot.constructLineId(r + rand(1, step), previousLineId,
-          nextLineId, replica, clock));
+          nextLineId, replica));
 
     r += step;
   }
@@ -102,9 +104,8 @@ Logoot.prefix = function(lineId, index) {
  * \param   startLineId   LineId from generate r.
  * \param   endLineId     LineId to generate r.
  * \param   replica       User unqiue replica.
- * \param   clock         User clock (at this time).
  */
-Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
+Logoot.constructLineId = function(r, startLineId, endLineId, replica) {
   var strR = r.toString();
 
   // Cut strR on (DIGIT) to get each chunk. if strR isn't cutable on DIGIT,
@@ -134,10 +135,13 @@ Logoot.constructLineId = function(r, startLineId, endLineId, replica, clock) {
           endLineId.getPosition(i).getReplica(),
           endLineId.getPosition(i).getClock());
     } else {
-      position = new Position(d, replica, clock);
-      ++ clock;
+      position = new Position(d, replica, Logoot.clock);
+      ++Logoot.clock;
     }
 
+    if(isNaN(position.getInt())) {
+      console.error("NaN in apostition.");
+    }
     lineId.add(position);
   }
 
