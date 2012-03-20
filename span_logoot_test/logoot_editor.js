@@ -7,10 +7,46 @@ var BEGIN_LINE_ID = LineId.getDocumentStarter().serialize();
 var END_LINE_ID = LineId.getDocumentFinisher().serialize();
 var CHARACTER_CLASS = "logoot_character";
 var LIMIT_CLASS = "logoot_limit";
+var TYPE_INSERTION = "logoot_insertion"; 
+var TYPE_DELETION = "logoot_deletion";
+var PUSH_URL = "";
 
 // generated in makeLogootEditor()
 var identifier = undefined;
 var logootPusher = undefined;
+
+function register()
+{
+	var http;
+	if (window.XMLHttpRequest)
+	{ // Mozilla, Safari, IE7 ...
+		http = new XMLHttpRequest();
+	}
+	else if (window.ActiveXObject)
+	{ // Internet Explorer 6
+		http = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	http.open('GET', '/r5a/networkServiceImplTwo?action=register', true);
+	http.onreadystatechange = onRegister;
+	http.send(null);	
+}  
+
+function onRegister()
+{
+	if (http.readyState == 4)
+	{
+		if (http.status == 200)
+		{
+			identifier = http.responseText;
+			makeLogootEditor(EDITABLE_ID);
+		}
+		else
+		{
+			console.log('Pas glop pas glop');
+		}
+	}
+}
 
 function makeLogootEditor(divID) {
   var edit = document.getElementById(divID);
@@ -28,10 +64,9 @@ function makeLogootEditor(divID) {
                    + "' id='"
                    + END_LINE_ID
                    + "'></span>";
-  //identifier = ???;
-  //logootPusher = new EventSource();
-
-  //logootPusher.onmessage = onReceive;
+   logootPusher = new EventSource(PUSH_URL);
+   
+   logootPusher.onmessage = onReceive;
 }
 
 //==============================================================================
@@ -39,7 +74,15 @@ function makeLogootEditor(divID) {
 //==============================================================================
 
 function onReceive(event) {
-  // TODO
+  var message = JSON.parse(event.data);
+  switch(message.type) {
+	case TYPE_INSERTION:
+		foreignInsertion(message.repID, message.keyCode, message.lineIdentifier, closestLineIdentifier(message.lineIdentifier));
+		break;
+	case TYPE_DELETION:
+		foreignDeletion(message.repId, message.lineIdentifier);
+		break;
+  }
 }
 
 function insertion(event) {
@@ -97,9 +140,10 @@ function insertion(event) {
   selection.removeAllRanges();
   selection.addRange(range);
 
-  // TODO notify other clients
-  // send(???);
-
+  // notify other clients
+  var message = {"type": TYPE_INSERTION, "repID": identifier, "keyCode": event.keyCode, "lineIdentifier": span.id}
+  send(message);
+  
   // cancel the event, then the character is not added twice
   event.returnValue = false;
 }
@@ -118,8 +162,9 @@ function deletion(event) {
       var range = document.createRange();
       var span = selection.anchorNode.parentNode;
 
-      // TODO notify other clients
-      // send(???);
+      // notify other clients
+	  var message = {"type": TYPE_DELETION, "repID": identifier, "lineIdentifier": span.id}
+	  send(message);
 
       if(span.id && span.className != LIMIT_CLASS) {
         // move the caret to the end of the previous character
@@ -148,9 +193,10 @@ function deletion(event) {
          || (selection.baseOffset==1 && selection.anchorNode.id == "logoot")) {
         next=document.getElementById(BEGIN_LINE_ID).nextSibling;
       }
-
-      // TODO notify other clients
-      // send(???);
+	  
+      // notify other clients
+	  var message = {"type": TYPE_DELETION, "repID": identifier, "lineIdentifier": next.id}
+	  send(message);
 
       // delete the character
       if(next && next.className != LIMIT_CLASS) {
@@ -167,7 +213,7 @@ function deletion(event) {
 // utilities
 //==============================================================================
 
-function foreignInsertion(repID, data, newLineIdentifier,
+function foreignInsertion(repID, keyCode, newLineIdentifier,
                           previousLineIdentifier) {
   // do not process its own insertions
   if(repID != identifier) {
@@ -176,7 +222,8 @@ function foreignInsertion(repID, data, newLineIdentifier,
     var range = selection.getRangeAt(0);
     var next = document.getElementById(previousLineIdentifier).nextSibling;
     var span = document.createElement("span");
-
+	var data = string.fromCharCode(keyCode);
+	
     // set the new span
     span.innerHTML = data;
     span.id = newLineIdentifier;
@@ -254,4 +301,38 @@ function closestSpan(newLineIdentifier) {
 
   return span;
 }
+
+function send(message)
+{
+	var http;
+	if (window.XMLHttpRequest)
+	{ // Mozilla, Safari, IE7 ...
+		http = new XMLHttpRequest();
+	}
+	else if (window.ActiveXObject)
+	{ // Internet Explorer 6
+		http = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	http.open('GET', '/r5a/networkServiceImplTwo?action=send&message='+JSON.stringify(message), true);
+	//http.onreadystatechange = handleAJAXReturn;
+	http.send(null);
+}
+	
+
+	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
