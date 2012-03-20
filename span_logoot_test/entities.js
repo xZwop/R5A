@@ -243,6 +243,36 @@ LineId.prototype.toString = function() {
 }
 
 /*!
+ * \brief   Returns a JSON representation of the object.
+ *
+ * \return  A JSON from object datas.
+ */
+LineId.prototype.serialize = function() {
+  return JSON.stringify(this);
+}
+
+/*!
+ * \brief   Unserialize a JSON LineId.
+ *
+ * \param   json  JSON datas of LineId.
+ * \return  A new LineId from JSON datas.
+ */
+LineId.unserialize = function(json) {
+  var data = JSON.parse(json);
+  var lineId = new LineId();
+
+  for (i in data.positions) {
+    var int_ = data.positions[i].first;
+    var replica = data.positions[i].second;
+    var clock = data.positions[i].third;
+
+    lineId.add(new Position(int_, replica, clock));
+  }
+
+  return lineId;
+}
+
+/*!
  * \brief   Returns new Line Identifier with min position only.
  *
  * The Line Identifier with min position represente the starter of document.
