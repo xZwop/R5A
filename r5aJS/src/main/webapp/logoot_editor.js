@@ -213,11 +213,6 @@ function deletion(event) {
 // utilities
 //==============================================================================
 
-var notMe = new Array();
-var color = ["blue", "blueviolet", "brown", "darkorange", "hotpink", "red", "forestgreen", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "crimson", "cyan"];
-var colorIndex=0;
-
-
 function foreignInsertion(repID, keyCode, newLineIdentifier,
                           previousLineIdentifier) {
   // do not process its own insertions
@@ -238,13 +233,7 @@ function foreignInsertion(repID, keyCode, newLineIdentifier,
     span.innerHTML = data;
     span.id = newLineIdentifier;
     span.className = CHARACTER_CLASS;
-
-    //color
-    if(notMe[repID]==undefined){
-     notMe[repID]=colorIndex;
-     ++colorIndex;
-    }
-    span.style.color = color[notMe[repID]]; 
+    span.style.color = caretColorForRepID(repID); 
     
     
     // insert the added character
@@ -301,8 +290,32 @@ function removeCaretForRepID(repID) {
   }
 }
 
+
+var notMe = new Array();
+var color = [
+  "blue",
+  "blueviolet",
+  "brown",
+  "darkorange",
+  "hotpink",
+  "red",
+  "forestgreen",
+  "cadetblue",
+  "chartreuse",
+  "chocolate",
+  "coral",
+  "cornflowerblue",
+  "crimson",
+  "cyan"
+];
+var colorIndex = 0;
 function caretColorForRepID(repID) {
-  return "red"; // TODO generated with the repID
+  if(notMe[repID] == undefined){
+   notMe[repID] = colorIndex;
+   ++colorIndex;
+  }
+
+  return color[notMe[repID]];
 }
 
 function closestSpan(newLineIdentifier) {
