@@ -97,6 +97,7 @@ public class LogootEngine implements ILogootEngine {
 
     for (IOperation op : patched)
       deliver(op);
+
     return getCurrentText();
   }
 

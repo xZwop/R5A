@@ -95,7 +95,26 @@ public class Position implements Comparable<Position>, Serializable {
 
     return 0;
   }
-
+  /**
+   * Compare current position with another.
+   * 
+   * Position is an ordered Triplet. With compareToFake, only the digit is
+   * compare (not the clock and the replica).
+   * 
+   * @param position
+   *          Position to compare with current.
+   * @return Result of comparison. Values is one of (-1, 0, 1).
+   */
+  public int compareToFake(Position position) {
+    if (this.digit > position.digit) {
+      return 1;
+    } else if (this.digit < position.digit) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+  
   /**
    * Returns the Integer in range of <code>[1..BASE[</code>.
    * 

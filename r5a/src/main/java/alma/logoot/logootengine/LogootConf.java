@@ -14,7 +14,8 @@ public class LogootConf {
   /**
    * Maximal value of an identifier : <BASE ,0 ,0 >
    */
-  public static final int BASE = Integer.MAX_VALUE;
+  // public static final int BASE = Integer.MAX_VALUE;
+  public static final int BASE = 100;
 
   /**
    * Number of digit in BASE.

@@ -65,6 +65,23 @@ public class LineId extends ArrayList<Position> implements Comparable<LineId> {
    *          The LineId to compare with current.
    * @return Result of comparison. Values is one of (-1, 0, 1).
    */
+  // public int compareTo(LineId lineid) {
+  // if (size() > 0 && lineid.size() > 0) {
+  // int lastAvailableIndex = Math.min(size(), lineid.size()) -1;
+  //
+  // for (int i = 0; i < lastAvailableIndex; ++i) {
+  // int comparison = get(i).compareToFake(lineid.get(i));
+  //
+  // if (comparison != 0) {
+  // return comparison;
+  // }
+  // }
+  //
+  // return get(lastAvailableIndex).compareTo(lineid.get(lastAvailableIndex));
+  // }
+  //
+  // return 0;
+  // }
   public int compareTo(LineId lineid) {
     if (size() > 0 && lineid.size() > 0) {
       for (int i = 0; i < Math.min(size(), lineid.size()); i++) {
