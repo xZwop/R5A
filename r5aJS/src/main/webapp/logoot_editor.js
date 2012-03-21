@@ -213,6 +213,11 @@ function deletion(event) {
 // utilities
 //==============================================================================
 
+var notMe = new Array();
+var color = ["blue", "blueviolet", "brown", "darkorange", "hotpink", "red", "forestgreen", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "crimson", "cyan"];
+var colorIndex=0;
+
+
 function foreignInsertion(repID, keyCode, newLineIdentifier,
                           previousLineIdentifier) {
   // do not process its own insertions
@@ -234,6 +239,14 @@ function foreignInsertion(repID, keyCode, newLineIdentifier,
     span.id = newLineIdentifier;
     span.className = CHARACTER_CLASS;
 
+    //color
+    if(notMe[repID]==undefined){
+     notMe[repID]=colorIndex;
+     ++colorIndex;
+    }
+    span.style.color = color[notMe[repID]]; 
+    
+    
     // insert the added character
     edit.insertBefore(span, next);
   }
