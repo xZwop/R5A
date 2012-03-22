@@ -1,2 +1,62 @@
 \section{Implémentation en \emph{Java} \emph{GWT}}
-
+  \subsection{Qu'est-ce que \emph{GWT}}
+  Google Web Toolkit est un ensemble d'outils fournis par Google pour le
+   développement d'application web complexe. C'est un outil gratuit et 
+   open source.
+   
+   Lors du développement, le code est écrit en  \emph{Java}. Ensuite \emph{GWT} 
+   inclus un compilateur qui le traduit en \emph{Javascript} afin de le rendre 
+   compatible avec tous les navigateur du marché.
+   
+  \subsection{Objectif de l'implémentation en \emph{Java} \emph{GWT}}
+  L'avantage d'utiliser \emph{GWT} est la possibilité de decouper notre 
+  logiciel de facon complétement modulaire. En effet, nous respectons la
+  conception du chapitre précédent \ref{conception}. Grâce à cela, 
+  l'interface utilisateur, la gestion du réseau et le moteur \emph{logoot}
+  sont totalement découplés les uns des autres. L'objectif de départ étant
+  de fournir deux interfaces : une en client leger (web avec \emph{Javascript})
+  et une en client lourd (avec \emph{Swing}\footnote{Swing est une bibliothèque
+  graphique pour \emph{Java}}). 
+  
+  \subsection{État d'avancement}
+	L'implentation est complétement fonctionnel mais nous nous sommes heurté
+	a de nombreux problèmes.
+	
+	\label{sec:textarea}
+	Pour implémenter l'éditeur, on utilise un \emph{TextArea}. C'est le 
+	composant de base de \emph{html} pour ce genre de tache. Cet élément 
+	est trés contraignant. En effet la gestion du curseur est complexe
+	pour des raisons de sécurité ( afin d'éviter une introsion trop forte).
+	Afin de changer le texte quand des changement sont effectué à 
+	l'exterieur, nous somme obligé de redéfinir tout le texte après un 
+	passage dans un algorithme de \emph{diff}\footnote{permet la comparaison 
+	de texte en trouvant les différences}/\emph{patch}\footnote{integration
+	d'un resultat de diff pour introduire les modifications}. Ce procédé
+	est lent et a tendance à nous faire perdre certains caractères lorsque
+	l'on tape rapidement.
+	
+	Le protocol clasique de communication utilisé sur le web n'est pas 
+	adapté à notre projet. En général, ce sont les pages web qui requêtent
+	le serveur et celui-ci réponds. Aucun problème pour envoyer nos modifications 
+	au serveur via un appel RPC fournis par \emph{GWT}. Le problème se présente
+	pour permettre la réception des modifications. Plusieurs solutions 
+	techniques sont disponible :
+	\begin{itemize}
+		\item \emph{Server Push} : La méthode consiste à ne pas clore la
+		transaction coté serveur. Aprés une requête du client, le serveur
+		répond quand il le souhaite. Afin de permetre une connection continue 
+		entre le client et le serveur, le client doit à la réception d'une 
+		réponse émettre une nouvelle requête.
+		\item \emph{Web Socket}\cite{websocket_spec} : Il s'agit d'une spécification en cours au sein
+		du \emph{WHATWG}\footnote{Web Hypertext Application Technology Working 
+		Group} afin de permettre une communication bidirectionnel entre client
+		et serveur. En raison de failles de sécurité et du coup d'implémentation 
+		timide dans les navigateurs, nous n'avons pas retenu cette solution.
+		\item \emph{Server Sent Event}\cite{server_sent_spec} 
+		\cite{server_sent_html5_rocks} : Cette technologie est également en
+		cours de spécification. Elle permet au client d'initier une connexion
+		au serveur et de lui permettre d'envoyer les informations quand il
+		le souhaite sans clore la connection.
+	\end{itemize}
+	
+	Nous avons choisi d'utiliser les Server Sent Event pour leurs simplicités.
