@@ -15,5 +15,8 @@ open localhost:8080/r5aJS in your browser and enjoy !
 
 cd /home/user/
 git clone git://github.com/xZwop/R5A.git
-cd R5A/r5a/
+cd R5A/r5aGWT/
 mvn jetty:run-exploded # This will launch new server on localhost:8080
+
+open localhost:8080/r5a in your browser and enjoy !
+
