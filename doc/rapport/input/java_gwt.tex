@@ -1,4 +1,5 @@
 \section{Implémentation en \emph{Java} \emph{GWT}}
+  \label{sec:gwt}
   \subsection{Qu'est-ce que \emph{GWT}}
   Google Web Toolkit est un ensemble d'outils fournis par Google pour le
    développement d'application web complexe. C'est un \emph{framework} gratuit
@@ -28,7 +29,7 @@
 	est trés contraignant. En effet la gestion du curseur est complexe
 	pour des raisons de sécurité (afin d'éviter une intrusion trop forte côté 
 	client). Afin de changer le texte quand des changement sont effectué à 
-	l'exterieur, nous somme obligé de redéfinir tout le texte après un 
+	l'exterieur, il redéfinir le texte entiérement après un 
 	passage dans un algorithme de \emph{diff}\footnote{permet la comparaison 
 	de texte en trouvant les différences}/\emph{patch}\footnote{integration
 	d'un resultat de diff pour introduire les modifications}. Ce procédé
@@ -64,3 +65,33 @@
 	Par contre, \emph{GWT} ne permet d'utiliser directement cette fonction.
 	On utilise alors un mécanisme qui permet d'inclure du \emph{Javascript} natif.
 	Là encore, on touche à la limite de ce que permet \emph{GWT}.
+
+\section{Comparatif des implémentations}
+\begin{table}[h!]
+	\center
+	\begin{tabular}{|l|c|c|c|} 
+	\hline
+	 ~ & \emph{Dart} & \emph{Javascript / HTML 5} & \emph{GWT}\\
+	\hline
+	Insertion unique & oui & oui &oui\\
+	\hline
+	Suppression unique & oui & oui & oui\\
+	\hline
+	Saut de ligne & oui & non & oui\\
+	\hline
+	Insertion bloc & oui & non & oui\\
+	\hline
+	Suppression bloc & oui & non & oui\\
+	\hline
+	Edition distante & non & oui & oui \\
+	\hline
+	Coloration & non & oui & non \\
+	\hline
+	Curseur statique\footnote{position du curseur cohérente lors de l'insertion d'un autre client} & non & oui & non \\ 
+	\hline
+	Curseur des clients & non & non & non \\
+	\hline
+	Performance & Moyenne & Bonne & Moyenne \\ 
+	\hline
+	\end{tabular}
+\end{table}
