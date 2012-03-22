@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 
-\setbeamertemplate{blocks}[rounded]%[shadow=true]
+\setbeamertemplate{blocks}[rounded]
 
 \usetheme{CambridgeUS}
 \hypersetup{
@@ -21,11 +21,6 @@
         Alban Ménager\\
         Alexandre Prenza}
 
-%		\begin{figure}
-%			\includegraphics[scale=0.5]{includes/logoLina}
-%			\label{fig:logoLina}
-%   	\end{figure}
-
 \begin{document}
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %% Titre
@@ -41,14 +36,14 @@
   {
     \begin{frame}<beamer>
       \frametitle{Plan}
-      \tableofcontents[currentsection,currentsubsection]
+      \tableofcontents[currentsection,currentsubsections]
     \end{frame}
   }
   \AtBeginSubsection[]
   {
     \begin{frame}<beamer>
       \frametitle{Plan}
-      \tableofcontents[currentsection,currentsubsection]
+      \tableofcontents[currentsection,currentsubsections]
     \end{frame}
   }
 
