@@ -6,6 +6,7 @@ var EDITABLE_ID = "logoot";
 var BEGIN_LINE_ID = LineId.getDocumentStarter().serialize();
 var END_LINE_ID = LineId.getDocumentFinisher().serialize();
 var CHARACTER_CLASS = "logoot_character";
+var BR_CLASS = "logoot_carriage";
 var LIMIT_CLASS = "logoot_limit";
 var TYPE_INSERTION = "logoot_insertion"; 
 var TYPE_DELETION = "logoot_deletion";
@@ -89,19 +90,34 @@ function insertion(event) {
   var edit = document.getElementById(EDITABLE_ID);
   var selection = window.getSelection();
   var range = selection.getRangeAt(0);
-  var next = selection.anchorNode.parentNode.nextSibling;
+  var current = selection.anchorNode;
+  if(current.className != BR_CLASS) {
+    current = current.parentNode;
+  }
+  var next = current.nextSibling;
   var span = document.createElement("span");
   var data = String.fromCharCode(event.keyCode);
+  var className = CHARACTER_CLASS;
 
   // space
-  if(event.keyCode==32) {
+  if(event.keyCode == 32) {
     data = "&nbsp;";
   }
 
+  // return
+  if(event.keyCode == 13) {
+    data = "<br/>";
+  	className = BR_CLASS;
+  }
+
   // be sure that the next node is between the begin and the end span
-  if(selection.baseOffset==0
-     || (selection.baseOffset==1 && selection.anchorNode.id == "logoot")) {
-    next=document.getElementById(BEGIN_LINE_ID).nextSibling;
+  if(selection.baseOffset == 0
+     || (selection.baseOffset == 1 && selection.anchorNode.id == "logoot")) {
+    if(current.previousSibbling == LIMIT_CLASS) {
+    	next = document.getElementById(BEGIN_LINE_ID).nextSibling;
+    } else {
+    	next = current;
+    }
   } else if(next == document.getElementById(BEGIN_LINE_ID)) {
     next = next.nextSibling;  
   } else if(next == null) {
@@ -124,7 +140,7 @@ function insertion(event) {
 
   // set the new span
   span.innerHTML = data;
-  span.className = CHARACTER_CLASS;
+  span.className = className;
   span.id = Logoot.generateLineId(LineId.unserialize(previousLineIdentifier),
                                   LineId.unserialize(nextLineIdentifier),
                                   1,
@@ -227,6 +243,11 @@ function foreignInsertion(repID, keyCode, newLineIdentifier,
     // space
     if(keyCode == 32) {
       data = "&nbsp;";
+    }
+
+    // return
+    if(keyCode == 13) {
+      data = "<br class=\"" + BR_CLASS + "\"/>";
     }
 
     // set the new span

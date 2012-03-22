@@ -1,7 +1,101 @@
 \section{Implémentation en \emph{HTML5} avec \emph{Javascript}}
+	\label{sec:html5}
   \subsection{Qu'est-ce que \emph{HTML5}}
-  \subsection{Qu'est-ce que \emph{Javascript}}
-  \subsection{Objectif de l'implémentation en \emph{HTML5} avec
-              \emph{Javascript}}
-  \subsection{État d'avancement}
+  
+	\emph{HTML} (HyperText Markup Language) est le format de données conçu pour 
+	représenter les pages web. 
 
+	\emph{HTML5} est la prochaine révision majeure d'\emph{HTML}. 
+	Cette nouvelle version d'\emph{HTML5} est encore est en cours de 
+	développement et apporte un grand nombre d'améliorations.
+	De nouvelles balises, de nouveaux attributs, une plus grande rapidité et des
+	évolutions importantes comme les \emph{Web Workers} et les \emph{Events}.
+	
+	Les \emph{Web Workers} vont permettre de passer outre la limitation 
+	historique de Javascript à ne pas supporter les multi-thread.
+	Les APIs des \emph{Web Workers} définissent justement un moyen d’exécuter 
+	des scripts en tâche de fond. Cela va donc permettre d’exécuter des 
+	traitements sur des threads séparés vivant à côté de la page principale et 
+	n’ayant pas d’impact sur ses performances d’affichage. 
+	
+	Les \emph{Server Sent Events} vont permettre d'envoyer des évènements du 
+	serveur vers le client, tandis que les \emph{DOM}
+	\footnote{Domain Object Model} \emph{Events} vont quand à eux	permettre 
+	d'ajouter des évènements à chaque élément d'une page web.
+	
+	\subsection{Objectif de l'implémentation en \emph{HTML5} avec
+		\emph{Javascript}}
+	
+	L'implémentation avec \emph{Javascript} et \emph{HTML5} permet de réunir 
+	l'interface graphique et le modèle du logoot dans un même composant, et non de
+	devoir les séparer en deux composants comme en \emph{GWT} \ref{gwt}, tout en gagnant énormément en rapidité et efficacité.
+	
+	L'éditeur de texte est une balise éditable grâce à la propriété 
+	\emph{contenteditable} et les évènements vont pouvoir être récupérés et 
+	ré-implémentés à notre bon vouloir.
+	
+	\subsection{État d'avancement}
+
+	Pour implémenter notre éditeur, on utilise donc une \emph{div} qui n'est pas
+	un élément très contraignant, ce qui permet de récupérer la position du
+	curseur de façon assez simple et de parcourir les enfants représentant 
+	chaque caractère par des \emph{span} grâces aux méthodes de parcours des 
+	éléments du DOM, comme \emph{previousSibbling} ou \emph{parentNode} par 
+	exemple.
+	
+	Concrétement, voilà les fonctionnalités proposés par cette version :
+	\begin{itemize}
+		\item Insertion et suppression de caractères
+		\item Différenciation des clients via couleurs différentes 
+	\end{itemize}
+	
+	L'insertion de caractères va être récupéré et modifié de façon à créer une 
+	balise \emph{span} à chaque insertion, contenant en identifiant l'id généré 
+	par l'algorithme du logoot, permettant de trier le texte, et d'insérer les 
+	caractères directement au bon endroit sans avoir à passer par le calcul des 
+	différences pour détecter les modifications éffectués.
+	De plus, cela permet d'assigner une couleur à chaque utilisateur 
+	en rajoutant un style spécifique à chaque \emph{span} en fonction du
+	replica unique à chaque client.
+
+	\begin{figure}[h]
+		\label{fig:html5}
+		\includegraphics[width=\textwidth]{includes/html5.png}
+		\caption{Ajout d'un caractère via l'éditeur \emph{HTML5}}
+	\end{figure}
+	
+	Lors de la suppression, l'évènement est lui aussi récupéré et l'on peut 
+	récupèrer directement le \emph{span} supprimer grâce à la position du curseur
+	du client, ce qui rend la	suppression très simple, sans avoir à effectuer une
+	différence pour trouver les changements effectués.
+		
+	Pour finir, il reste encore quelques améliorations et finition à porter sur 
+	la version \emph{HTML5} du projet :
+	\begin{itemize}
+		\item Retour à la ligne
+		\item Affichage du curseur des différents clients
+		\item Suppression multiple de caractères
+		\item Copier/coller de caractères
+	\end{itemize}
+	
+	Ces améliorations ne sont pas impossible à rajouter et pourraient être 
+	implémentées dans une version future.
+	
+	Le retour à la ligne doit être représenté avec la balise spécifique 
+	\emph{<BR/>} ce qui posait quelques problèmes dans le parcours des éléments du
+	DOM lorsque l'on récupérait le parent et les frères suivants des éléments.
+	
+	L'affichage des curseurs des différents clients s'apparente un peu au problème
+	des retours à la ligne dans le sens ou la fonction est prévue en \emph{HTML5} 
+	mais est représenté lui aussi par une balise spécifique ce qui imposerait de 
+	faire des cas spécifiques en fonction de la valeur du \emph{span} qui 
+	pourrait donc contenir soit un caractère soit une balise \emph{HTML}.
+	
+	La suppression multiple de caractère impose seulement de traiter 
+	l'insertion en fonction de la taille de la sélection du curseur, et dans le 
+	cas ou la sélection n'est pas vide, traiter l'évènement de manière différente.
+	
+	De même que la suppression, le copier/coller peut être récupéré via un 
+	évènement \emph{HTML5} pré-définis et demanderait donc d'être traité de 
+	manière différente que l'insertion d'un simple caractère.
+	selection
