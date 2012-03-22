@@ -2,35 +2,174 @@
 
 \section{Logoot}
 	\emph{logoot} est un algorithme destiné à l'édition de documents textes sur
-	un réseau \emph{peer-to-peer} (cf. \ref{sec:p2p}). Concrètement, cet
+	un réseau \emph{pair-à-pair} (cf. \ref{sec:p2p}). Concrètement, cet
 	algorithme permet de partager la position des caractères du document entre
 	les différentes personnes travaillant dessus.
 	
-	\subsection{Fonctionnement}
+	\subsection{Principe de fonctionnement}
 		Chaque utilisateur possède un tableau dans lequel y est placé la
-		position de tous les caractères du document collaboratif. Lorsqu'un
-		caractère est ajouté par un utilisateur, ce dernier est envoyé à travers
-		le réseau afin que chaque autre utilisateur puisse mettre à jour son
-		tableau et le document.\\
+		position de tous les caractères du document collaboratif. Ces derniers
+		sont identifié par un identifiant unique appelé \emph{identifiant de
+		caractère}. Lorsqu'un caractère est ajouté par un utilisateur, ce
+		dernier est envoyé à travers le réseau afin que tous les autres
+		utilisateurs puissent mettre à jour	son	tableau et le document.\\
 		
 		Initialement, l'algorithme \emph{Logoot} est basé sur des identifiants
 		de position de ligne. Cependant, dans un travail collaboratif, une même
-		ligne peut être modifiée en même temps par plusieurs personnes, il est
-		donc nécessaire de non plus avoir un identifiant par ligne mais bien par
-		caractère. Un identifiant de position est un triplet \verb+<i,s,h>+ avec 
+		ligne peut être modifiée en même temps par plusieurs personnes
+		(répliques), il est	donc nécessaire de non plus avoir un identifiant par
+		ligne mais bien par caractère. Un \emph{identifiant de position} est
+		un triplet
+		\verb+<i,s,h>+ avec 
 		\begin{itemize}
-			\item \emph{i} : 
-			\item \emph{s} : 
-			\item \emph{h} : 
-		\end{itemize}
-			
-	\subsection{Algorithme}
+			\item \emph{i} : un chiffre dans la base \emph{BASE}. La valeur
+			maximum que peut prendre \emph{i} \emph{MAX} sera entre $0$ et
+			\emph{BASE}$ - 1$.
+			\item \emph{s} : un identifiant unique de la réplique.
+			\item \emph{h} : la valeur de l'horloge logique de la réplique.
+		\end{itemize}~
 		
+		Un \emph{identifiant de caractère} est une liste ordonnée non-mutable d'
+		\emph{identifiants de positions}. Voici un exemple d'\emph{identifiant
+		de caractère}: \\
+		\verb+<42, 1, 1><1337, 1, 72>+ ou encore \verb+<2, 4, 4>+\\
+		
+		La \emph{table des identifiants} permet de stocker les identifiants de
+		caractères ce qui permet, via une recherche dichotomique, d'acceder à
+		tous les caractères du document.
+		
+	\subsection{Insertion dans le document}
+	
+		Pour insérer un nouveau caractère, il faut calculer son identifiant afin
+		que les autres utilisateurs sachent où le placer dans le document. La
+		table \ref{tab:tableID}	p.\pageref{tab:tableID} est la table d'origine
+		d'un document qui est:
+		\verb+ab+.\\
+		\begin{table}
+			\center
+			\begin{tabular}{|l|l|l|}			
+			\hline
+				Table des identifiants & Identifiant de caractère & Caractère\\
+			\hline
+				0 & \verb+<0, NA, NA>+ & NA\\
+				1 & \verb+<41, 3, 1>+ & a\\
+				2 & \verb+<44, 2, 16>+ & b\\
+				MAX & \verb+<MAX, NA, NA>+ & NA\\
+			\hline
+			\end{tabular}
+			\caption{Exemple de table des identifiants - Origine}
+			\label{tab:tableID}
+		\end{table}
+		
+		L'explication de l'insertion se fera par l'exemple, on veut ajouter deux
+		caractères 'c' et 'd' entre les lettres 'a' et 'b' qui ont pour
+		identifiants \verb+<41, 3, 1>+ et \verb+<44, 2, 16>+.
+		\begin{enumerate}
+			\item Les identifiants des caractères des éléments précédent et
+			suivant sont récupérés (via la table des identifiants):
+			\verb+<prefPrev, sPrev, hPrev>+ et \verb+<prefNext, sNext, hNext>+
+			\item On regarde si on a la <<place>> pour placer les nouveaux
+			identifiants\\ \verb+interval = prefNext - prefPrev - 1;+ ce qui
+			donne\\ \verb+interval = 44 - 41 - 1 = 2;+. Il y a donc la place
+			pour générer deux identifiants de taille un (c'est-à-dire un seul
+			triplet	par	identifiant de caractère).
+			\item Les identifiants sont générés dans l'interval disponible, on a
+			donc: \verb+<42, 1, 1>+ et \verb+<43, 1, 2>+
+			La table \ref{tab:tableID_cd} p.\pageref{tab:tableID_cd} représente
+			la table des identifiants après l'ajout des deux lettres.
+				
+		\begin{table}
+			\center
+			\begin{tabular}{|l|l|l|}			
+			\hline
+				Table des identifiants & Identifiant de caractère & Caractère\\
+			\hline
+				0 & \verb+<0, NA, NA>+ & NA\\
+				1 & \verb+<41, 3, 1>+ & a\\
+				2 & \verb+<42, 1, 1>+ & c\\
+				3 & \verb+<43, 1, 2>+ & d\\
+				4 & \verb+<44, 2, 16>+ & b\\
+				MAX & \verb+<MAX, NA, NA>+ & NA\\
+			\hline
+			\end{tabular}
+			\caption{Exemple de table des identifiants - Insertion de 'c' et
+			'd'}
+			\label{tab:tableID_cd}
+		\end{table}
+			\item Le Document mis a jour est:
+				\verb+acdb+
+		\end{enumerate}~
+		
+		On veut maintenant ajouter le caractère 'e' entre 'c' et 'd'.
+		\begin{enumerate}
+			\item Les identifiants des caractères des éléments précédent et
+			suivant sont récupérés (via la table des identifiants):
+			\verb+<prefPrev, sPrev, hPrev>+ et \verb+<prefNext, sNext, hNext>+
+			\item On regarde si on a la <<place>> pour placer le nouvel
+			identifiant\\ \verb+interval = prefNext - prefPrev - 1;+ ce qui
+			donne \\
+			\verb+interval = 43 - 42 - 1 = 0;+. Il n'y a pas de place, le
+			nouvel identifiant sera donc préfixé par \verb+<42, 1, 1>+.
+			\item Afin de calculer le nouvel identifiant \emph{i}, on determine
+			l'interval de choix de \emph{i} qui sera entre le précédent et le
+			suivant concaténé avec le triplet minimum:\\
+			\verb+<42, 1, 1><0, 1, x>+\\ 
+			\verb+<43, 1, 2><0, 1, x>+\\
+			Nous avons donc un interval de \emph{MAX} positions disponibles.
+			\item ]0, MAX[ est donc l'interval dans lequel sera généré le
+			\emph{i} suivant:\\
+			\verb+<42, 1, 1><5, 1, 3>+\\
+			Le choix de \emph{i} dans l'interval est réalisé par un algorithme
+			de génération (cf. \ref{sec:algos}).
+			La table \ref{tab:tableID_e} p.\pageref{tab:tableID_e} représente la
+			table des identifiants après l'ajout des deux lettres.
+				
+		\begin{table}
+			\center
+			\begin{tabular}{|l|l|l|}			
+			\hline
+				Table des identifiants & Identifiant de caractère & Caractère\\
+			\hline
+				0 & \verb+<0, NA, NA>+ & NA\\
+				1 & \verb+<41, 3, 1>+ & a\\
+				2 & \verb+<42, 1, 1>+ & c\\
+				3 & \verb+<42, 1, 1><5, 1, 3>+ & e\\
+				4 & \verb+<43, 1, 2>+ & d\\
+				5 & \verb+<44, 2, 16>+ & b\\
+				MAX & \verb+<MAX, NA, NA>+ & NA\\
+			\hline
+			\end{tabular}
+			\caption{Exemple de table des identifiants - Insertion de 'e'}
+			\label{tab:tableID_e}
+		\end{table} 
+		\end{enumerate}~
+		
+		\subsubsection{Algorithme de génération des
+		identifiants}\label{sec:algos}
+		Il existe deux algorithmes qui permettent de générer les identifiants:
+		\emph{Random} et \emph{Boundary}.\\
+		
+		\textbf{Random:}\\
+			Les identifiants sont générés aléatoirement parmi tous ceux de
+			l'interval.\\
+		
+		\textbf{Boundary:}\\
+			Comme pour le \emph{random}, les identifiants sont générés
+			aléatoirement mais deux identifiants successifs ne peuvent espacés
+			de plus d'une valeur notée \emph{boundary}. Cette stratégie permet
+			de laisser un plus grand interval pour les insertions futures car on
+			prend en compte le fait que les insertions ont généralement lieu en
+			fin de document qu'au début.
+		
+	\subsection{Suppression dans le document}
+		
+		Pour supprimer un élément, son \emph{identifiant de caractère} est tout
+		simplement supprimé de la table des identifiants.
+		
+\section{Pair-à-Pair}\label{sec:p2p}
 
-\section{Peer-to-Peer}\label{sec:p2p}
-
-	Un réseau peer-to-peer est un modèle ou chaque client est aussi serveur. En
-	effet, dans un réseau peer-to-peer, l'information est diffusée au travers du
+	Un réseau pair-à-pair est un modèle ou chaque client est aussi serveur. En
+	effet, dans un réseau pair-à-pair, l'information est diffusée au travers du
 	réseau grâce aux clients qui relaient l'information. Comme représenté en
 	figure \ref{fig:p2p} page \pageref{fig:p2p}, le réseau est décentralisé,
 	chaque ordinateur joue un double rôle de client et de serveur. L'avantage
@@ -43,7 +182,7 @@
 	\begin{figure}
 	  \center
       \includegraphics[width=0.4\textwidth]{includes/P2P-network.png}
-      \caption{Exemple de réseau peer to peer}
+      \caption{Exemple de réseau pair-à-pair}
       \label{fig:p2p}
     \end{figure}
 	
@@ -90,7 +229,7 @@
 	
 	\subsection{Jxta}
 		JXTA est une technologie open source permettant de faire un réseau
-		peer-to-peer en Java. Le principe est simple, un réseau peer-to-peer est
+		pair-à-pair en Java. Le principe est simple, un réseau pair-à-pair est
 		créé sur le réseau existant permettant aux différents noeuds de pouvoir
 		communiquer entre eux.\\
 		
