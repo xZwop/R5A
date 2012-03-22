@@ -9,7 +9,9 @@ Ainsi, chaque utilisateur possède l’ensemble du document et seulement les mo
 	sécurité -> pas de données centralisées par une entité tierce
 
 Présentation de Logoot
-	
 
+Logoot est un algorithme destiné à l'édition de documents textes sur
+un réseau pair-à-pair. Concrètement, cet algorithme permet de partager la position des caractères du document entre les différentes personnes travaillant dessus.
+	
 Techno abordées
-	Jxta
+	Jxta 
