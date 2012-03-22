@@ -35,7 +35,7 @@
 		\verb+<42, 1, 1><1337, 1, 72>+ ou encore \verb+<2, 4, 4>+\\
 		
 		La \emph{table des identifiants} permet de stocker les identifiants de
-		caractères ce qui permet, via une recherche dichotomique, d'acceder à
+		caractères ce qui permet, via une recherche dichotomique, d'accéder à
 		tous les caractères du document.
 		
 	\subsection{Insertion dans le document}
@@ -69,11 +69,11 @@
 			suivant sont récupérés (via la table des identifiants):
 			\verb+<prefPrev, sPrev, hPrev>+ et \verb+<prefNext, sNext, hNext>+
 			\item On regarde si on a la <<place>> pour placer les nouveaux
-			identifiants\\ \verb+interval = prefNext - prefPrev - 1;+ ce qui
-			donne\\ \verb+interval = 44 - 41 - 1 = 2;+. Il y a donc la place
+			identifiants\\ \verb+intervalle = prefNext - prefPrev - 1;+ ce qui
+			donne\\ \verb+intervalle = 44 - 41 - 1 = 2;+. Il y a donc la place
 			pour générer deux identifiants de taille un (c'est-à-dire un seul
 			triplet	par	identifiant de caractère).
-			\item Les identifiants sont générés dans l'interval disponible, on a
+			\item Les identifiants sont générés dans l'intervalle disponible, on a
 			donc: \verb+<42, 1, 1>+ et \verb+<43, 1, 2>+
 			La table \ref{tab:tableID_cd} p.\pageref{tab:tableID_cd} représente
 			la table des identifiants après l'ajout des deux lettres.
@@ -106,20 +106,20 @@
 			suivant sont récupérés (via la table des identifiants):
 			\verb+<prefPrev, sPrev, hPrev>+ et \verb+<prefNext, sNext, hNext>+
 			\item On regarde si on a la <<place>> pour placer le nouvel
-			identifiant\\ \verb+interval = prefNext - prefPrev - 1;+ ce qui
+			identifiant\\ \verb+intervalle = prefNext - prefPrev - 1;+ ce qui
 			donne \\
-			\verb+interval = 43 - 42 - 1 = 0;+. Il n'y a pas de place, le
+			\verb+intervalle = 43 - 42 - 1 = 0;+. Il n'y a pas de place, le
 			nouvel identifiant sera donc préfixé par \verb+<42, 1, 1>+.
 			\item Afin de calculer le nouvel identifiant \emph{i}, on determine
-			l'interval de choix de \emph{i} qui sera entre le précédent et le
+			l'intervalle de choix de \emph{i} qui sera entre le précédent et le
 			suivant concaténé avec le triplet minimum:\\
 			\verb+<42, 1, 1><0, 1, x>+\\ 
 			\verb+<43, 1, 2><0, 1, x>+\\
-			Nous avons donc un interval de \emph{MAX} positions disponibles.
-			\item ]0, MAX[ est donc l'interval dans lequel sera généré le
+			Nous avons donc un intervalle de \emph{MAX} positions disponibles.
+			\item ]0, MAX[ est donc l'intervalle dans lequel sera généré le
 			\emph{i} suivant:\\
 			\verb+<42, 1, 1><5, 1, 3>+\\
-			Le choix de \emph{i} dans l'interval est réalisé par un algorithme
+			Le choix de \emph{i} dans l'intervalle est réalisé par un algorithme
 			de génération (cf. \ref{sec:algos}).
 			La table \ref{tab:tableID_e} p.\pageref{tab:tableID_e} représente la
 			table des identifiants après l'ajout des deux lettres.
@@ -151,13 +151,13 @@
 		
 		\textbf{Random:}\\
 			Les identifiants sont générés aléatoirement parmi tous ceux de
-			l'interval.\\
+			l'intervalle.\\
 		
 		\textbf{Boundary:}\\
 			Comme pour le \emph{random}, les identifiants sont générés
 			aléatoirement mais deux identifiants successifs ne peuvent espacés
 			de plus d'une valeur notée \emph{boundary}. Cette stratégie permet
-			de laisser un plus grand interval pour les insertions futures car on
+			de laisser un plus grand intervalle pour les insertions futures car on
 			prend en compte le fait que les insertions ont généralement lieu en
 			fin de document qu'au début.
 		
@@ -204,7 +204,7 @@
 		suivant:
 		\begin{enumerate}
 			\item Chaque noeud possède une liste de \emph{peer} dans le réseau.
-			\item À intervale régulier, le poste prend un peer au hazard dans la
+			\item À intervallee régulier, le poste prend un peer au hazard dans la
 			liste et lui envoie le message.
 			\item Le poste qui reçoit le message vérifie s'il possède la
 			ressource: si c'est le cas, il répond, sinon il recommence depuis

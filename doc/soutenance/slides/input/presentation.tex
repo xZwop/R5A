@@ -1,8 +1,98 @@
-\section{Presentation de Logoot}
+\section{Présentation de Logoot}
   \begin{frame}
-    \frametitle{Presentation de Logoot}
+    \frametitle{Présentation de Logoot}
     \begin{itemize}
-      \item Pouet
+      \item Algorithme permettant la génération d'identifiants pour le partage des modifications entre les personnes travaillant sur le document.
+      \item Identifiants permettant le positionnement des modifications dans le document.
     \end{itemize}
   \end{frame}
 
+\begin{frame}
+    \frametitle{Table des identifiants}
+      \begin{itemize}
+      	\item Position de chaque caractère du document.
+      	\item Identifié par un \emph{identifiant de caractère} unique.
+      	\item Liste des nouveaux identifiants de caractère mis-à-jour par tous les utilisateurs du document.
+    \end{itemize}
+  \end{frame}
+
+\begin{frame}  
+  \frametitle{Identifiant de position}
+	\begin{center}
+		\textbf{<i, s, h>}
+	\end{center}
+		\begin{itemize}
+			\item \emph{i} : un chiffre dans la base \emph{BASE}. La valeur
+			maximum que peut prendre \emph{i} \emph{MAX} sera entre $0$ et
+			\emph{BASE}$ - 1$.
+			\item \emph{s} : un identifiant unique de la réplique.
+			\item \emph{h} : la valeur de l'horloge logique de la réplique.
+		\end{itemize}
+  \end{frame}
+
+\begin{frame}  
+  \frametitle{Identifiant de caractère}
+  	Liste ordonnée non-mutable d'identifiants de positions\\
+  	Exemples:
+	\begin{center}
+		\textbf{<42, 1, 1><1337, 1, 72>}\\
+		\textbf{<2, 4, 4>}
+	\end{center}
+  \end{frame}
+
+\begin{frame}  
+  \frametitle{Exemple d'insertion}
+  	\begin{center}
+		\textbf{ab}
+	\end{center}
+  	\begin{table}
+			\center
+			\begin{tabular}{|l|l|l|}			
+			\hline
+				Table des identifiants & Identifiant de caractère & Caractère\\
+			\hline
+				0 & <0, NA, NA> & NA\\
+				1 & <41, 3, 1> & a\\
+				2 & <44, 2, 16> & b\\
+				MAX & <MAX, NA, NA> & NA\\
+			\hline
+			\end{tabular}
+			\caption{Exemple de table des identifiants - Origine}
+		\end{table}
+	\end{frame}
+	
+\begin{frame}  
+  \frametitle{Exemple d'insertion}
+  	Insertion de la lettre \textbf{e} entre \textbf{a} et \textbf{b}.\\
+  	Entre les identifiants:
+  	\textbf{<41, 3, 1>} et \textbf{<44, 2, 16>}.
+  	\begin{itemize}
+		\item On regarde si on a la <<place>> pour placer les nouveaux
+			identifiants\\ \textbf{intervalle = 44 - 41 - 1 = 2}. 
+			Il y a donc la place pour générer deux identifiants.
+		\item Un identifiant est généré dans l'intervalle \textbf{]41, 44[}.
+		\item Insertion de l'identifiant généré \textbf{<42, 1, 1>} dans la table des identifiants.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}	
+	\frametitle{Exemple d'insertion}
+  	\begin{center}
+		\textbf{aeb}
+	\end{center}
+  	\begin{table}
+			\center
+			\begin{tabular}{|l|l|l|}			
+			\hline
+				Table des identifiants & Identifiant de caractère & Caractère\\
+			\hline
+				0 & <0, NA, NA>+ & NA\\
+				1 & <41, 3, 1> & a\\
+				2 & <42, 1, 1> & e\\
+				3 & <44, 2, 16> & b\\
+				MAX & <MAX, NA, NA> & NA\\
+			\hline
+			\end{tabular}
+			\caption{Exemple de table des identifiants - Insertion de 'e'}
+		\end{table}
+	\end{frame}
