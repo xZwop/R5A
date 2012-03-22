@@ -1,9 +1,32 @@
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
-  \begin{itemize}
-    \item Rappel du sujet.
-    \item Bilan du travail effectué.
-    \item
-    \item
-  \end{itemize}
+  L'objectif de ce projet fut d'implémenter l'algorithme \emph{Logoot} pour
+  permettre son utilisation concrète dans un éditeur collaboratif sur un réseau
+  Pair-à-Pair (à la base des hypothèses de \emph{Logoot} -- causalité, etc.).
+
+  Ce projet à été à l'origine de plusieurs tests. Au départ du projet, nous
+  avons effectué trois test de technologies différentes afin de n'en choisir
+  qu'une seule. Après plusieurs semaines de développement, il a été décidé
+  d'abandonner les versions \emph{Javascript} et \emph{Dart} et de continuer la
+  version \emph{Java} \emph{GWT}. Lorsqu'il a fallu intégrer tous les composants
+  de l'application, nous nous sommes aperçu que c'était très laborieux. Il
+  subsistait aussi le problème de la \emph{textarea} (voir la section
+  \ref{sec:textarea} page \pageref{sec:textarea}). Il a donc été décidé de
+  reprendre la version \emph{Javascript} et de la coupler à un \emph{div}
+  éditable, fournit par \emph{HTML5} (voir la section \ref{sec:html5} page
+  \pageref{sec:html5}). Nous avons donc obtenu deux versions fonctionnelles
+  possédant toute deux leurs faiblesses. La version \emph{HTML5} avec
+  \emph{Javascript} propose une manière de faire très appropriée à
+  \emph{Logoot}.
+
+  Ce projet fut très intéressant, du point de vu de l'exploration des
+  technologies qu'il a fallu faire, ainsi que pour l'idée principale qui est de
+  "concurancer" \emph{Google Docs}.
+
+  Ce projet n'a pas atteint le niveau de finition souhaité. Il faudrait se
+  focaliser sur la version \emph{HTML5} avec \emph{Javascript} qui  à la
+  particularité d'utiliser l'arbre \emph{DOM} comme modèle de \emph{Logoot}
+  (identifiants de ligne comme identifiants des n\oe{}uds \emph{DOM}). Cette
+  version ne propose pas encore toutes les fonctionnalités de base d'un éditeur,
+  problème qu'il faut résoudre en priorité.
 
