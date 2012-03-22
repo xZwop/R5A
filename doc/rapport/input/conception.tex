@@ -4,36 +4,103 @@
   Replicated Data Types}. La figure \ref{fig:architecture} représente cette
   architecture et sert de support aux explications qui suivent.
 
-  \begin{figure}[h]
+  \begin{figure}[hbt]
     \label{fig:architecture}
-    \includegraphics[width=\textwidth]{includes/architecture.png}
+    \includegraphics[width=\textwidth]{includes/architecture.pdf}
     \caption{Architecture d'un éditeur collaboratif utilisant \emph{Logoot}}
   \end{figure}
 
-  Le \emph{LogootEngine} maintient le modèle de texte relatif à \emph{Logoot},
-  c'est-à-dire la table des identifiants. Le \emph{LogootEngine} fournit un
-  service de création d'un nouvel identifiant de ligne (lors de l'insertion
-  d'un caractère à une position connue). Lorsque le système reçoit un
-  patch\footnote{modèle de
-  description des différences entre un document source et un document issue du
-  document source} suite à des modifications sur le document effectuées par un
-  autre utilisateur, \emph{Logoot} fournit un service permettant de l'intégrer
-  au modèle déjà existant.
+  Dans la suite de ce chapitre nous détaillons chaque composant et les
+  interfaces qui les accompagnent.
+
+  \section{LogootEngine}
+  \begin{figure}[hbt]
+    \center
+    \label{fig:logootengine}
+    \includegraphics[width=.7\textwidth]{includes/model/ILogootEngine.pdf}
+    \caption{Composant \emph{LogootEngine}}
+  \end{figure}
+
+  Le \emph{LogootEngine} (figure~\ref{fig:logootengine}
+  page~\pageref{fig:logootengine}) maintient le modèle de texte relatif
+  à \emph{Logoot}, c'est-à-dire la table des identifiants. Pour se faire, le
+  \emph{LogootEngine} offre les services de génération et d'intégration
+  d'opérations d'insertion et de suppression d'identifiants. Le composant
+  \emph{LogootEngine} fourni plusieurs opération de génarations et d'intégration
+  de patches : 
+  \begin{enumerate}
+    \item L'opération \verb?generatePatch(text)? génère un patch
+    depuis un état précédent du texte grace à l'algortihme du diff. Cette
+    opération, bien que facile à implémenter, pose des problème de rapidité à
+    cause de l'emploie de l'algorithme du diff qui à une complexité en
+    $O(m \times n)$ avec $m$ les nombres de caractères dans le document sources
+    et $n$ le nombre de caractère dans la variable $text$ ;
+    \item L'opération \verb?generatePatch(content, offset)? génère un
+    patch en fonction d'une insertion ou d'une suppression dans le document
+    texte. La génération du patch est nettement plus performante avec une
+    complexité temporelle qui est égale à la génartion et le maintient de la
+    table des identifiants ;
+    \item L'opération \verb?generatepatchFromModel()? permet de générer un patch
+    représentant le modèle. Cette opération est utile lorsqu'un nouvelle
+    utilisateur join l'edition de document et qu'il doit charger l'existant ;
+    \item L'opération \verb?deliver(patch)? s'occupe de l'intégration du patch.
+    Deux comportements sont possibles. Soit cette méthode retourne le texte
+    du document après application des modifications. Soit cette
+    méthode retourne uniquement les caractères à insérer / supprimer avec
+    leur offset.
+  \end{enumerate}
+
+  \section{Network}
+  \begin{figure}[hbt]
+    \center
+    \label{fig:logootengine}
+    \includegraphics[width=.7\textwidth]{includes/model/INetwork.pdf}
+    \caption{Composant \emph{Network}}
+  \end{figure}
 
   Le composant \emph{Network} fournit des services d'envoi et de réception de
   données. Il est utilisé pour émettre un patch lors de modifications locales
-  du document. De même, il est utilisé pour recevoir les patchs générés pas
-  d'autres utilisateurs.
+  du document et pour recevoir les patchs générés pas d'autres utilisateurs.
+  Pour utiliser les services, l'utilisateurs doit au préalable se connecter.
+  Le composant \emph{Network} offre plusieurs ouverture où l'utilisateur peut
+  définir des fonctions de rappelles. Un \verb?IAfterConnectionHandler? est
+  appelé à la fin de chaque connexion. Un \verb?IReceiveListener? est appelé
+  à chaque réception de données.
 
-  L'\emph{UI}\footnote{User Interface} représente l'interface graphique de
-  l'éditeur. Elle permet à l'utilisateur de visionner et modifier un document
-  texte. L'\emph{UI} doit être notifiée de la mise à jour du document par un
-  autre utilisateur, afin que l'utilisateur ait une vision toujours à jour
-  du document partagé.
+  \section{UI}
+  \begin{figure}[hbt]
+    \center
+    \label{fig:logootengine}
+    \includegraphics[width=.5\textwidth]{includes/model/IUI.pdf}
+    \caption{Composant \emph{UI}}
+  \end{figure}
 
-  Le \emph{Controller} sert à configurer le système. Il se charge de demander
-  au \emph{LogootEngine} de mettre à jour sont modèle tout comme il notifie
-  l'\emph{UI} des modifications des autres utilisateurs. C'est aussi lui qui se
-  charge de transmettre les modifications locales sur le \emph{Network}. Il
-  reçoit aussi, par le \emph{Network} les modifications des autres utilisateurs.
+  Le composant \emph{UI}\footnote{User Interface} représente l'interface
+  graphique de l'éditeur. Elle permet à l'utilisateur de visionner et modifier
+  un document texte. Pour se faire la méthode \verb?setText(text)? remplace le 
+  texte du document et la méthode \verb?setText(content, offset)?
+  modifier le document à une position donnée. Le composant \emph{UI} permet
+  d'exécuter des fonctions de rapelles après chaque modification du texte.
+
+  \section{Controller}
+  \begin{figure}[hbt]
+    \center
+    \label{fig:logootengine}
+    \includegraphics[width=.9\textwidth]{includes/model/Controller.pdf}
+    \caption{Composant \emph{Controller}}
+  \end{figure}
+
+  Le composant \emph{Controller} sert à configurer le système. Il demande
+  au \emph{LogootEngine} de mettre à jour sont modèle et notifie l'\emph{UI} des
+  modifications des autres utilisateurs. Le composant \emph{Controller}
+  implemente toutes les interfaces d'handler ce qui lui permet :
+  \begin{itemize}
+    \item de capter la modification du document texte sur l'\emph{UI} et ainsi
+    demander au \emph{LogootEngine} de générer un nouveau patch ;
+    \item de capter la connexion d'un client sur le \emph{Network} et ainsi de
+    récupérer un identifiant unqiue et initiliser et récupérer le contexte
+    depuis le documents des autres utilisateurs ;
+    \item de capter la réception de patch depuis le \emph{Network} pour le
+    faire intégrer par le\emph{LogootEngine} et mettre à jours l'\emph{UI}.
+  \end{itemize}
 
