@@ -4,12 +4,12 @@
    développement d'application web complexe. C'est un outil gratuit et 
    open source.
    
-   Lors du développement, le code est écrit en  \emph{Java}. Ensuite \emph{GWT} inclus un 
-   compilateur qui le traduit en \emph{Javascript} afin de le rendre compatible
-   avec tous les navigateur du marché.
+   Lors du développement, le code est écrit en  \emph{Java}. Ensuite \emph{GWT} 
+   inclus un compilateur qui le traduit en \emph{Javascript} afin de le rendre 
+   compatible avec tous les navigateur du marché.
    
   \subsection{Objectif de l'implémentation en \emph{Java} \emph{GWT}}
-  L'avantage d'utilser \emph{GWT} est la possibilité de decouper notre 
+  L'avantage d'utiliser \emph{GWT} est la possibilité de decouper notre 
   logiciel de facon complétement modulaire. En effet, nous respectons la
   conception du chapitre précédent \ref{conception}. Grâce à cela, 
   l'interface utilisateur, la gestion du réseau et le moteur \emph{logoot}
@@ -42,7 +42,21 @@
 	pour permettre la réception des modifications. Plusieurs solutions 
 	techniques sont disponible :
 	\begin{itemize}
-		\item \emph{Server Push}
-		\item \emph{Web Socket}
-		\item \emph{Server Sent Event}
+		\item \emph{Server Push} : La méthode consiste à ne pas clore la
+		transaction coté serveur. Aprés une requête du client, le serveur
+		répond quand il le souhaite. Afin de permetre une connection continue 
+		entre le client et le serveur, le client doit à la réception d'une 
+		réponse émettre une nouvelle requête.
+		\item \emph{Web Socket}\cite{websocket_spec} : Il s'agit d'une spécification en cours au sein
+		du \emph{WHATWG}\footnote{Web Hypertext Application Technology Working 
+		Group} afin de permettre une communication bidirectionnel entre client
+		et serveur. En raison de failles de sécurité et du coup d'implémentation 
+		timide dans les navigateurs, nous n'avons pas retenu cette solution.
+		\item \emph{Server Sent Event}\cite{server_sent_spec} 
+		\cite{server_sent_html5_rocks} : Cette technologie est également en
+		cours de spécification. Elle permet au client d'initier une connexion
+		au serveur et de lui permettre d'envoyer les informations quand il
+		le souhaite sans clore la connection.
 	\end{itemize}
+	
+	Nous avons choisi d'utiliser les Server Sent Event pour leurs simplicités.
