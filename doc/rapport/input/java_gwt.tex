@@ -66,32 +66,3 @@
 	On utilise alors un mécanisme qui permet d'inclure du \emph{Javascript} natif.
 	Là encore, on touche à la limite de ce que permet \emph{GWT}.
 
-\section{Comparatif des implémentations}
-\begin{table}[h!]
-	\center
-	\begin{tabular}{|l|c|c|c|} 
-	\hline
-	 ~ & \emph{Dart} & \emph{Javascript / HTML 5} & \emph{GWT}\\
-	\hline
-	Insertion unique & oui & oui &oui\\
-	\hline
-	Suppression unique & oui & oui & oui\\
-	\hline
-	Saut de ligne & oui & non & oui\\
-	\hline
-	Insertion bloc & oui & non & oui\\
-	\hline
-	Suppression bloc & oui & non & oui\\
-	\hline
-	Edition distante & non & oui & oui \\
-	\hline
-	Coloration & non & oui & non \\
-	\hline
-	Curseur statique\footnote{position du curseur cohérente lors de l'insertion d'un autre client} & non & oui & non \\ 
-	\hline
-	Curseur des clients & non & non & non \\
-	\hline
-	Performance & Moyenne & Bonne & Moyenne \\ 
-	\hline
-	\end{tabular}
-\end{table}
