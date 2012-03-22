@@ -1,0 +1,15 @@
+Introduction
+
+De nos jours, le travail collaboratif a une place importante. En effet, le monde de l’entreprise et de la recherche oblige de plus en plus le travail à distance entre plusieurs personnes en même temps. Une aide pour ce travail est bien entendu les vidéos-conférences dans lesquelles plusieurs personnes distantes peuvent communiquer en direct et sans problème. Pouvoir éditer des documents en même temps et par tous est un atout majeur dans le travail collaboratif.
+
+L'objectif du projet est rendre possible l'edition de document de manière collaborative dans un réseau pair-à-pair en utilisant la technologie Logoot. 
+Ainsi, chaque utilisateur possède l’ensemble du document et seulement les modifications apportées à ce dernier seront transmises aux autres utilisateurs qui se met- tront à jour. Ceci permet d'avoir un gain significatif en terme de coûts:
+	prix -> pas besoin de serveur centralisé
+	rapidité
+	sécurité -> pas de données centralisées par une entité tierce
+
+Présentation de Logoot
+	
+
+Techno abordées
+	Jxta
