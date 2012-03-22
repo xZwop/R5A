@@ -1,0 +1,63 @@
+ \documentclass[14pt]{beamer}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{color}
+
+\setbeamertemplate{blocks}[rounded]
+
+\usetheme{CambridgeUS}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+
+\title{Logoot}
+\subtitle{a Scalable Optimistic Replication Algorithm for Collaborative Editing on P2P Networks}
+\author{Adrien Drouet\\
+        Alexandre Prenza}
+
+\begin{document}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %% Titre
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{frame}
+    \titlepage
+  \end{frame}
+
+	\begin{frame}
+		\frametitle{Introduction}
+		\begin{itemize}
+			\item<1-> Collaborative editing
+			\item <2->Wikipedia
+				\begin{itemize}
+					\item<3-> 10 million of articles
+					\item<3-> centralized infrastructure
+					\begin{itemize}
+						\item<4-> fault tolerance
+						\item<4-> costly scalability
+					\end{itemize}
+				\end{itemize}
+			\item<5-> Solution ?
+			\begin{itemize}
+						\item<6-> Peer-to-peer
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{P2P}
+		Peer-to-Peer system :
+		\begin{itemize}
+			\item<2-> Causality : all operations are ordered
+			\item<2-> Convergence : when the system is idle, it's converges
+			\item<2-> Intention : expected effect observed on all replica
+			\item<2-> Scalability : 
+		\end{itemize}
+	\end{frame}
+
+\end{document}
+
