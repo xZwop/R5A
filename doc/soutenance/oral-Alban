@@ -7,19 +7,25 @@ Introduction
 De nos jours, le travail collaboratif a une place importante. En effet, le monde de l’entreprise et de la recherche oblige de plus en plus le travail à distance entre plusieurs personnes en même temps. Une aide pour ce travail est bien entendu les vidéos-conférences dans lesquelles plusieurs personnes distantes peuvent communiquer en direct et sans problème. Pouvoir éditer des documents en même temps et par tous est un atout majeur dans le travail collaboratif.
 
 L'objectif du projet est rendre possible l'edition de document de manière collaborative dans un réseau pair-à-pair en utilisant la technologie Logoot. 
-Ainsi, chaque utilisateur possède l’ensemble du document et seulement les modifications apportées à ce dernier seront transmises aux autres utilisateurs qui se met- tront à jour. Ceci permet d'avoir un gain significatif en terme de coûts:
-	prix -> pas besoin de serveur centralisé
-	rapidité
+Ainsi, chaque utilisateur possède l’ensemble du document et seulement les modifications apportées à ce dernier seront transmises aux autres utilisateurs qui se mettront à jour. Ceci permet d'avoir un gain significatif en terme de coûts:
+	économique -> pas besoin de serveur centralisé
+	rapidité -> pas de problèmes lors des montées en charge
 	sécurité -> pas de données centralisées par une entité tierce
-			 -> moins sensible aux problèmes (crash du serveur central)
-
+			 -> meilleure tolérance aux fautes
+	
 Présentation de Logoot
 
 Logoot est un algorithme destiné à l'édition de documents textes sur
 un réseau pair-à-pair. Concrètement, cet algorithme permet de partager la position des caractères du document entre les différentes personnes travaillant dessus.
 	
-Techno abordées
-	Jxta 
+Techno abordées - Jxta 
+Permet la couche P2P
+serveur web offrant un service de connexion et un service d’envoi/réception de messages.
+	
+Le déploiement d’un nouveau serveur entraine la création d’un nouveau pair dans le réseau. 
+Ainsi chaque nouveau serveur discute avec les autres serveurs via un réseau pair-à-pair.
+
+Chaque serveur se comporte comme un point de connexion pour plusieurs clients. Ainsi un serveur est en charge de redistribuer un messages à tous ses clients (via un mécanisme interne de socket) et aux autres serveurs du réseau (via le réseau pair-à-pair).
 	
 	
 **********************************************
