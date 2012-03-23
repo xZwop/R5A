@@ -6,7 +6,6 @@ var EDITABLE_ID = "logoot";
 var BEGIN_LINE_ID = LineId.getDocumentStarter().serialize();
 var END_LINE_ID = LineId.getDocumentFinisher().serialize();
 var CHARACTER_CLASS = "logoot_character";
-var BR_CLASS = "logoot_carriage";
 var LIMIT_CLASS = "logoot_limit";
 var TYPE_INSERTION = "logoot_insertion"; 
 var TYPE_DELETION = "logoot_deletion";
@@ -30,7 +29,7 @@ function register() {
 	{ // Internet Explorer 6
 		http = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	
+
 	http.open('GET', REGISTER_URL, true);
 	http.onreadystatechange = function() {
     if (http.readyState == 4) {
@@ -90,34 +89,19 @@ function insertion(event) {
   var edit = document.getElementById(EDITABLE_ID);
   var selection = window.getSelection();
   var range = selection.getRangeAt(0);
-  var current = selection.anchorNode;
-  if(current.className != BR_CLASS) {
-    current = current.parentNode;
-  }
-  var next = current.nextSibling;
+  var next = selection.anchorNode.parentNode.nextSibling;
   var span = document.createElement("span");
   var data = String.fromCharCode(event.keyCode);
-  var className = CHARACTER_CLASS;
 
   // space
-  if(event.keyCode == 32) {
+  if(event.keyCode==32) {
     data = "&nbsp;";
   }
 
-  // return
-  if(event.keyCode == 13) {
-    data = "<br/>";
-  	className = BR_CLASS;
-  }
-
   // be sure that the next node is between the begin and the end span
-  if(selection.baseOffset == 0
-     || (selection.baseOffset == 1 && selection.anchorNode.id == "logoot")) {
-    if(current.previousSibbling == LIMIT_CLASS) {
-    	next = document.getElementById(BEGIN_LINE_ID).nextSibling;
-    } else {
-    	next = current;
-    }
+  if(selection.baseOffset==0
+     || (selection.baseOffset==1 && selection.anchorNode.id == "logoot")) {
+    next=document.getElementById(BEGIN_LINE_ID).nextSibling;
   } else if(next == document.getElementById(BEGIN_LINE_ID)) {
     next = next.nextSibling;  
   } else if(next == null) {
@@ -140,7 +124,7 @@ function insertion(event) {
 
   // set the new span
   span.innerHTML = data;
-  span.className = className;
+  span.className = CHARACTER_CLASS;
   span.id = Logoot.generateLineId(LineId.unserialize(previousLineIdentifier),
                                   LineId.unserialize(nextLineIdentifier),
                                   1,
@@ -209,7 +193,7 @@ function deletion(event) {
          || (selection.baseOffset==1 && selection.anchorNode.id == "logoot")) {
         next=document.getElementById(BEGIN_LINE_ID).nextSibling;
       }
-	  
+
       // notify other clients
 	  var message = {"type": TYPE_DELETION, "repID": identifier, "lineIdentifier": next.id}
 	  send(message);
@@ -243,11 +227,6 @@ function foreignInsertion(repID, keyCode, newLineIdentifier,
     // space
     if(keyCode == 32) {
       data = "&nbsp;";
-    }
-
-    // return
-    if(keyCode == 13) {
-      data = "<br class=\"" + BR_CLASS + "\"/>";
     }
 
     // set the new span
@@ -366,9 +345,8 @@ function send(message)
 	{ // Internet Explorer 6
 		http = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	
+
 	http.open('GET', SEND_URL + '&message=' + JSON.stringify(message), true);
 	//http.onreadystatechange = handleAJAXReturn;
 	http.send(null);
 }
-
