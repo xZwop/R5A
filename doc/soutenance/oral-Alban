@@ -1,3 +1,7 @@
+**********************************************
+Logoot
+**********************************************
+
 Introduction
 
 De nos jours, le travail collaboratif a une place importante. En effet, le monde de l’entreprise et de la recherche oblige de plus en plus le travail à distance entre plusieurs personnes en même temps. Une aide pour ce travail est bien entendu les vidéos-conférences dans lesquelles plusieurs personnes distantes peuvent communiquer en direct et sans problème. Pouvoir éditer des documents en même temps et par tous est un atout majeur dans le travail collaboratif.
@@ -7,6 +11,7 @@ Ainsi, chaque utilisateur possède l’ensemble du document et seulement les mo
 	prix -> pas besoin de serveur centralisé
 	rapidité
 	sécurité -> pas de données centralisées par une entité tierce
+			 -> moins sensible aux problèmes (crash du serveur central)
 
 Présentation de Logoot
 
@@ -15,3 +20,45 @@ un réseau pair-à-pair. Concrètement, cet algorithme permet de partager la pos
 	
 Techno abordées
 	Jxta 
+	
+	
+**********************************************
+Anglais
+**********************************************
+
+Hi everyone, we are here to talk about the article Evaluating CRDTs for Real-time Document Editing.
+
+Nowadays, collaboring work is increasing and real-time editing systems are catching on. More and More people need to work with others all around the world.
+	
+Google Docs is a good example, since it enables multiple authors to edit the same document at the same time, whenever it is and wherever they are.
+
+Slides 15/16
+
+All algorithms degrade over time, but logoot more slowly than others.
+This degradation is due to size of the documents and the character identifiers grows over the time.
+
+All algorithms expect logoot are not vailable for real-time editing because the responding time will increase 50ms.
+
+This increases are due to insert or delete a lot of characters.
+
+Slides 17/18
+
+Wooto, Logoot and RGA remain stable during al the time. 
+
+The chaotic performance of SOCT2 is mainly due to its garbage collection mechanism. Users have a period of inactivity and the garbage mechanism cannot purge the history log. SOCT2 can’t be used for real-time editing because of his response time increasing 50ms quickly 
+	-> if we take a copy paste of 5000 characters, and the average of 1ms for SOCT2
+
+Figure 6 is a bit different than 5 because of the number of characters deleting (students didn’t delete as much as in the serie experiments as in the report experiment). RGA and WootH are better than the others because their algorithms are based on hash tables.
+
+
+
+WOOT algo -> use a linear structure for insertion and delete operations. They use tombstone, the elements are not physicaly deleted but marked as deleted.
+WOOTO is a optimisation of WOOT
+WOOTH is an optimisation of WOOTO use an Hahs table and a linked list.
+
+Replicated Growable Array (RGA)
+suport Insert, delete and update operations
+Replace the content of the document without increase the size of it
+
+SOCT2 -> OT algo
+The principle of this class of algorithms is that when a causally ready operation is integrated at a site, the whole log of operations is traversed and reordered. After reorder- ing, causally preceding operations come before concurrent ones in the history buffer
