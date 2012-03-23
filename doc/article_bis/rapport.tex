@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Rapport de Service, WorkflowManagement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage[margin={2.5cm, 2.5cm}]{geometry}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{hyperref}
+% \usepackage{algorithm2e}
+
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+
+\newcommand\note[1]{\begin{quote}\emph{\textbf{Note : }}#1\end{quote}}
+
+\pagestyle{empty}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\lhead{Logoot : a Scalable Optimistic Replication Algorithm for Collaborative Editing on P2P Networks}
+\rhead{}
+\lfoot{\today}
+\cfoot{\thepage}
+\rfoot{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Préambule
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{ Summary
+       <<Logoot : a Scalable Optimistic Replication Algorithm for Collaborative Editing on P2P Networks>>}
+
+\author{Adrien Drouet\\Alexandre Prenza}
+\date{Year 2011-2012\\
+      (University of Nantes)}
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Début
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+  \maketitle
+
+  \fancypagestyle{plain}{\fancyhead{} \fancyfoot{}} 
+  %\vfill
+  %\tableofcontents\renewcommand{\headrulewidth}{0.4pt}
+  ~\newline
+  \renewcommand{\footrulewidth}{0.4pt}
+  \pagestyle{fancy}
+  \fancypagestyle{plain}{}
+  \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Nowodays, massive collaborative editing becomes a reality through leading projects such as Wikipedia. By this way, real-time editing systems are catching on, enabling multiple authors to edit the same document at the same time, whenever they are and whenever it is.
+ 
+ Any real-time editing have to ensure the CCI\footnote{Causality, Convergence, and Intention preservation}, and must scale according to the number of users.
+ 
+ Actually, \emph{WOOKI} and \emph{TreeDoc} are two collaborative editing system known which ensure the CCI but also to scale according to the number of users in the network. Both are different, but both kept deleted lines using tombstones. 
+ 
+ According to the scalability definition, the tombstone cost is not acceptable on massive editing systems. For instance, for the most edited pages of Wikipedia, the tombstone storage overhead can represent several hundred of times the document size. Tombstones are also responsible of performance degradation.
+ 
+ The purpose of this paper is to explain a new approach to build distributed colaborative editing systems, \emph{Logoot}, which scales in terms of number of users, but also in terms of number of edits, removing the principle of tombstones. \emph{Logoot} also ensure the CCI criteria.
+ 
+ After some explanations about how \emph{Logoot} is working and how it scales and ensures the CCI, it will be evaluated and compared with some others collaborative editing systems like \emph{Wooto} and \emph{TreeDoc} on a set of the most edited and the biggest pages of Wikipedia.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
